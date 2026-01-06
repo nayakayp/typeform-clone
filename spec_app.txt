@@ -1,0 +1,20 @@
+<specification>
+  <project_name>Typeform Clone</project_name>
+
+  <tech_stack>
+    <framework>Next.js 15 (App Router)</framework>
+    <ui-framework>Shadcn UI</ui-framework>
+    <language>TypeScript</language>
+    <styling>Tailwind CSS</styling>
+    <database>PostgreSQL</database>
+    <orm>Drizzle ORM</orm>
+    <authentication>BetterAuth</authentication>
+    <state_management>Zustand (Builder state)</state_management>
+    <data_fetching>TanStack Query (React Query)</data_fetching>
+    <drag_and_drop>@dnd-kit/core</drag_and_drop>
+    <animations>framer-motion</animations>
+    <file_storage>Local or AWS S3</file_storage>
+    <payments>Polar.sh</payments>
+    <deployment>Docker Compose</deployment>
+  </tech_stack>
+</specification>
