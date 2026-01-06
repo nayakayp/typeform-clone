@@ -1,0 +1,122 @@
+"use client";
+
+import {
+  DndContext,
+  closestCenter,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { useState } from "react";
+import { useBuilderStore } from "@/stores/builder-store";
+import { useBuilderSensors } from "@/lib/dnd";
+import { QuestionCard } from "./question-card";
+import { cn } from "@/lib/utils";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import type { BuilderQuestion } from "@/types/builder";
+
+interface BuilderCanvasProps {
+  className?: string;
+}
+
+export function BuilderCanvas({ className }: BuilderCanvasProps) {
+  const { questions, reorderQuestions, selectQuestion, addQuestion } =
+    useBuilderStore();
+  const sensors = useBuilderSensors();
+  const [activeQuestion, setActiveQuestion] = useState<BuilderQuestion | null>(
+    null
+  );
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    const question = questions.find((q) => q.id === active.id);
+    if (question) {
+      setActiveQuestion(question);
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      reorderQuestions(active.id as string, over.id as string);
+    }
+
+    setActiveQuestion(null);
+  };
+
+  const handleCanvasClick = () => {
+    selectQuestion(null);
+  };
+
+  const handleAddQuestion = () => {
+    addQuestion("short_text");
+  };
+
+  return (
+    <div
+      className={cn("flex-1 overflow-y-auto bg-background p-6", className)}
+      onClick={handleCanvasClick}
+    >
+      <div className="mx-auto max-w-2xl">
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={questions.map((q) => q.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-3">
+              {questions.map((question, index) => (
+                <QuestionCard
+                  key={question.id}
+                  question={question}
+                  index={index}
+                />
+              ))}
+            </div>
+          </SortableContext>
+
+          <DragOverlay>
+            {activeQuestion && (
+              <div className="rounded-lg border bg-card p-4 shadow-lg">
+                <span className="font-medium">
+                  {activeQuestion.title || "Untitled question"}
+                </span>
+              </div>
+            )}
+          </DragOverlay>
+        </DndContext>
+
+        {questions.length === 0 && (
+          <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed py-12 text-center">
+            <p className="mb-4 text-muted-foreground">
+              No questions yet. Add your first question!
+            </p>
+            <Button onClick={handleAddQuestion}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Question
+            </Button>
+          </div>
+        )}
+
+        {questions.length > 0 && (
+          <div className="mt-4 flex justify-center">
+            <Button variant="outline" onClick={handleAddQuestion}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Question
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
