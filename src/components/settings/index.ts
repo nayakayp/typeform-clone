@@ -4,3 +4,4 @@ export { ProfileSettings } from "./ProfileSettings";
 export { AccountDetails } from "./AccountDetails";
 export { NotificationPreferences } from "./NotificationPreferences";
 export { SecuritySettings } from "./SecuritySettings";
+export { ApiKeysSettings } from "./ApiKeysSettings";
