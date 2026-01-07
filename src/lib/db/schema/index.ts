@@ -33,3 +33,6 @@ export * from "./notifications";
 
 // Access Control
 export * from "./access-control";
+
+// Versions & Templates
+export * from "./versions";

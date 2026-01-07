@@ -8,3 +8,9 @@ export { QuestionConfigPanel } from "./config-panel";
 export { PipingTextarea } from "./PipingTextarea";
 export * from "./config-panel";
 export * from "./logic";
+
+// Advanced Features
+export { VersionHistoryPanel } from "./VersionHistoryPanel";
+export { TemplateGallery } from "./TemplateGallery";
+export { CloneFormDialog } from "./CloneFormDialog";
+export { SaveAsTemplateDialog } from "./SaveAsTemplateDialog";
