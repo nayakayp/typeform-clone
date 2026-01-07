@@ -94,9 +94,137 @@ export const integrationsRelations = relations(integrations, ({ one }) => ({
   }),
 }));
 
+// Integration tokens (for OAuth)
+export const integrationTokens = pgTable("integration_tokens", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  integrationId: uuid("integration_id")
+    .notNull()
+    .references(() => integrations.id, { onDelete: "cascade" }),
+  accessToken: text("access_token").notNull(),
+  refreshToken: text("refresh_token"),
+  tokenType: varchar("token_type", { length: 50 }),
+  scope: text("scope"),
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const integrationTokensRelations = relations(integrationTokens, ({ one }) => ({
+  integration: one(integrations, {
+    fields: [integrationTokens.integrationId],
+    references: [integrations.id],
+  }),
+}));
+
+// Form-level integrations (connects forms to workspace integrations)
+export const formIntegrations = pgTable("form_integrations", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  formId: uuid("form_id")
+    .notNull()
+    .references(() => forms.id, { onDelete: "cascade" }),
+  integrationId: uuid("integration_id")
+    .notNull()
+    .references(() => integrations.id, { onDelete: "cascade" }),
+  config: jsonb("config").$type<Record<string, unknown>>().default({}).notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  lastSyncAt: timestamp("last_sync_at"),
+  lastError: text("last_error"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const formIntegrationsRelations = relations(formIntegrations, ({ one }) => ({
+  form: one(forms, {
+    fields: [formIntegrations.formId],
+    references: [forms.id],
+  }),
+  integration: one(integrations, {
+    fields: [formIntegrations.integrationId],
+    references: [integrations.id],
+  }),
+}));
+
+// Integration logs
+export const integrationLogs = pgTable("integration_logs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  formIntegrationId: uuid("form_integration_id")
+    .notNull()
+    .references(() => formIntegrations.id, { onDelete: "cascade" }),
+  action: varchar("action", { length: 100 }).notNull(),
+  status: varchar("status", { length: 20 }).notNull(),
+  message: text("message"),
+  details: jsonb("details").$type<Record<string, unknown>>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const integrationLogsRelations = relations(integrationLogs, ({ one }) => ({
+  formIntegration: one(formIntegrations, {
+    fields: [integrationLogs.formIntegrationId],
+    references: [formIntegrations.id],
+  }),
+}));
+
+// Zapier subscriptions
+export const zapierSubscriptions = pgTable("zapier_subscriptions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  formId: uuid("form_id")
+    .notNull()
+    .references(() => forms.id, { onDelete: "cascade" }),
+  hookUrl: text("hook_url").notNull(),
+  event: varchar("event", { length: 100 }).notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const zapierSubscriptionsRelations = relations(zapierSubscriptions, ({ one }) => ({
+  form: one(forms, {
+    fields: [zapierSubscriptions.formId],
+    references: [forms.id],
+  }),
+}));
+
+// Integration provider constants
+export const INTEGRATION_PROVIDERS = [
+  "google_sheets",
+  "slack",
+  "zapier",
+  "airtable",
+  "hubspot",
+  "mailchimp",
+] as const;
+
+export type IntegrationProvider = typeof INTEGRATION_PROVIDERS[number];
+
+// Config types for different providers
+export interface GoogleSheetsConfig {
+  spreadsheetId: string;
+  spreadsheetName: string;
+  sheetId: number;
+  sheetName: string;
+  mappings: Array<{
+    questionId: string;
+    columnIndex: number;
+    columnLetter: string;
+  }>;
+  includeHeaders: boolean;
+  autoSync: boolean;
+}
+
+export interface SlackConfig {
+  channelId: string;
+  channelName: string;
+  messageTemplate: string;
+  notifyOn: Array<"response.created" | "response.completed">;
+  includePreview: boolean;
+}
+
 export type Webhook = typeof webhooks.$inferSelect;
 export type NewWebhook = typeof webhooks.$inferInsert;
 export type WebhookLog = typeof webhookLogs.$inferSelect;
 export type NewWebhookLog = typeof webhookLogs.$inferInsert;
 export type Integration = typeof integrations.$inferSelect;
 export type NewIntegration = typeof integrations.$inferInsert;
+export type FormIntegration = typeof formIntegrations.$inferSelect;
+export type NewFormIntegration = typeof formIntegrations.$inferInsert;
+export type IntegrationToken = typeof integrationTokens.$inferSelect;
+export type ZapierSubscription = typeof zapierSubscriptions.$inferSelect;
