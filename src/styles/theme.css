@@ -1,0 +1,432 @@
+/**
+ * Theme CSS Variables
+ * Dynamic CSS variables that are set by the theme provider
+ */
+
+/* ============================================
+   Base Theme Variables
+   ============================================ */
+
+.form-theme-container {
+  /* Colors */
+  --theme-primary: #0066ff;
+  --theme-secondary: #6b7280;
+  --theme-background: #ffffff;
+  --theme-foreground: #1f2937;
+  --theme-muted: #f3f4f6;
+  --theme-muted-foreground: #6b7280;
+  --theme-accent: #e0e7ff;
+  --theme-accent-foreground: #3730a3;
+  --theme-destructive: #ef4444;
+  --theme-border: #e5e7eb;
+  --theme-input: #e5e7eb;
+  --theme-ring: #0066ff;
+
+  /* Question-specific colors */
+  --theme-question-text: #1f2937;
+  --theme-question-background: transparent;
+  --theme-answer-text: #374151;
+  --theme-answer-background: #ffffff;
+
+  /* Typography */
+  --theme-font-family: "Inter", system-ui, sans-serif;
+  --theme-heading-font-family: "Inter", system-ui, sans-serif;
+  --theme-font-size-base: 16px;
+  --theme-font-size-heading: 32px;
+  --theme-font-size-subheading: 20px;
+  --theme-line-height: 1.5;
+  --theme-font-weight: normal;
+
+  /* Layout */
+  --theme-max-width: 1024px;
+  --theme-padding-x: 32px;
+  --theme-padding-y: 48px;
+  --theme-question-alignment: left;
+
+  /* Buttons */
+  --theme-button-radius: 8px;
+  --theme-button-variant: solid;
+  --theme-button-size: md;
+
+  /* Progress bar */
+  --theme-progress-color: var(--theme-primary);
+
+  /* Animations */
+  --theme-transition-speed: 300ms;
+  --theme-transition-type: fade;
+}
+
+/* ============================================
+   Theme Application Classes
+   ============================================ */
+
+/* Apply theme font family */
+.theme-text {
+  font-family: var(--theme-font-family);
+  color: var(--theme-foreground);
+  line-height: var(--theme-line-height);
+}
+
+/* Apply theme heading styles */
+.theme-heading {
+  font-family: var(--theme-heading-font-family);
+  font-size: var(--theme-font-size-heading);
+  color: var(--theme-question-text);
+  font-weight: var(--theme-font-weight);
+  line-height: 1.2;
+}
+
+/* Apply theme subheading styles */
+.theme-subheading {
+  font-family: var(--theme-heading-font-family);
+  font-size: var(--theme-font-size-subheading);
+  color: var(--theme-question-text);
+  opacity: 0.8;
+}
+
+/* Apply theme body text styles */
+.theme-body {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-base);
+  color: var(--theme-foreground);
+}
+
+/* ============================================
+   Question Styles
+   ============================================ */
+
+.theme-question {
+  text-align: var(--theme-question-alignment);
+  padding: var(--theme-padding-y) var(--theme-padding-x);
+  max-width: var(--theme-max-width);
+  margin: 0 auto;
+}
+
+.theme-question-title {
+  font-family: var(--theme-heading-font-family);
+  font-size: var(--theme-font-size-heading);
+  color: var(--theme-question-text);
+  margin-bottom: 16px;
+}
+
+.theme-question-description {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-base);
+  color: var(--theme-muted-foreground);
+  margin-bottom: 24px;
+}
+
+/* ============================================
+   Button Styles
+   ============================================ */
+
+.theme-button {
+  font-family: var(--theme-font-family);
+  border-radius: var(--theme-button-radius);
+  transition: all var(--theme-transition-speed) ease;
+}
+
+.theme-button-solid {
+  background-color: var(--theme-primary);
+  color: white;
+  border: none;
+}
+
+.theme-button-solid:hover {
+  opacity: 0.9;
+}
+
+.theme-button-outline {
+  background-color: transparent;
+  color: var(--theme-primary);
+  border: 2px solid var(--theme-primary);
+}
+
+.theme-button-outline:hover {
+  background-color: var(--theme-primary);
+  color: white;
+}
+
+.theme-button-ghost {
+  background-color: transparent;
+  color: var(--theme-primary);
+  border: none;
+}
+
+.theme-button-ghost:hover {
+  background-color: var(--theme-muted);
+}
+
+/* Button sizes */
+.theme-button-sm {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.theme-button-md {
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+.theme-button-lg {
+  padding: 16px 32px;
+  font-size: 18px;
+}
+
+/* ============================================
+   Input Styles
+   ============================================ */
+
+.theme-input {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-base);
+  color: var(--theme-answer-text);
+  background-color: var(--theme-answer-background);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--theme-button-radius);
+  padding: 12px 16px;
+  transition:
+    border-color var(--theme-transition-speed) ease,
+    box-shadow var(--theme-transition-speed) ease;
+}
+
+.theme-input:focus {
+  outline: none;
+  border-color: var(--theme-ring);
+  box-shadow: 0 0 0 3px var(--theme-ring) / 20%;
+}
+
+.theme-input::placeholder {
+  color: var(--theme-muted-foreground);
+}
+
+/* ============================================
+   Progress Bar Styles
+   ============================================ */
+
+.theme-progress {
+  height: 4px;
+  background-color: var(--theme-muted);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.theme-progress-bar {
+  height: 100%;
+  background-color: var(--theme-progress-color);
+  transition: width var(--theme-transition-speed) ease;
+}
+
+.theme-progress-text {
+  font-family: var(--theme-font-family);
+  font-size: 14px;
+  color: var(--theme-muted-foreground);
+}
+
+/* ============================================
+   Animation Classes
+   ============================================ */
+
+/* Fade transition */
+.theme-transition-fade-enter {
+  opacity: 0;
+}
+
+.theme-transition-fade-enter-active {
+  opacity: 1;
+  transition: opacity var(--theme-transition-speed) ease;
+}
+
+.theme-transition-fade-exit {
+  opacity: 1;
+}
+
+.theme-transition-fade-exit-active {
+  opacity: 0;
+  transition: opacity var(--theme-transition-speed) ease;
+}
+
+/* Slide transition */
+.theme-transition-slide-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.theme-transition-slide-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity var(--theme-transition-speed) ease,
+    transform var(--theme-transition-speed) ease;
+}
+
+.theme-transition-slide-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.theme-transition-slide-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition:
+    opacity var(--theme-transition-speed) ease,
+    transform var(--theme-transition-speed) ease;
+}
+
+/* Zoom transition */
+.theme-transition-zoom-enter {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.theme-transition-zoom-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity var(--theme-transition-speed) ease,
+    transform var(--theme-transition-speed) ease;
+}
+
+.theme-transition-zoom-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.theme-transition-zoom-exit-active {
+  opacity: 0;
+  transform: scale(0.95);
+  transition:
+    opacity var(--theme-transition-speed) ease,
+    transform var(--theme-transition-speed) ease;
+}
+
+/* Flip transition */
+.theme-transition-flip-enter {
+  opacity: 0;
+  transform: rotateX(-90deg);
+}
+
+.theme-transition-flip-enter-active {
+  opacity: 1;
+  transform: rotateX(0);
+  transition:
+    opacity var(--theme-transition-speed) ease,
+    transform var(--theme-transition-speed) ease;
+}
+
+.theme-transition-flip-exit {
+  opacity: 1;
+  transform: rotateX(0);
+}
+
+.theme-transition-flip-exit-active {
+  opacity: 0;
+  transform: rotateX(90deg);
+  transition:
+    opacity var(--theme-transition-speed) ease,
+    transform var(--theme-transition-speed) ease;
+}
+
+/* ============================================
+   Selection Styles
+   ============================================ */
+
+.theme-option {
+  background-color: var(--theme-answer-background);
+  border: 2px solid var(--theme-border);
+  border-radius: var(--theme-button-radius);
+  padding: 16px;
+  cursor: pointer;
+  transition:
+    border-color var(--theme-transition-speed) ease,
+    background-color var(--theme-transition-speed) ease;
+}
+
+.theme-option:hover {
+  border-color: var(--theme-primary);
+  background-color: var(--theme-muted);
+}
+
+.theme-option-selected {
+  border-color: var(--theme-primary);
+  background-color: var(--theme-accent);
+}
+
+.theme-option-text {
+  font-family: var(--theme-font-family);
+  color: var(--theme-answer-text);
+}
+
+/* ============================================
+   Rating Styles
+   ============================================ */
+
+.theme-rating-item {
+  color: var(--theme-muted-foreground);
+  transition: color var(--theme-transition-speed) ease;
+}
+
+.theme-rating-item:hover,
+.theme-rating-item-active {
+  color: var(--theme-primary);
+}
+
+/* ============================================
+   Branding Styles
+   ============================================ */
+
+.theme-logo {
+  max-height: 48px;
+  width: auto;
+}
+
+.theme-powered-by {
+  font-family: var(--theme-font-family);
+  font-size: 12px;
+  color: var(--theme-muted-foreground);
+}
+
+/* ============================================
+   Background Video Styles
+   ============================================ */
+
+.theme-background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.theme-background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+
+@media (max-width: 768px) {
+  .form-theme-container {
+    --theme-padding-x: 16px;
+    --theme-padding-y: 24px;
+    --theme-font-size-heading: 24px;
+    --theme-font-size-subheading: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-theme-container {
+    --theme-padding-x: 12px;
+    --theme-padding-y: 16px;
+    --theme-font-size-heading: 20px;
+    --theme-font-size-subheading: 14px;
+  }
+}
