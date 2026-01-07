@@ -5,18 +5,37 @@ export type QuestionType =
   | "email"
   | "phone"
   | "number"
+  | "url"
   | "date"
+  | "time"
   | "multiple_choice"
   | "checkboxes"
   | "dropdown"
   | "rating"
   | "opinion_scale"
+  | "nps"
+  | "ranking"
+  | "matrix"
   | "file_upload"
   | "picture_choice"
   | "yes_no"
   | "statement"
   | "welcome_screen"
-  | "thank_you_screen";
+  | "thank_you_screen"
+  | "redirect"
+  | "video_embed"
+  | "image_block";
+
+// Validation types for questions
+export interface QuestionValidations {
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  min?: number;
+  max?: number;
+  pattern?: string;
+  customError?: string;
+}
 
 export interface Question {
   id: string;
@@ -27,7 +46,8 @@ export interface Question {
   required: boolean;
   order: number;
   properties: Record<string, unknown>;
-  validations: Record<string, unknown>;
+  settings?: Record<string, unknown>;
+  validations: QuestionValidations;
   logic: Record<string, unknown>;
   createdAt: Date;
   updatedAt: Date;
