@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { z } from "zod";
 import { TEMPLATE_CATEGORIES, TemplateCategory } from "@/lib/db/schema";
@@ -20,7 +21,9 @@ const saveTemplateSchema = z.object({
 // GET /api/templates - List templates
 export async function GET(request: Request) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -65,7 +68,9 @@ export async function GET(request: Request) {
 // POST /api/templates - Save form as template
 export async function POST(request: Request) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

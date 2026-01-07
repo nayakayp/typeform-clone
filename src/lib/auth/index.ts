@@ -36,6 +36,22 @@ export const auth = betterAuth({
       enabled: true,
     },
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: false,
+        defaultValue: "user",
+        input: false,
+      },
+      status: {
+        type: "string",
+        required: false,
+        defaultValue: "active",
+        input: false,
+      },
+    },
+  },
 });
 
 export type Session = typeof auth.$Infer.Session;

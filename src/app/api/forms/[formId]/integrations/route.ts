@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { forms, formIntegrations } from "@/lib/db/schema";
@@ -8,7 +9,7 @@ import { getFormIntegrations, connectFormIntegration, deleteFormIntegration, upd
 
 const createIntegrationSchema = z.object({
   integrationId: z.string().uuid(),
-  config: z.record(z.unknown()).optional(),
+  config: z.record(z.string(), z.unknown()).optional(),
 });
 
 // GET /api/forms/[formId]/integrations - List form integrations
@@ -17,7 +18,9 @@ export async function GET(
   { params }: { params: Promise<{ formId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -52,7 +55,9 @@ export async function POST(
   { params }: { params: Promise<{ formId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

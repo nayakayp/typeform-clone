@@ -1,6 +1,5 @@
 import {
   pgTable,
-  uuid,
   varchar,
   text,
   timestamp,
@@ -10,8 +9,8 @@ import { users } from "./users";
 
 // Sessions table for better-auth
 export const sessions = pgTable("sessions", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
+  id: text("id").primaryKey(),
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   token: text("token").notNull().unique(),
@@ -32,8 +31,8 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
 
 // Accounts for OAuth providers (better-auth)
 export const accounts = pgTable("accounts", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
+  id: text("id").primaryKey(),
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   accountId: text("account_id").notNull(),
@@ -58,7 +57,7 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
 
 // Verification tokens for email verification
 export const verifications = pgTable("verifications", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),

@@ -29,7 +29,7 @@ export const workspaces = pgTable("workspaces", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 255 }).notNull(),
   slug: varchar("slug", { length: 100 }).notNull().unique(),
-  ownerId: uuid("owner_id")
+  ownerId: text("owner_id")
     .notNull()
     .references(() => users.id),
   logo: text("logo"),
@@ -47,11 +47,11 @@ export const workspaceMembers = pgTable(
     workspaceId: uuid("workspace_id")
       .notNull()
       .references(() => workspaces.id, { onDelete: "cascade" }),
-    userId: uuid("user_id")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     role: varchar("role", { length: 20 }).notNull().default("member").$type<WorkspaceRole>(),
-    invitedBy: uuid("invited_by").references(() => users.id),
+    invitedBy: text("invited_by").references(() => users.id),
     joinedAt: timestamp("joined_at").defaultNow().notNull(),
   },
   (table) => [unique("unique_member").on(table.workspaceId, table.userId)]
@@ -66,7 +66,7 @@ export const workspaceInvitations = pgTable("workspace_invitations", {
   email: varchar("email", { length: 255 }).notNull(),
   role: varchar("role", { length: 20 }).notNull().default("member").$type<WorkspaceRole>(),
   token: varchar("token", { length: 100 }).notNull().unique(),
-  invitedBy: uuid("invited_by")
+  invitedBy: text("invited_by")
     .notNull()
     .references(() => users.id),
   expiresAt: timestamp("expires_at").notNull(),
@@ -79,7 +79,7 @@ export const activityLogs = pgTable("activity_logs", {
   workspaceId: uuid("workspace_id")
     .notNull()
     .references(() => workspaces.id, { onDelete: "cascade" }),
-  userId: uuid("user_id")
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   action: varchar("action", { length: 100 }).notNull(),

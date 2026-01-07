@@ -38,7 +38,7 @@ export const notifications = pgTable(
   "notifications",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    userId: uuid("user_id")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     type: notificationTypeEnum("type").notNull(),
@@ -69,7 +69,7 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
 // Email notification preferences
 export const emailPreferences = pgTable("email_preferences", {
   id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" })
     .unique(),
@@ -98,7 +98,7 @@ export const emailPreferencesRelations = relations(
 // Notification digest tracking (for daily/weekly digests)
 export const notificationDigests = pgTable("notification_digests", {
   id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   type: varchar("type", { length: 20 }).notNull(), // 'daily' | 'weekly'

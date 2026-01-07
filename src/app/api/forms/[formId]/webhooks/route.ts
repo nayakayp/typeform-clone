@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { webhooks, forms } from "@/lib/db/schema";
+import { webhooks, forms, WebhookEvent } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 import { randomBytes } from "crypto";
 
 const createWebhookSchema = z.object({
-  name: z.string().min(1).max(100),
   url: z.string().url(),
   events: z.array(z.string()).min(1),
   secret: z.string().optional(),
@@ -19,7 +19,9 @@ export async function GET(
   { params }: { params: Promise<{ formId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -58,7 +60,9 @@ export async function POST(
   { params }: { params: Promise<{ formId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -87,7 +91,7 @@ export async function POST(
       );
     }
 
-    const { name, url, events, secret } = validation.data;
+    const { url, events, secret } = validation.data;
 
     // Generate a secret if not provided
     const webhookSecret = secret || randomBytes(32).toString("hex");
@@ -96,9 +100,8 @@ export async function POST(
       .insert(webhooks)
       .values({
         formId,
-        name,
         url,
-        events,
+        events: events as WebhookEvent[],
         secret: webhookSecret,
         isActive: true,
       })

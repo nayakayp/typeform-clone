@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin";
 import {
@@ -23,7 +24,7 @@ export async function GET(
   { params }: { params: Promise<{ flagId: string }> }
 ) {
   try {
-    const admin = await requireAdmin();
+    const admin = await requireAdmin(await headers());
     if (!admin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -51,7 +52,7 @@ export async function PATCH(
   { params }: { params: Promise<{ flagId: string }> }
 ) {
   try {
-    const admin = await requireAdmin();
+    const admin = await requireAdmin(await headers());
     if (!admin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -99,7 +100,7 @@ export async function DELETE(
   { params }: { params: Promise<{ flagId: string }> }
 ) {
   try {
-    const admin = await requireAdmin();
+    const admin = await requireAdmin(await headers());
     if (!admin || !admin.isSuper) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

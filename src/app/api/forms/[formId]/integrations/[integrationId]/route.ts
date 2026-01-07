@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { formIntegrations } from "@/lib/db/schema";
@@ -7,7 +8,7 @@ import { z } from "zod";
 import { updateFormIntegration, deleteFormIntegration, logIntegrationActivity } from "@/lib/integrations";
 
 const updateIntegrationSchema = z.object({
-  config: z.record(z.unknown()).optional(),
+  config: z.record(z.string(), z.unknown()).optional(),
   isActive: z.boolean().optional(),
 });
 
@@ -17,7 +18,9 @@ export async function PATCH(
   { params }: { params: Promise<{ formId: string; integrationId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -66,7 +69,9 @@ export async function DELETE(
   { params }: { params: Promise<{ formId: string; integrationId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -105,7 +110,9 @@ export async function POST(
   { params }: { params: Promise<{ formId: string; integrationId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

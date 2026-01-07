@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { forms } from "@/lib/db/schema";
@@ -15,7 +16,7 @@ const createLinksSchema = z.object({
     z.object({
       email: z.string().email().optional(),
       name: z.string().optional(),
-      metadata: z.record(z.unknown()).optional(),
+      metadata: z.record(z.string(), z.unknown()).optional(),
       expiresAt: z.string().optional(),
       maxUses: z.number().min(1).optional(),
     })
@@ -28,7 +29,9 @@ export async function GET(
   { params }: { params: Promise<{ formId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -75,7 +78,9 @@ export async function POST(
   { params }: { params: Promise<{ formId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

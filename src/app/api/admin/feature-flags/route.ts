@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin";
 import {
@@ -16,7 +17,7 @@ const createFlagSchema = z.object({
 // GET /api/admin/feature-flags - List feature flags
 export async function GET() {
   try {
-    const admin = await requireAdmin();
+    const admin = await requireAdmin(await headers());
     if (!admin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -36,7 +37,7 @@ export async function GET() {
 // POST /api/admin/feature-flags - Create feature flag
 export async function POST(request: Request) {
   try {
-    const admin = await requireAdmin();
+    const admin = await requireAdmin(await headers());
     if (!admin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -22,7 +23,7 @@ export async function GET(
   { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const admin = await requireAdmin();
+    const admin = await requireAdmin(await headers());
     if (!admin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -68,7 +69,7 @@ export async function PATCH(
   { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const admin = await requireAdmin();
+    const admin = await requireAdmin(await headers());
     if (!admin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

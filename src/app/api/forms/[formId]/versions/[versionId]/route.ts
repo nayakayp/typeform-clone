@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { forms, formVersions } from "@/lib/db/schema";
+import { forms, formVersions, FormSnapshot } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { getVersion, compareVersions, updateVersionLabel } from "@/lib/versions";
 
@@ -11,7 +12,9 @@ export async function GET(
   { params }: { params: Promise<{ formId: string; versionId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -44,7 +47,7 @@ export async function GET(
 
     let diff = null;
     if (previousVersion) {
-      diff = compareVersions(previousVersion.snapshot, version.snapshot);
+      diff = compareVersions(previousVersion.snapshot as FormSnapshot, version.snapshot as FormSnapshot);
     }
 
     return NextResponse.json({ version, diff });
@@ -63,7 +66,9 @@ export async function PATCH(
   { params }: { params: Promise<{ formId: string; versionId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

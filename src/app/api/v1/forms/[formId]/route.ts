@@ -17,7 +17,7 @@ import { z } from "zod";
 const updateFormSchema = z.object({
   title: z.string().min(1).max(255).optional(),
   description: z.string().optional(),
-  settings: z.record(z.unknown()).optional(),
+  settings: z.record(z.string(), z.unknown()).optional(),
   isPublic: z.boolean().optional(),
   maxResponses: z.number().int().positive().nullable().optional(),
   closeAt: z.string().datetime().nullable().optional(),

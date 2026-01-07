@@ -50,7 +50,7 @@ export const forms = pgTable(
     workspaceId: uuid("workspace_id")
       .notNull()
       .references(() => workspaces.id, { onDelete: "cascade" }),
-    createdBy: uuid("created_by")
+    createdBy: text("created_by")
       .notNull()
       .references(() => users.id),
     title: varchar("title", { length: 255 }).notNull().default("Untitled Form"),
@@ -104,39 +104,11 @@ export const formsRelations = relations(forms, ({ one, many }) => ({
   }),
   questions: many(questions),
   responses: many(responses),
-  versions: many(formVersions),
+  // Note: versions relation is defined in versions.ts to avoid circular imports
   webhooks: many(webhooks),
   views: many(formViews),
   stats: one(formStats),
 }));
 
-// Form versions for history
-export const formVersions = pgTable("form_versions", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  formId: uuid("form_id")
-    .notNull()
-    .references(() => forms.id, { onDelete: "cascade" }),
-  version: integer("version").notNull(),
-  snapshot: jsonb("snapshot").notNull().$type<Record<string, unknown>>(), // Complete form + questions state
-  createdBy: uuid("created_by")
-    .notNull()
-    .references(() => users.id),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-// Form version relations
-export const formVersionsRelations = relations(formVersions, ({ one }) => ({
-  form: one(forms, {
-    fields: [formVersions.formId],
-    references: [forms.id],
-  }),
-  creator: one(users, {
-    fields: [formVersions.createdBy],
-    references: [users.id],
-  }),
-}));
-
 export type Form = typeof forms.$inferSelect;
 export type NewForm = typeof forms.$inferInsert;
-export type FormVersion = typeof formVersions.$inferSelect;
-export type NewFormVersion = typeof formVersions.$inferInsert;

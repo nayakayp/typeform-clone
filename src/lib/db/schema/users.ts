@@ -1,23 +1,32 @@
 import {
   pgTable,
-  uuid,
   varchar,
   boolean,
   text,
   timestamp,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { sessions, accounts } from "./auth";
 import { workspaceMembers, workspaces } from "./workspaces";
-import { forms, formVersions } from "./forms";
+import { forms } from "./forms";
+import { formVersions } from "./versions";
+
+// User role enum
+export const userRoleEnum = pgEnum("user_role", ["user", "admin", "super_admin"]);
+
+// User status enum
+export const userStatusEnum = pgEnum("user_status", ["active", "suspended"]);
 
 // Users table
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: text("id").primaryKey(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   emailVerified: boolean("email_verified").default(false),
   name: varchar("name", { length: 255 }),
   image: text("image"),
+  role: userRoleEnum("role").default("user").notNull(),
+  status: userStatusEnum("status").default("active").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

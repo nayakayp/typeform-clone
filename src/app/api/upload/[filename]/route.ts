@@ -19,7 +19,7 @@ export async function GET(
       const buffer = await uploadService.getFileBuffer(filename);
       const mimeType = mime.lookup(filename) || "application/octet-stream";
 
-      return new NextResponse(buffer, {
+      return new NextResponse(new Uint8Array(buffer), {
         status: 200,
         headers: {
           "Content-Type": mimeType,

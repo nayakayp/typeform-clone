@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { db } from "./index";
 import {
   users,
@@ -7,15 +8,29 @@ import {
   questions,
   questionOptions,
   themes,
+  accounts,
 } from "./schema";
+import { hash } from "bcryptjs";
+
+// Generate a nanoid-style ID (better-auth compatible)
+function generateId() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let id = "";
+  for (let i = 0; i < 21; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return id;
+}
 
 async function seed() {
   console.log("🌱 Starting database seed...");
 
-  // Create a test user
+  // Create a test user (generate ID since users.id is text without default)
+  const userId = generateId();
   const [testUser] = await db
     .insert(users)
     .values({
+      id: userId,
       email: "demo@example.com",
       name: "Demo User",
       emailVerified: true,
@@ -23,6 +38,18 @@ async function seed() {
     .returning();
 
   console.log("✅ Created test user:", testUser.email);
+
+  // Create account with password for the demo user
+  const hashedPassword = await hash("demo123", 10);
+  await db.insert(accounts).values({
+    id: generateId(),
+    userId: testUser.id,
+    accountId: testUser.id,
+    providerId: "credential",
+    password: hashedPassword,
+  });
+
+  console.log("✅ Created account with password");
 
   // Create a default theme
   const [defaultTheme] = await db
@@ -217,6 +244,7 @@ async function seed() {
   console.log("\n🎉 Seed completed successfully!");
   console.log("\nTest credentials:");
   console.log("  Email: demo@example.com");
+  console.log("  Password: demo123");
   console.log("  Workspace: demo-workspace");
   console.log("  Form slug: customer-feedback");
 

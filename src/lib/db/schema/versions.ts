@@ -33,7 +33,7 @@ export const formVersions = pgTable("form_versions", {
   snapshot: jsonb("snapshot").$type<FormSnapshot>().notNull(),
   changeDescription: text("change_description"),
   label: varchar("label", { length: 100 }),
-  createdBy: uuid("created_by").references(() => users.id, { onDelete: "set null" }),
+  createdBy: text("created_by").references(() => users.id, { onDelete: "set null" }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 }, (table) => [
   index("form_versions_form_id_idx").on(table.formId),
@@ -79,7 +79,7 @@ export const formTemplates = pgTable("form_templates", {
   isFeatured: boolean("is_featured").default(false).notNull(),
   snapshot: jsonb("snapshot").$type<FormSnapshot>().notNull(),
   usageCount: integer("usage_count").default(0).notNull(),
-  createdBy: uuid("created_by").references(() => users.id, { onDelete: "set null" }),
+  createdBy: text("created_by").references(() => users.id, { onDelete: "set null" }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 }, (table) => [

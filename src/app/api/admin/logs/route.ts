@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { adminLogs } from "@/lib/db/schema/admin";
 import { users } from "@/lib/db/schema";
@@ -8,7 +9,7 @@ import { requireAdmin } from "@/lib/admin";
 // GET /api/admin/logs - List admin activity logs
 export async function GET(request: Request) {
   try {
-    const admin = await requireAdmin();
+    const admin = await requireAdmin(await headers());
     if (!admin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

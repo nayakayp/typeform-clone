@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const publicPaths = [
-  "/",
   "/login",
   "/register",
   "/forgot-password",
   "/reset-password",
   "/verify-email",
+  "/templates",
   "/f/", // Public form viewing
   "/api/auth", // Auth API routes
 ];
@@ -21,6 +21,11 @@ const authPaths = [
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Homepage is public
+  if (pathname === "/") {
+    return NextResponse.next();
+  }
 
   // Check if the path is public
   const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));

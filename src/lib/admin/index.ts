@@ -22,8 +22,10 @@ export async function isSuperAdmin(userId: string): Promise<boolean> {
 }
 
 // Admin authentication check
-export async function requireAdmin(): Promise<{ userId: string; isSuper: boolean } | null> {
-  const session = await auth();
+export async function requireAdmin(headersList: Headers): Promise<{ userId: string; isSuper: boolean } | null> {
+  const session = await auth.api.getSession({
+    headers: headersList,
+  });
 
   if (!session?.user?.id) {
     return null;
@@ -161,8 +163,8 @@ export async function getAdminStats() {
 // Get users for admin management
 export async function getAdminUsers(options?: {
   search?: string;
-  role?: string;
-  status?: string;
+  role?: "user" | "admin" | "super_admin";
+  status?: "active" | "suspended";
   limit?: number;
   offset?: number;
 }) {

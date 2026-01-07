@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/lib/auth/client";
 import { AdminHeader, UserTable } from "@/components/admin";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,9 +14,11 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search } from "lucide-react";
+import type { ExtendedUser } from "@/types/auth";
 
 export default function AdminUsersPage() {
   const { data: session } = useSession();
+  const user = session?.user as ExtendedUser | undefined;
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -91,8 +93,8 @@ export default function AdminUsersPage() {
         <div className="rounded-lg border">
           <UserTable
             users={users}
-            currentUserId={session?.user?.id || ""}
-            isSuper={session?.user?.role === "super_admin"}
+            currentUserId={user?.id || ""}
+            isSuper={user?.role === "super_admin"}
           />
         </div>
       )}

@@ -14,7 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, Settings, User } from "lucide-react";
 
-export function UserDropdown() {
+export function UserDropdown({ collapsed = false }: { collapsed?: boolean }) {
   const router = useRouter();
   const { user } = useAuth();
 

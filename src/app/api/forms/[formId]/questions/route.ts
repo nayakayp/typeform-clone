@@ -36,16 +36,6 @@ export async function PUT(
     // Find questions to delete (exist in DB but not in incoming)
     const idsToDelete = [...existingIds].filter((id) => !incomingIds.has(id));
 
-    // Find questions to create (have isNew flag or don't exist in DB)
-    const questionsToCreate = builderQuestions.filter(
-      (q) => q.isNew || !existingIds.has(q.id)
-    );
-
-    // Find questions to update (exist in both)
-    const questionsToUpdate = builderQuestions.filter(
-      (q) => !q.isNew && existingIds.has(q.id)
-    );
-
     // Perform deletions
     if (idsToDelete.length > 0) {
       await db
@@ -55,9 +45,9 @@ export async function PUT(
         );
     }
 
-    // Perform creations
-    for (const question of questionsToCreate) {
-      const [newQuestion] = await db
+    // Upsert all incoming questions
+    for (const question of builderQuestions) {
+      await db
         .insert(questions)
         .values({
           id: question.id,
@@ -75,43 +65,24 @@ export async function PUT(
           video: question.video,
           logicJump: question.logicJump,
         })
-        .returning();
-
-      // Create options if any
-      if (question.options && question.options.length > 0) {
-        await db.insert(questionOptions).values(
-          question.options.map((opt, index) => ({
-            id: opt.id || crypto.randomUUID(),
-            questionId: newQuestion.id,
-            label: opt.label,
-            value: opt.value,
-            image: opt.image,
-            order: index,
-          }))
-        );
-      }
-    }
-
-    // Perform updates
-    for (const question of questionsToUpdate) {
-      await db
-        .update(questions)
-        .set({
-          type: question.type,
-          title: question.title,
-          description: question.description,
-          placeholder: question.placeholder,
-          order: question.order,
-          groupId: question.groupId,
-          required: question.required,
-          validations: question.validations,
-          settings: question.settings,
-          image: question.image,
-          video: question.video,
-          logicJump: question.logicJump,
-          updatedAt: new Date(),
-        })
-        .where(eq(questions.id, question.id));
+        .onConflictDoUpdate({
+          target: questions.id,
+          set: {
+            type: question.type,
+            title: question.title,
+            description: question.description,
+            placeholder: question.placeholder,
+            order: question.order,
+            groupId: question.groupId,
+            required: question.required,
+            validations: question.validations,
+            settings: question.settings,
+            image: question.image,
+            video: question.video,
+            logicJump: question.logicJump,
+            updatedAt: new Date(),
+          },
+        });
 
       // Update options - delete existing and insert new
       if (question.options !== undefined) {

@@ -19,8 +19,8 @@ const updateQuestionSchema = z.object({
   description: z.string().optional(),
   placeholder: z.string().max(255).optional(),
   required: z.boolean().optional(),
-  settings: z.record(z.unknown()).optional(),
-  validations: z.record(z.unknown()).optional(),
+  settings: z.record(z.string(), z.unknown()).optional(),
+  validations: z.record(z.string(), z.unknown()).optional(),
   options: z.array(z.object({
     id: z.string().uuid().optional(), // Existing option ID
     label: z.string().min(1).max(500),

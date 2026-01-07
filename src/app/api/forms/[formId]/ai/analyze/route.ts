@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { forms, questions, responses, responseAnswers } from "@/lib/db/schema";
+import { forms, questions, responses, answers } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { analyzeResponses, AnalysisInput } from "@/lib/ai";
 
@@ -10,7 +11,9 @@ export async function POST(
   { params }: { params: Promise<{ formId: string }> }
 ) {
   try {
-    const session = await auth();
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -59,13 +62,13 @@ export async function POST(
       formTitle: form.title,
       questions: formQuestions.map((q) => ({
         id: q.id,
-        title: q.title,
+        title: q.title ?? "",
         type: q.type,
       })),
       responses: formResponses.map((r) =>
         r.answers.map((a) => ({
           questionId: a.questionId,
-          value: a.value as string | number | string[],
+          value: (a.textValue ?? a.numberValue ?? a.jsonValue ?? a.booleanValue ?? "") as string | number | string[],
         }))
       ),
     };

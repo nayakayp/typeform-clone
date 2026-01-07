@@ -20,7 +20,7 @@ export const featureFlags = pgTable("feature_flags", {
 // Admin activity logs
 export const adminLogs = pgTable("admin_logs", {
   id: uuid("id").primaryKey().defaultRandom(),
-  adminId: uuid("admin_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  adminId: text("admin_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   action: varchar("action", { length: 100 }).notNull(),
   targetType: varchar("target_type", { length: 50 }),
   targetId: uuid("target_id"),
