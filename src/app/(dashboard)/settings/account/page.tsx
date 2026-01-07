@@ -3,13 +3,13 @@
 import {
   SettingsLayout,
   SettingsSidebar,
-  ProfileSettings,
+  AccountDetails,
 } from "@/components/settings";
 
-export default function SettingsPage() {
+export default function AccountSettingsPage() {
   return (
     <SettingsLayout sidebar={<SettingsSidebar />}>
-      <ProfileSettings />
+      <AccountDetails />
     </SettingsLayout>
   );
 }

@@ -3,13 +3,13 @@
 import {
   SettingsLayout,
   SettingsSidebar,
-  ProfileSettings,
+  NotificationPreferences,
 } from "@/components/settings";
 
-export default function SettingsPage() {
+export default function NotificationSettingsPage() {
   return (
     <SettingsLayout sidebar={<SettingsSidebar />}>
-      <ProfileSettings />
+      <NotificationPreferences />
     </SettingsLayout>
   );
 }
