@@ -76,3 +76,94 @@ export interface TimeSettings extends QuestionSettings {
   maxTime?: string;
   placeholder?: string;
 }
+
+// Selection & Rating Types
+
+export interface ChoiceOption {
+  id: string;
+  label: string;
+  value?: string;
+  image?: string;
+  order: number;
+}
+
+export interface MultipleChoiceSettings extends QuestionSettings {
+  options?: ChoiceOption[];
+  allowOther?: boolean;
+  randomize?: boolean;
+  layout?: "vertical" | "horizontal" | "grid";
+  columns?: number;
+}
+
+export interface CheckboxesSettings extends QuestionSettings {
+  options?: ChoiceOption[];
+  minSelections?: number;
+  maxSelections?: number;
+  allowOther?: boolean;
+  randomize?: boolean;
+}
+
+export interface DropdownSettings extends QuestionSettings {
+  options?: ChoiceOption[];
+  searchable?: boolean;
+  placeholder?: string;
+  allowOther?: boolean;
+  alphabetize?: boolean;
+}
+
+export interface PictureChoiceSettings extends QuestionSettings {
+  options?: ChoiceOption[];
+  multipleSelection?: boolean;
+  columns?: number;
+  showLabels?: boolean;
+  supersize?: boolean;
+}
+
+export interface YesNoSettings extends QuestionSettings {
+  yesLabel?: string;
+  noLabel?: string;
+}
+
+export interface RatingSettings extends QuestionSettings {
+  maxRating?: number;
+  icon?: "star" | "heart" | "thumbs" | "number";
+  lowLabel?: string;
+  highLabel?: string;
+  showNumbers?: boolean;
+}
+
+export interface OpinionScaleSettings extends QuestionSettings {
+  min?: number;
+  max?: number;
+  step?: number;
+  lowLabel?: string;
+  midLabel?: string;
+  highLabel?: string;
+  showLabels?: boolean;
+}
+
+export interface NpsSettings extends QuestionSettings {
+  lowLabel?: string;
+  highLabel?: string;
+}
+
+export interface RankingSettings extends QuestionSettings {
+  options?: ChoiceOption[];
+  randomize?: boolean;
+}
+
+export interface MatrixRow {
+  id: string;
+  label: string;
+}
+
+export interface MatrixColumn {
+  id: string;
+  label: string;
+}
+
+export interface MatrixSettings extends QuestionSettings {
+  rows?: MatrixRow[];
+  columns?: MatrixColumn[];
+  allowMultiplePerRow?: boolean;
+}
