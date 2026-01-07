@@ -36,3 +36,6 @@ export * from "./access-control";
 
 // Versions & Templates
 export * from "./versions";
+
+// Files
+export * from "./files";

@@ -18,6 +18,12 @@ export { PictureChoice } from "./PictureChoice";
 export { Ranking } from "./Ranking";
 export { Matrix } from "./Matrix";
 
+// Media question renderers
+export { FileUpload } from "./FileUpload";
+export { Signature } from "./Signature";
+export { VideoRecording } from "./VideoRecording";
+export { AudioRecording } from "./AudioRecording";
+
 // Content block renderers
 export { WelcomeScreen } from "./WelcomeScreen";
 export { Statement } from "./Statement";
@@ -50,6 +56,10 @@ import { ThankYouScreen } from "./ThankYouScreen";
 import { Redirect } from "./Redirect";
 import { VideoEmbed } from "./VideoEmbed";
 import { ImageBlock } from "./ImageBlock";
+import { FileUpload } from "./FileUpload";
+import { Signature } from "./Signature";
+import { VideoRecording } from "./VideoRecording";
+import { AudioRecording } from "./AudioRecording";
 import type { QuestionRendererProps, ContentBlockProps } from "../types";
 
 // Question renderer map for dynamic rendering
@@ -81,6 +91,10 @@ export const QuestionRenderers: Record<
   >,
   ranking: Ranking as React.ComponentType<QuestionRendererProps<unknown>>,
   matrix: Matrix as React.ComponentType<QuestionRendererProps<unknown>>,
+  file_upload: FileUpload as React.ComponentType<QuestionRendererProps<unknown>>,
+  signature: Signature as React.ComponentType<QuestionRendererProps<unknown>>,
+  video_recording: VideoRecording as React.ComponentType<QuestionRendererProps<unknown>>,
+  audio_recording: AudioRecording as React.ComponentType<QuestionRendererProps<unknown>>,
 };
 
 // Content block renderer map for dynamic rendering
