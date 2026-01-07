@@ -14,7 +14,7 @@ import type { Question, QuestionSettings } from "@/lib/db/schema/questions";
 import type { VideoEmbedSettings } from "../types";
 
 interface VideoEmbedSettingsPanelProps {
-  question: Question;
+  question: Omit<Question, "formId"> & { formId?: string };
   onUpdate: (settings: QuestionSettings) => void;
 }
 

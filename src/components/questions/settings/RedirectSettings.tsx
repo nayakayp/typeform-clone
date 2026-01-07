@@ -8,7 +8,7 @@ import type { Question, QuestionSettings } from "@/lib/db/schema/questions";
 import type { RedirectSettings } from "../types";
 
 interface RedirectSettingsPanelProps {
-  question: Question;
+  question: Omit<Question, "formId"> & { formId?: string };
   onUpdate: (settings: QuestionSettings) => void;
 }
 

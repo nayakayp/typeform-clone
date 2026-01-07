@@ -14,7 +14,7 @@ import type { Question, QuestionSettings } from "@/lib/db/schema/questions";
 import type { ImageBlockSettings } from "../types";
 
 interface ImageBlockSettingsPanelProps {
-  question: Question;
+  question: Omit<Question, "formId"> & { formId?: string };
   onUpdate: (settings: QuestionSettings) => void;
 }
 

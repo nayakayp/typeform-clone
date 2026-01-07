@@ -8,7 +8,7 @@ import type { Question, QuestionSettings } from "@/lib/db/schema/questions";
 import type { WelcomeScreenSettings } from "../types";
 
 interface WelcomeScreenSettingsPanelProps {
-  question: Question;
+  question: Omit<Question, "formId"> & { formId?: string };
   onUpdate: (settings: QuestionSettings) => void;
 }
 

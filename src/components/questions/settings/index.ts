@@ -52,8 +52,9 @@ import { VideoEmbedSettingsPanel } from "./VideoEmbedSettings";
 import { ImageBlockSettingsPanel } from "./ImageBlockSettings";
 import type { Question, QuestionSettings } from "@/lib/db/schema/questions";
 
+// Use Omit to make formId optional for builder context
 type SettingsPanelProps = {
-  question: Question;
+  question: Omit<Question, "formId"> & { formId?: string };
   onUpdate: (settings: QuestionSettings) => void;
 };
 

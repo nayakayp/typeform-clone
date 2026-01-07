@@ -15,7 +15,7 @@ import type { Question, QuestionSettings } from "@/lib/db/schema/questions";
 import type { StatementSettings } from "../types";
 
 interface StatementSettingsPanelProps {
-  question: Question;
+  question: Omit<Question, "formId"> & { formId?: string };
   onUpdate: (settings: QuestionSettings) => void;
 }
 

@@ -4,3 +4,5 @@ export { BuilderCanvas } from "./builder-canvas";
 export { QuestionSidebar } from "./question-sidebar";
 export { QuestionCard } from "./question-card";
 export { PreviewPanel } from "./preview-panel";
+export { QuestionConfigPanel } from "./config-panel";
+export * from "./config-panel";
