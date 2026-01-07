@@ -7,6 +7,12 @@ import type {
   PreviewMode,
   HistoryAction,
 } from "@/types/builder";
+import type {
+  SkipLogic,
+  VisibilityLogic,
+  Calculator,
+  HiddenField,
+} from "@/lib/logic/types";
 
 // Default question values
 function createDefaultQuestion(
@@ -45,6 +51,14 @@ interface FormBuilderState {
   questions: BuilderQuestion[];
   selectedQuestionId: string | null;
 
+  // Logic
+  skipLogicRules: SkipLogic[];
+  visibilityRules: VisibilityLogic[];
+  calculators: Calculator[];
+  hiddenFields: HiddenField[];
+  logicModalOpen: boolean;
+  logicModalQuestionId: string | null;
+
   // History for undo/redo
   history: HistoryAction[];
   historyIndex: number;
@@ -68,6 +82,25 @@ interface FormBuilderActions {
   duplicateQuestion: (id: string) => string | null;
   reorderQuestions: (activeId: string, overId: string) => void;
   selectQuestion: (id: string | null) => void;
+
+  // Logic actions
+  setSkipLogic: (questionId: string, logic: SkipLogic | null) => void;
+  setVisibilityLogic: (
+    questionId: string,
+    logic: VisibilityLogic | null
+  ) => void;
+  addCalculator: (calculator: Calculator) => void;
+  updateCalculator: (id: string, updates: Partial<Calculator>) => void;
+  deleteCalculator: (id: string) => void;
+  addHiddenField: (field: HiddenField) => void;
+  updateHiddenField: (id: string, updates: Partial<HiddenField>) => void;
+  deleteHiddenField: (id: string) => void;
+  openLogicModal: (questionId: string) => void;
+  closeLogicModal: () => void;
+  getSkipLogicForQuestion: (questionId: string) => SkipLogic | undefined;
+  getVisibilityLogicForQuestion: (
+    questionId: string
+  ) => VisibilityLogic | undefined;
 
   // History actions
   undo: () => void;
@@ -96,6 +129,12 @@ const initialState: FormBuilderState = {
   saveError: null,
   questions: [],
   selectedQuestionId: null,
+  skipLogicRules: [],
+  visibilityRules: [],
+  calculators: [],
+  hiddenFields: [],
+  logicModalOpen: false,
+  logicModalQuestionId: null,
   history: [],
   historyIndex: -1,
   previewMode: "desktop",
@@ -116,6 +155,12 @@ export const useBuilderStore = create<FormBuilderState & FormBuilderActions>()(
             state.questions = questions;
             state.isDirty = false;
             state.selectedQuestionId = null;
+            state.skipLogicRules = [];
+            state.visibilityRules = [];
+            state.calculators = [];
+            state.hiddenFields = [];
+            state.logicModalOpen = false;
+            state.logicModalQuestionId = null;
             state.history = [];
             state.historyIndex = -1;
           });
@@ -319,6 +364,131 @@ export const useBuilderStore = create<FormBuilderState & FormBuilderActions>()(
           set((state) => {
             state.selectedQuestionId = id;
           });
+        },
+
+        // Logic actions
+        setSkipLogic: (questionId, logic) => {
+          set((state) => {
+            const existingIndex = state.skipLogicRules.findIndex(
+              (r) => r.questionId === questionId
+            );
+
+            if (logic === null) {
+              // Remove the rule
+              if (existingIndex !== -1) {
+                state.skipLogicRules.splice(existingIndex, 1);
+              }
+            } else {
+              // Add or update the rule
+              if (existingIndex !== -1) {
+                state.skipLogicRules[existingIndex] = logic;
+              } else {
+                state.skipLogicRules.push(logic);
+              }
+            }
+            state.isDirty = true;
+          });
+        },
+
+        setVisibilityLogic: (questionId, logic) => {
+          set((state) => {
+            const existingIndex = state.visibilityRules.findIndex(
+              (r) => r.questionId === questionId
+            );
+
+            if (logic === null) {
+              // Remove the rule
+              if (existingIndex !== -1) {
+                state.visibilityRules.splice(existingIndex, 1);
+              }
+            } else {
+              // Add or update the rule
+              if (existingIndex !== -1) {
+                state.visibilityRules[existingIndex] = logic;
+              } else {
+                state.visibilityRules.push(logic);
+              }
+            }
+            state.isDirty = true;
+          });
+        },
+
+        addCalculator: (calculator) => {
+          set((state) => {
+            state.calculators.push(calculator);
+            state.isDirty = true;
+          });
+        },
+
+        updateCalculator: (id, updates) => {
+          set((state) => {
+            const index = state.calculators.findIndex((c) => c.id === id);
+            if (index !== -1) {
+              Object.assign(state.calculators[index], updates);
+              state.isDirty = true;
+            }
+          });
+        },
+
+        deleteCalculator: (id) => {
+          set((state) => {
+            const index = state.calculators.findIndex((c) => c.id === id);
+            if (index !== -1) {
+              state.calculators.splice(index, 1);
+              state.isDirty = true;
+            }
+          });
+        },
+
+        addHiddenField: (field) => {
+          set((state) => {
+            state.hiddenFields.push(field);
+            state.isDirty = true;
+          });
+        },
+
+        updateHiddenField: (id, updates) => {
+          set((state) => {
+            const index = state.hiddenFields.findIndex((f) => f.id === id);
+            if (index !== -1) {
+              Object.assign(state.hiddenFields[index], updates);
+              state.isDirty = true;
+            }
+          });
+        },
+
+        deleteHiddenField: (id) => {
+          set((state) => {
+            const index = state.hiddenFields.findIndex((f) => f.id === id);
+            if (index !== -1) {
+              state.hiddenFields.splice(index, 1);
+              state.isDirty = true;
+            }
+          });
+        },
+
+        openLogicModal: (questionId) => {
+          set((state) => {
+            state.logicModalOpen = true;
+            state.logicModalQuestionId = questionId;
+          });
+        },
+
+        closeLogicModal: () => {
+          set((state) => {
+            state.logicModalOpen = false;
+            state.logicModalQuestionId = null;
+          });
+        },
+
+        getSkipLogicForQuestion: (questionId) => {
+          const state = get();
+          return state.skipLogicRules.find((r) => r.questionId === questionId);
+        },
+
+        getVisibilityLogicForQuestion: (questionId) => {
+          const state = get();
+          return state.visibilityRules.find((r) => r.questionId === questionId);
         },
 
         // History actions

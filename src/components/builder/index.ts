@@ -5,4 +5,6 @@ export { QuestionSidebar } from "./question-sidebar";
 export { QuestionCard } from "./question-card";
 export { PreviewPanel } from "./preview-panel";
 export { QuestionConfigPanel } from "./config-panel";
+export { PipingTextarea } from "./PipingTextarea";
 export * from "./config-panel";
+export * from "./logic";
