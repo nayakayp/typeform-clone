@@ -1,3 +1,4 @@
+// Question renderers (input types)
 export { ShortText } from "./ShortText";
 export { LongText } from "./LongText";
 export { Email } from "./Email";
@@ -17,6 +18,14 @@ export { PictureChoice } from "./PictureChoice";
 export { Ranking } from "./Ranking";
 export { Matrix } from "./Matrix";
 
+// Content block renderers
+export { WelcomeScreen } from "./WelcomeScreen";
+export { Statement } from "./Statement";
+export { ThankYouScreen } from "./ThankYouScreen";
+export { Redirect } from "./Redirect";
+export { VideoEmbed } from "./VideoEmbed";
+export { ImageBlock } from "./ImageBlock";
+
 import { ShortText } from "./ShortText";
 import { LongText } from "./LongText";
 import { Email } from "./Email";
@@ -35,7 +44,13 @@ import { Nps } from "./Nps";
 import { PictureChoice } from "./PictureChoice";
 import { Ranking } from "./Ranking";
 import { Matrix } from "./Matrix";
-import type { QuestionRendererProps } from "../types";
+import { WelcomeScreen } from "./WelcomeScreen";
+import { Statement } from "./Statement";
+import { ThankYouScreen } from "./ThankYouScreen";
+import { Redirect } from "./Redirect";
+import { VideoEmbed } from "./VideoEmbed";
+import { ImageBlock } from "./ImageBlock";
+import type { QuestionRendererProps, ContentBlockProps } from "../types";
 
 // Question renderer map for dynamic rendering
 export const QuestionRenderers: Record<
@@ -66,4 +81,17 @@ export const QuestionRenderers: Record<
   >,
   ranking: Ranking as React.ComponentType<QuestionRendererProps<unknown>>,
   matrix: Matrix as React.ComponentType<QuestionRendererProps<unknown>>,
+};
+
+// Content block renderer map for dynamic rendering
+export const ContentBlockRenderers: Record<
+  string,
+  React.ComponentType<ContentBlockProps>
+> = {
+  welcome_screen: WelcomeScreen,
+  statement: Statement,
+  thank_you_screen: ThankYouScreen,
+  redirect: Redirect,
+  video_embed: VideoEmbed,
+  image_block: ImageBlock,
 };

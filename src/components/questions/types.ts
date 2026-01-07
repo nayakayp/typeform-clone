@@ -167,3 +167,70 @@ export interface MatrixSettings extends QuestionSettings {
   columns?: MatrixColumn[];
   allowMultiplePerRow?: boolean;
 }
+
+// Content Block Types
+export interface WelcomeScreenSettings extends QuestionSettings {
+  title?: string;
+  description?: string;
+  buttonText?: string;
+  image?: string;
+  video?: string;
+  showEstimatedTime?: boolean;
+  estimatedMinutes?: number;
+}
+
+export interface StatementSettings extends QuestionSettings {
+  content?: string;
+  contentType?: "plain" | "markdown";
+  buttonText?: string;
+  image?: string;
+  imagePosition?: "left" | "right" | "top" | "bottom" | "background";
+  textAlignment?: "left" | "center" | "right";
+}
+
+export interface ThankYouScreenSettings extends QuestionSettings {
+  title?: string;
+  description?: string;
+  showSocialShare?: boolean;
+  socialMessage?: string;
+  showResponseSummary?: boolean;
+  redirectUrl?: string;
+  redirectDelay?: number;
+  buttonText?: string;
+  buttonUrl?: string;
+  showConfetti?: boolean;
+}
+
+export interface RedirectSettings extends QuestionSettings {
+  url?: string;
+  delay?: number;
+  openInNewTab?: boolean;
+  showMessage?: string;
+  passResponseData?: boolean;
+}
+
+export interface VideoEmbedSettings extends QuestionSettings {
+  url?: string;
+  provider?: "youtube" | "vimeo" | "wistia" | "loom" | "custom";
+  autoplay?: boolean;
+  showControls?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+  requiredWatchTime?: number;
+}
+
+export interface ImageBlockSettings extends QuestionSettings {
+  url?: string;
+  alt?: string;
+  caption?: string;
+  size?: "small" | "medium" | "large" | "full";
+  alignment?: "left" | "center" | "right";
+  link?: string;
+  lightbox?: boolean;
+}
+
+export interface ContentBlockProps {
+  question: Question;
+  onContinue?: () => void;
+  disabled?: boolean;
+}

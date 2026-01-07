@@ -1,3 +1,4 @@
+// Question settings panels (input types)
 export { ShortTextSettingsPanel } from "./ShortTextSettings";
 export { LongTextSettingsPanel } from "./LongTextSettings";
 export { EmailSettingsPanel } from "./EmailSettings";
@@ -17,6 +18,14 @@ export { PictureChoiceSettingsPanel } from "./PictureChoiceSettings";
 export { RankingSettingsPanel } from "./RankingSettings";
 export { MatrixSettingsPanel } from "./MatrixSettings";
 
+// Content block settings panels
+export { WelcomeScreenSettingsPanel } from "./WelcomeScreenSettings";
+export { StatementSettingsPanel } from "./StatementSettings";
+export { ThankYouScreenSettingsPanel } from "./ThankYouScreenSettings";
+export { RedirectSettingsPanel } from "./RedirectSettings";
+export { VideoEmbedSettingsPanel } from "./VideoEmbedSettings";
+export { ImageBlockSettingsPanel } from "./ImageBlockSettings";
+
 import { ShortTextSettingsPanel } from "./ShortTextSettings";
 import { LongTextSettingsPanel } from "./LongTextSettings";
 import { EmailSettingsPanel } from "./EmailSettings";
@@ -35,6 +44,18 @@ import { NpsSettingsPanel } from "./NpsSettings";
 import { PictureChoiceSettingsPanel } from "./PictureChoiceSettings";
 import { RankingSettingsPanel } from "./RankingSettings";
 import { MatrixSettingsPanel } from "./MatrixSettings";
+import { WelcomeScreenSettingsPanel } from "./WelcomeScreenSettings";
+import { StatementSettingsPanel } from "./StatementSettings";
+import { ThankYouScreenSettingsPanel } from "./ThankYouScreenSettings";
+import { RedirectSettingsPanel } from "./RedirectSettings";
+import { VideoEmbedSettingsPanel } from "./VideoEmbedSettings";
+import { ImageBlockSettingsPanel } from "./ImageBlockSettings";
+import type { Question, QuestionSettings } from "@/lib/db/schema/questions";
+
+type SettingsPanelProps = {
+  question: Question;
+  onUpdate: (settings: QuestionSettings) => void;
+};
 
 // Settings panel map for dynamic rendering
 export const QuestionSettingsPanels: Record<
@@ -116,4 +137,17 @@ export const QuestionSettingsPanels: Record<
     settings: unknown;
     onChange: (settings: unknown) => void;
   }>,
+};
+
+// Content block settings panel map for dynamic rendering
+export const ContentBlockSettingsPanels: Record<
+  string,
+  React.ComponentType<SettingsPanelProps>
+> = {
+  welcome_screen: WelcomeScreenSettingsPanel,
+  statement: StatementSettingsPanel,
+  thank_you_screen: ThankYouScreenSettingsPanel,
+  redirect: RedirectSettingsPanel,
+  video_embed: VideoEmbedSettingsPanel,
+  image_block: ImageBlockSettingsPanel,
 };
