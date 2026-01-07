@@ -30,3 +30,6 @@ export * from "./api-keys";
 
 // Notifications
 export * from "./notifications";
+
+// Access Control
+export * from "./access-control";
