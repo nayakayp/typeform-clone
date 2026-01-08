@@ -8,6 +8,7 @@ import {
   DEFAULT_TYPOGRAPHY,
   DEFAULT_LAYOUT,
   DEFAULT_BUTTONS,
+  DEFAULT_FORM_ELEMENTS,
   DEFAULT_PROGRESS_BAR,
   DEFAULT_BRANDING,
   DEFAULT_ANIMATIONS,
@@ -44,9 +45,73 @@ export const defaultTheme: ThemeTemplate = {
     typography: DEFAULT_TYPOGRAPHY,
     layout: DEFAULT_LAYOUT,
     buttons: DEFAULT_BUTTONS,
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: DEFAULT_PROGRESS_BAR,
     branding: DEFAULT_BRANDING,
     animations: DEFAULT_ANIMATIONS,
+  },
+};
+
+// Typeform Classic - Matches Typeform's signature style
+export const typeformClassicTheme: ThemeTemplate = {
+  id: "typeform-classic",
+  name: "Typeform Classic",
+  description: "Classic Typeform style with underline inputs and badge numbers",
+  theme: {
+    colors: {
+      primary: "#3B5998",
+      secondary: "#6B7280",
+      background: "#FFFFFF",
+      foreground: "#1F2937",
+      muted: "#F3F4F6",
+      mutedForeground: "#6B7280",
+      accent: "#E8F0FE",
+      accentForeground: "#3B5998",
+      destructive: "#EF4444",
+      border: "#3B5998",
+      input: "#3B5998",
+      ring: "#3B5998",
+      questionText: "#1F2937",
+      questionBackground: "transparent",
+      answerText: "#1F2937",
+      answerBackground: "#FFFFFF",
+    },
+    background: {
+      type: "solid",
+      color: "#FFFFFF",
+    },
+    typography: {
+      ...DEFAULT_TYPOGRAPHY,
+      fontFamily: "Inter",
+      headingFontFamily: "Inter",
+      fontSize: "large",
+    },
+    layout: {
+      ...DEFAULT_LAYOUT,
+      questionAlignment: "left",
+    },
+    buttons: {
+      variant: "solid",
+      radius: "sm",
+      size: "md",
+      submitText: "OK",
+    },
+    formElements: {
+      inputStyle: "underline",
+      questionNumberStyle: "badge",
+      navigationStyle: "corner-arrows",
+    },
+    progressBar: {
+      type: "bar",
+      position: "top",
+      showPercentage: false,
+      color: "#3B5998",
+    },
+    branding: DEFAULT_BRANDING,
+    animations: {
+      ...DEFAULT_ANIMATIONS,
+      transition: "slide",
+    },
   },
 };
 
@@ -87,6 +152,7 @@ export const darkTheme: ThemeTemplate = {
       ...DEFAULT_BUTTONS,
       variant: "solid",
     },
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       ...DEFAULT_PROGRESS_BAR,
       color: "#3B82F6",
@@ -141,6 +207,7 @@ export const minimalTheme: ThemeTemplate = {
       radius: "none",
       size: "md",
     },
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       type: "bar",
       position: "top",
@@ -209,6 +276,7 @@ export const vibrantTheme: ThemeTemplate = {
       radius: "full",
       size: "lg",
     },
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       type: "dots",
       position: "bottom",
@@ -271,6 +339,7 @@ export const corporateTheme: ThemeTemplate = {
       radius: "sm",
       size: "md",
     },
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       type: "percentage",
       position: "top",
@@ -336,6 +405,7 @@ export const playfulTheme: ThemeTemplate = {
       radius: "full",
       size: "lg",
     },
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       type: "steps",
       position: "top",
@@ -405,6 +475,7 @@ export const natureTheme: ThemeTemplate = {
       radius: "lg",
       size: "md",
     },
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       type: "bar",
       position: "top",
@@ -474,6 +545,7 @@ export const oceanTheme: ThemeTemplate = {
       radius: "lg",
       size: "md",
     },
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       type: "bar",
       position: "bottom",
@@ -544,6 +616,7 @@ export const sunsetTheme: ThemeTemplate = {
       radius: "md",
       size: "lg",
     },
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       type: "dots",
       position: "bottom",
@@ -591,6 +664,7 @@ export const plainBlueTheme: ThemeTemplate = {
     typography: DEFAULT_TYPOGRAPHY,
     layout: DEFAULT_LAYOUT,
     buttons: DEFAULT_BUTTONS,
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       ...DEFAULT_PROGRESS_BAR,
       color: "#14B8A6",
@@ -634,6 +708,7 @@ export const plainDarkTheme: ThemeTemplate = {
       ...DEFAULT_BUTTONS,
       variant: "solid",
     },
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       ...DEFAULT_PROGRESS_BAR,
       color: "#374151",
@@ -681,6 +756,7 @@ export const barcelonetaTheme: ThemeTemplate = {
       ...DEFAULT_BUTTONS,
       radius: "md",
     },
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       ...DEFAULT_PROGRESS_BAR,
       color: "#D4A574",
@@ -735,6 +811,7 @@ export const coralWavesTheme: ThemeTemplate = {
     },
     layout: DEFAULT_LAYOUT,
     buttons: DEFAULT_BUTTONS,
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       ...DEFAULT_PROGRESS_BAR,
       color: "#F87171",
@@ -786,6 +863,7 @@ export const tealLagoonTheme: ThemeTemplate = {
     },
     layout: DEFAULT_LAYOUT,
     buttons: DEFAULT_BUTTONS,
+    formElements: DEFAULT_FORM_ELEMENTS,
     progressBar: {
       ...DEFAULT_PROGRESS_BAR,
       color: "#5EEAD4",
@@ -797,6 +875,7 @@ export const tealLagoonTheme: ThemeTemplate = {
 
 // All templates array
 export const THEME_TEMPLATES: ThemeTemplate[] = [
+  typeformClassicTheme,
   defaultTheme,
   plainBlueTheme,
   plainDarkTheme,

@@ -219,6 +219,7 @@ export function ThemeEditor({
                   progressBar={theme.progressBar}
                   animations={theme.animations}
                   branding={theme.branding}
+                  formElements={theme.formElements}
                   onProgressBarChange={(progressBar) =>
                     updateTheme("progressBar", progressBar)
                   }
@@ -227,6 +228,9 @@ export function ThemeEditor({
                   }
                   onBrandingChange={(branding) =>
                     updateTheme("branding", branding)
+                  }
+                  onFormElementsChange={(formElements) =>
+                    updateTheme("formElements", formElements)
                   }
                 />
               </TabsContent>
@@ -263,24 +267,29 @@ import type {
   ThemeProgressBar,
   ThemeAnimations,
   ThemeBranding,
+  ThemeFormElements,
 } from "@/lib/theme/types";
 
 interface EffectsEditorProps {
   progressBar: ThemeProgressBar;
   animations: ThemeAnimations;
   branding: ThemeBranding;
+  formElements: ThemeFormElements;
   onProgressBarChange: (progressBar: ThemeProgressBar) => void;
   onAnimationsChange: (animations: ThemeAnimations) => void;
   onBrandingChange: (branding: ThemeBranding) => void;
+  onFormElementsChange: (formElements: ThemeFormElements) => void;
 }
 
 function EffectsEditor({
   progressBar,
   animations,
   branding,
+  formElements,
   onProgressBarChange,
   onAnimationsChange,
   onBrandingChange,
+  onFormElementsChange,
 }: EffectsEditorProps) {
   return (
     <div className="space-y-6">
@@ -484,6 +493,82 @@ function EffectsEditor({
                 })
               }
             />
+          </div>
+        </div>
+      </div>
+
+      {/* Form Elements Section */}
+      <div className="space-y-4">
+        <h3 className="font-medium">Form Elements</h3>
+
+        <div className="grid gap-4">
+          <div className="space-y-2">
+            <Label>Input Style</Label>
+            <Select
+              value={formElements.inputStyle}
+              onValueChange={(value) =>
+                onFormElementsChange({
+                  ...formElements,
+                  inputStyle: value as ThemeFormElements["inputStyle"],
+                })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="box">Box (bordered)</SelectItem>
+                <SelectItem value="underline">Underline</SelectItem>
+                <SelectItem value="borderless">Borderless</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Question Number Style</Label>
+            <Select
+              value={formElements.questionNumberStyle}
+              onValueChange={(value) =>
+                onFormElementsChange({
+                  ...formElements,
+                  questionNumberStyle: value as ThemeFormElements["questionNumberStyle"],
+                })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="badge">Badge (filled)</SelectItem>
+                <SelectItem value="circle">Circle (outline)</SelectItem>
+                <SelectItem value="arrow">Arrow (1 →)</SelectItem>
+                <SelectItem value="plain">Plain (1.)</SelectItem>
+                <SelectItem value="none">Hidden</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Navigation Style</Label>
+            <Select
+              value={formElements.navigationStyle}
+              onValueChange={(value) =>
+                onFormElementsChange({
+                  ...formElements,
+                  navigationStyle: value as ThemeFormElements["navigationStyle"],
+                })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="corner-arrows">Corner Arrows (Typeform)</SelectItem>
+                <SelectItem value="inline">Inline (Back/Next)</SelectItem>
+                <SelectItem value="bottom-bar">Bottom Bar</SelectItem>
+                <SelectItem value="hidden">Hidden</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>

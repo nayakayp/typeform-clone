@@ -95,6 +95,12 @@ export interface CustomTheme {
     variant?: "solid" | "outline" | "ghost";
     radius?: "none" | "sm" | "md" | "lg" | "full";
     size?: "sm" | "md" | "lg";
+    submitText?: string;
+  };
+  formElements?: {
+    inputStyle?: "box" | "underline" | "borderless";
+    questionNumberStyle?: "arrow" | "badge" | "circle" | "plain" | "none";
+    navigationStyle?: "inline" | "corner-arrows" | "bottom-bar" | "hidden";
   };
   progressBar?: {
     type?: "bar" | "dots" | "percentage" | "steps" | "none";

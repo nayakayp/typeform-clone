@@ -10,6 +10,7 @@ import type {
   ThemeTypography,
   ThemeLayout,
   ThemeButtons,
+  ThemeFormElements,
   ThemeProgressBar,
   ThemeBranding,
   ThemeAnimations,
@@ -63,6 +64,14 @@ export const DEFAULT_BUTTONS: ThemeButtons = {
   variant: "solid",
   radius: "md",
   size: "md",
+  submitText: "OK",
+};
+
+// Default form elements
+export const DEFAULT_FORM_ELEMENTS: ThemeFormElements = {
+  inputStyle: "underline",
+  questionNumberStyle: "badge",
+  navigationStyle: "corner-arrows",
 };
 
 // Default progress bar
@@ -98,6 +107,7 @@ export const DEFAULT_THEME: Theme = {
   typography: DEFAULT_TYPOGRAPHY,
   layout: DEFAULT_LAYOUT,
   buttons: DEFAULT_BUTTONS,
+  formElements: DEFAULT_FORM_ELEMENTS,
   progressBar: DEFAULT_PROGRESS_BAR,
   branding: DEFAULT_BRANDING,
   animations: DEFAULT_ANIMATIONS,

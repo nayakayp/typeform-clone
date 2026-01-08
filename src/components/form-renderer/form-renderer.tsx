@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ChevronRight, ChevronLeft, Check, Loader2 } from "lucide-react";
+import { ChevronRight, ChevronLeft, ChevronUp, ChevronDown, Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   QuestionRenderers,
@@ -253,6 +253,13 @@ export function FormRenderer({ form, slug }: FormRendererProps) {
       mergedTheme.progressBar = {
         ...DEFAULT_THEME.progressBar,
         ...customTheme.progressBar,
+      };
+    }
+
+    if (customTheme.formElements) {
+      mergedTheme.formElements = {
+        ...DEFAULT_THEME.formElements,
+        ...customTheme.formElements,
       };
     }
 
@@ -765,13 +772,45 @@ export function FormRenderer({ form, slug }: FormRendererProps) {
             <div className="space-y-2" style={getStaggeredAnimationStyles(0)}>
               <div className="flex items-start gap-3">
                 {form.settings?.showQuestionNumbers && (
-                  <span
-                    className="text-lg font-medium"
-                    style={{ color: primaryColor }}
-                  >
-                    {currentIndex + 1}
-                    <span className="text-muted-foreground ml-1">→</span>
-                  </span>
+                  <>
+                    {/* Question number badge style (Typeform style) */}
+                    {theme.formElements.questionNumberStyle === "badge" && (
+                      <span
+                        className="flex h-6 w-6 items-center justify-center rounded text-sm font-bold text-white"
+                        style={{ backgroundColor: primaryColor }}
+                      >
+                        {currentIndex + 1}
+                      </span>
+                    )}
+                    {/* Question number circle style */}
+                    {theme.formElements.questionNumberStyle === "circle" && (
+                      <span
+                        className="flex h-7 w-7 items-center justify-center rounded-full border-2 text-sm font-medium"
+                        style={{ borderColor: primaryColor, color: primaryColor }}
+                      >
+                        {currentIndex + 1}
+                      </span>
+                    )}
+                    {/* Question number arrow style (original) */}
+                    {theme.formElements.questionNumberStyle === "arrow" && (
+                      <span
+                        className="text-lg font-medium"
+                        style={{ color: primaryColor }}
+                      >
+                        {currentIndex + 1}
+                        <span className="text-muted-foreground ml-1">→</span>
+                      </span>
+                    )}
+                    {/* Question number plain style */}
+                    {theme.formElements.questionNumberStyle === "plain" && (
+                      <span
+                        className="text-lg font-medium"
+                        style={{ color: primaryColor }}
+                      >
+                        {currentIndex + 1}.
+                      </span>
+                    )}
+                  </>
                 )}
                 <div className="flex-1">
                   <h2
@@ -816,46 +855,129 @@ export function FormRenderer({ form, slug }: FormRendererProps) {
             </div>
 
             {/* Navigation - stagger index 2 */}
-            <div className="flex items-center justify-between pt-4" style={getStaggeredAnimationStyles(2)}>
-              <Button
-                variant="ghost"
-                onClick={handlePrev}
-                disabled={currentIndex === 0}
-                className="gap-1"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                Back
-              </Button>
+            {theme.formElements.navigationStyle === "inline" && (
+              <div className="flex items-center justify-between pt-4" style={getStaggeredAnimationStyles(2)}>
+                <Button
+                  variant="ghost"
+                  onClick={handlePrev}
+                  disabled={currentIndex === 0}
+                  className="gap-1"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Back
+                </Button>
 
-              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={handleNext}
+                    disabled={isSubmitting}
+                    size="lg"
+                    style={{ backgroundColor: primaryColor }}
+                    className="gap-2 px-6 text-white hover:opacity-90"
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : isLastQuestion ? (
+                      "Submit"
+                    ) : (
+                      <>
+                        Next
+                        <ChevronRight className="h-5 w-5" />
+                      </>
+                    )}
+                  </Button>
+                  <span className="text-muted-foreground hidden text-xs sm:inline">
+                    press{" "}
+                    <kbd className="rounded border px-1.5 py-0.5 font-mono text-xs">
+                      Enter ↵
+                    </kbd>
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Typeform-style navigation: OK button + corner arrows */}
+            {theme.formElements.navigationStyle === "corner-arrows" && (
+              <div className="pt-4" style={getStaggeredAnimationStyles(2)}>
                 <Button
                   onClick={handleNext}
                   disabled={isSubmitting}
-                  size="lg"
+                  size="sm"
                   style={{ backgroundColor: primaryColor }}
-                  className="gap-2 px-6 text-white hover:opacity-90"
+                  className="px-4 text-white hover:opacity-90"
                 >
                   {isSubmitting ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    theme.buttons.submitText || (isLastQuestion ? "Submit" : "OK")
+                  )}
+                </Button>
+              </div>
+            )}
+
+            {/* Bottom bar navigation */}
+            {theme.formElements.navigationStyle === "bottom-bar" && (
+              <div className="flex items-center justify-center gap-4 pt-4" style={getStaggeredAnimationStyles(2)}>
+                <Button
+                  variant="outline"
+                  onClick={handlePrev}
+                  disabled={currentIndex === 0}
+                  size="sm"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  onClick={handleNext}
+                  disabled={isSubmitting}
+                  size="sm"
+                  style={{ backgroundColor: primaryColor }}
+                  className="px-6 text-white hover:opacity-90"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : isLastQuestion ? (
                     "Submit"
                   ) : (
-                    <>
-                      Next
-                      <ChevronRight className="h-5 w-5" />
-                    </>
+                    "Next"
                   )}
                 </Button>
-                <span className="text-muted-foreground hidden text-xs sm:inline">
-                  press{" "}
-                  <kbd className="rounded border px-1.5 py-0.5 font-mono text-xs">
-                    Enter ↵
-                  </kbd>
-                </span>
+                <Button
+                  variant="outline"
+                  onClick={handleNext}
+                  disabled={isLastQuestion || isSubmitting}
+                  size="sm"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
               </div>
-            </div>
+            )}
           </div>
         </div>
+
+        {/* Corner navigation arrows (Typeform style) */}
+        {theme.formElements.navigationStyle === "corner-arrows" && (
+          <div className="fixed right-4 bottom-4 z-20 flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
+              className="h-10 w-10 bg-white/80 backdrop-blur-sm"
+            >
+              <ChevronUp className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="default"
+              size="icon"
+              onClick={handleNext}
+              disabled={isLastQuestion && isSubmitting}
+              style={{ backgroundColor: primaryColor }}
+              className="h-10 w-10 text-white"
+            >
+              <ChevronDown className="h-5 w-5" />
+            </Button>
+          </div>
+        )}
       </div>
     );
   }

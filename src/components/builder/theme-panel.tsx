@@ -99,6 +99,10 @@ function customThemeToTheme(customTheme: CustomTheme | null | undefined): Theme 
     theme.buttons = { ...DEFAULT_THEME.buttons, ...customTheme.buttons };
   }
 
+  if (customTheme.formElements) {
+    theme.formElements = { ...DEFAULT_THEME.formElements, ...customTheme.formElements };
+  }
+
   if (customTheme.progressBar) {
     theme.progressBar = { ...DEFAULT_THEME.progressBar, ...customTheme.progressBar };
   }
@@ -129,6 +133,7 @@ function themeToCustomTheme(theme: Theme): CustomTheme {
     typography: theme.typography,
     layout: theme.layout,
     buttons: theme.buttons,
+    formElements: theme.formElements,
     progressBar: theme.progressBar,
     branding: theme.branding,
     animations: theme.animations,

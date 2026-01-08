@@ -33,6 +33,7 @@ function themeToTemplate(theme: Theme): ThemeTemplate {
       typography: theme.typography,
       layout: theme.layout,
       buttons: theme.buttons,
+      formElements: theme.formElements,
       progressBar: theme.progressBar,
       branding: theme.branding,
       animations: theme.animations,

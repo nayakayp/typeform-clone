@@ -76,11 +76,28 @@ export interface ThemeLayout {
   contentPosition: "top" | "center" | "bottom";
 }
 
+// Input field style
+export type InputStyle = "box" | "underline" | "borderless";
+
+// Question number display style
+export type QuestionNumberStyle = "arrow" | "badge" | "circle" | "plain" | "none";
+
+// Navigation style
+export type NavigationStyle = "inline" | "corner-arrows" | "bottom-bar" | "hidden";
+
 // Button configuration
 export interface ThemeButtons {
   variant: "solid" | "outline" | "ghost";
   radius: "none" | "sm" | "md" | "lg" | "full";
   size: "sm" | "md" | "lg";
+  submitText?: string; // Custom submit button text (default: "OK" or "Submit")
+}
+
+// Form elements styling
+export interface ThemeFormElements {
+  inputStyle: InputStyle;
+  questionNumberStyle: QuestionNumberStyle;
+  navigationStyle: NavigationStyle;
 }
 
 // Progress bar configuration
@@ -134,6 +151,7 @@ export interface Theme {
   typography: ThemeTypography;
   layout: ThemeLayout;
   buttons: ThemeButtons;
+  formElements: ThemeFormElements;
   progressBar: ThemeProgressBar;
   branding: ThemeBranding;
   animations: ThemeAnimations;
