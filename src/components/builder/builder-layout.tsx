@@ -5,7 +5,7 @@ import { useBuilderStore } from "@/stores/builder-store";
 import { useAutosave } from "@/hooks/use-autosave";
 import { QuestionSidebar } from "./question-sidebar";
 import { BuilderCanvas } from "./builder-canvas";
-import { PreviewPanel } from "./preview-panel";
+import { SettingsPanel } from "./settings-panel";
 import { BuilderHeader } from "./builder-header";
 import { QuestionConfigPanel } from "./config-panel";
 import type { Form } from "@/lib/db/schema/forms";
@@ -36,7 +36,7 @@ export function BuilderLayout({ form, questions }: BuilderLayoutProps) {
       <div className="flex flex-1 overflow-hidden">
         <QuestionSidebar />
         <BuilderCanvas />
-        <PreviewPanel />
+        <SettingsPanel />
       </div>
       <QuestionConfigPanel />
     </div>
