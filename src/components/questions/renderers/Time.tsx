@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { QuestionRendererProps, TimeSettings } from "../types";
+import { getInputStyleClasses } from "../input-styles";
 
 export function Time({
   question,
@@ -12,8 +13,10 @@ export function Time({
   error,
   disabled,
   autoFocus,
+  inputStyle = "underline",
 }: QuestionRendererProps<string>) {
   const settings = question.settings as TimeSettings;
+  const isUnderlineOrBorderless = inputStyle === "underline" || inputStyle === "borderless";
 
   // Generate time options for dropdown if using 12h format
   const generateTimeOptions = () => {
@@ -42,7 +45,10 @@ export function Time({
   return (
     <div className="space-y-2">
       <div className="relative">
-        <Clock className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+        <Clock className={cn(
+          "text-muted-foreground absolute top-1/2 h-4 w-4 -translate-y-1/2",
+          isUnderlineOrBorderless ? "left-0" : "left-3"
+        )} />
         <Input
           type="time"
           value={value || ""}
@@ -53,8 +59,8 @@ export function Time({
           disabled={disabled}
           autoFocus={autoFocus}
           className={cn(
-            "pl-10 text-lg",
-            error && "border-destructive focus-visible:ring-destructive"
+            isUnderlineOrBorderless ? "pl-6" : "pl-10",
+            getInputStyleClasses(inputStyle, !!error)
           )}
         />
       </div>

@@ -3,6 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import type { QuestionRendererProps, ShortTextSettings } from "../types";
+import { getInputStyleClasses } from "../input-styles";
 
 export function ShortText({
   question,
@@ -11,6 +12,7 @@ export function ShortText({
   error,
   disabled,
   autoFocus,
+  inputStyle = "underline",
 }: QuestionRendererProps<string>) {
   const settings = question.settings as ShortTextSettings;
 
@@ -24,10 +26,7 @@ export function ShortText({
         maxLength={settings?.maxLength}
         disabled={disabled}
         autoFocus={autoFocus}
-        className={cn(
-          "text-lg",
-          error && "border-destructive focus-visible:ring-destructive"
-        )}
+        className={cn(getInputStyleClasses(inputStyle, !!error))}
       />
       <div className="text-muted-foreground flex items-center justify-between text-xs">
         {settings?.maxLength && (

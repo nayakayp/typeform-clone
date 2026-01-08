@@ -850,7 +850,8 @@ export function FormRenderer({ form, slug }: FormRendererProps) {
                 currentQuestion,
                 answers[currentQuestion.id],
                 (value) => setAnswer(currentQuestion.id, value),
-                handleNext
+                handleNext,
+                theme.formElements.inputStyle
               )}
             </div>
 
@@ -1045,8 +1046,12 @@ export function FormRenderer({ form, slug }: FormRendererProps) {
               )}
 
               <div>
-                {renderQuestionInput(question, answers[question.id], (value) =>
-                  setAnswer(question.id, value)
+                {renderQuestionInput(
+                  question, 
+                  answers[question.id], 
+                  (value) => setAnswer(question.id, value),
+                  undefined,
+                  theme.formElements.inputStyle
                 )}
               </div>
             </div>
@@ -1076,7 +1081,8 @@ function renderQuestionInput(
   question: Question,
   value: AnswerValue,
   onChange: (value: AnswerValue) => void,
-  onContinue?: () => void
+  onContinue?: () => void,
+  inputStyle: "box" | "underline" | "borderless" = "underline"
 ) {
   const dbQuestion = toDBQuestion(question);
   const type = question.type;
@@ -1101,6 +1107,7 @@ function renderQuestionInput(
         value={value}
         onChange={handleChange}
         autoFocus
+        inputStyle={inputStyle}
       />
     );
   }

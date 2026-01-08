@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { QuestionRendererProps, NumberSettings } from "../types";
+import { getInputStyleClasses } from "../input-styles";
 
 export function Number({
   question,
@@ -13,6 +14,7 @@ export function Number({
   error,
   disabled,
   autoFocus,
+  inputStyle = "underline",
 }: QuestionRendererProps<number | undefined>) {
   const settings = question.settings as NumberSettings;
   const step = settings?.step || 1;
@@ -86,9 +88,9 @@ export function Number({
             disabled={disabled}
             autoFocus={autoFocus}
             className={cn(
-              "text-center text-lg",
+              "text-center",
               settings?.showButtons && "px-12",
-              error && "border-destructive focus-visible:ring-destructive"
+              getInputStyleClasses(inputStyle, !!error)
             )}
           />
           {settings?.showButtons && (

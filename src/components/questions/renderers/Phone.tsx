@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Phone as PhoneIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { QuestionRendererProps, PhoneSettings } from "../types";
+import { getInputStyleClasses } from "../input-styles";
 
 export function Phone({
   question,
@@ -12,8 +13,10 @@ export function Phone({
   error,
   disabled,
   autoFocus,
+  inputStyle = "underline",
 }: QuestionRendererProps<string>) {
   const settings = question.settings as PhoneSettings;
+  const isUnderlineOrBorderless = inputStyle === "underline" || inputStyle === "borderless";
 
   const formatPhoneNumber = (input: string): string => {
     // Remove all non-digit characters except +
@@ -29,7 +32,10 @@ export function Phone({
   return (
     <div className="space-y-2">
       <div className="relative">
-        <PhoneIcon className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+        <PhoneIcon className={cn(
+          "text-muted-foreground absolute top-1/2 h-4 w-4 -translate-y-1/2",
+          isUnderlineOrBorderless ? "left-0" : "left-3"
+        )} />
         <Input
           type="tel"
           value={value || ""}
@@ -38,8 +44,8 @@ export function Phone({
           disabled={disabled}
           autoFocus={autoFocus}
           className={cn(
-            "pl-10 text-lg",
-            error && "border-destructive focus-visible:ring-destructive"
+            isUnderlineOrBorderless ? "pl-6" : "pl-10",
+            getInputStyleClasses(inputStyle, !!error)
           )}
         />
       </div>

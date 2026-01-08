@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Link } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { QuestionRendererProps, UrlSettings } from "../types";
+import { getInputStyleClasses } from "../input-styles";
 
 export function Url({
   question,
@@ -12,8 +13,10 @@ export function Url({
   error,
   disabled,
   autoFocus,
+  inputStyle = "underline",
 }: QuestionRendererProps<string>) {
   const settings = question.settings as UrlSettings;
+  const isUnderlineOrBorderless = inputStyle === "underline" || inputStyle === "borderless";
 
   const handleBlur = () => {
     if (
@@ -28,7 +31,10 @@ export function Url({
   return (
     <div className="space-y-2">
       <div className="relative">
-        <Link className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+        <Link className={cn(
+          "text-muted-foreground absolute top-1/2 h-4 w-4 -translate-y-1/2",
+          isUnderlineOrBorderless ? "left-0" : "left-3"
+        )} />
         <Input
           type="url"
           value={value || ""}
@@ -38,8 +44,8 @@ export function Url({
           disabled={disabled}
           autoFocus={autoFocus}
           className={cn(
-            "pl-10 text-lg",
-            error && "border-destructive focus-visible:ring-destructive"
+            isUnderlineOrBorderless ? "pl-6" : "pl-10",
+            getInputStyleClasses(inputStyle, !!error)
           )}
         />
       </div>

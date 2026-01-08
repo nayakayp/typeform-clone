@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import type { QuestionRendererProps, LongTextSettings } from "../types";
+import { getTextareaStyleClasses } from "../input-styles";
 
 export function LongText({
   question,
@@ -12,6 +13,7 @@ export function LongText({
   error,
   disabled,
   autoFocus,
+  inputStyle = "underline",
 }: QuestionRendererProps<string>) {
   const settings = question.settings as LongTextSettings;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -38,9 +40,9 @@ export function LongText({
         disabled={disabled}
         autoFocus={autoFocus}
         className={cn(
-          "min-h-[120px] resize-y text-base",
+          "min-h-[120px] resize-y",
           settings?.autoResize && "resize-none overflow-hidden",
-          error && "border-destructive focus-visible:ring-destructive"
+          getTextareaStyleClasses(inputStyle, !!error)
         )}
       />
       <div className="text-muted-foreground flex items-center justify-between text-xs">

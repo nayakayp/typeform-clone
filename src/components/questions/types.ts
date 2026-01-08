@@ -1,4 +1,5 @@
 import type { Question, QuestionSettings } from "@/lib/db/schema/questions";
+import type { InputStyle } from "@/lib/theme/types";
 
 // Base question renderer props
 export interface QuestionRendererProps<T = unknown> {
@@ -8,6 +9,7 @@ export interface QuestionRendererProps<T = unknown> {
   error?: string;
   disabled?: boolean;
   autoFocus?: boolean;
+  inputStyle?: InputStyle;
 }
 
 // Extended settings interfaces for each question type
