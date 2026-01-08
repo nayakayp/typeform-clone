@@ -162,7 +162,7 @@ export async function PUT(
 
     await db
       .update(forms)
-      .set({ settings: updatedSettings })
+      .set({ settings: updatedSettings as typeof forms.$inferInsert.settings })
       .where(eq(forms.id, formId));
 
     return NextResponse.json({ success: true, settings: newSettings });

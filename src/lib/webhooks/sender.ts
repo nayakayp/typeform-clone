@@ -129,7 +129,7 @@ async function logWebhookDelivery(
     await db.insert(webhookLogs).values({
       webhookId,
       event: data.event,
-      payload: data.payload,
+      payload: data.payload as unknown as Record<string, unknown>,
       responseStatus: data.status,
       responseBody: data.responseBody,
       error: data.error,
@@ -251,7 +251,7 @@ export async function retryWebhook(
   }
 
   // Retry the webhook
-  return sendWebhook(webhook, log.payload as WebhookPayload);
+  return sendWebhook(webhook, log.payload as unknown as WebhookPayload);
 }
 
 // Test webhook (send a test payload)

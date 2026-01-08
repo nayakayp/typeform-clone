@@ -70,9 +70,9 @@ export function ChoiceDistributionChart({
                 tick={{ fill: "hsl(var(--muted-foreground))" }}
               />
               <Tooltip
-                formatter={(value: number, name: string, props: { payload?: { fullName?: string; percentage?: number } }) => [
-                  `${value} (${props.payload?.percentage?.toFixed(1)}%)`,
-                  props.payload?.fullName || name,
+                formatter={(value, name, props) => [
+                  `${value} (${(props.payload as { percentage?: number })?.percentage?.toFixed(1)}%)`,
+                  (props.payload as { fullName?: string })?.fullName || name,
                 ]}
                 contentStyle={{
                   backgroundColor: "hsl(var(--background))",

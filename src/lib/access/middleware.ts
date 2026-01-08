@@ -68,7 +68,7 @@ export async function getResponseCount(formId: string): Promise<number> {
   const [result] = await db
     .select({ count: count() })
     .from(responses)
-    .where(and(eq(responses.formId, formId), eq(responses.isComplete, true)));
+    .where(and(eq(responses.formId, formId), eq(responses.status, "completed")));
   return result?.count || 0;
 }
 

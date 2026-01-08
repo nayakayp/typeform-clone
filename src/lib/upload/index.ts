@@ -83,10 +83,10 @@ export class LocalUploadService implements UploadService {
 
     // Get file buffer
     let buffer: Buffer;
-    if (file instanceof Buffer) {
+    if (Buffer.isBuffer(file)) {
       buffer = file;
     } else {
-      buffer = Buffer.from(await file.arrayBuffer());
+      buffer = Buffer.from(await (file as File).arrayBuffer());
     }
 
     // Validate file size

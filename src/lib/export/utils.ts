@@ -132,14 +132,21 @@ export async function fetchResponses(
     // Convert answers array to a map by questionId
     const answersMap: Record<string, unknown> = {};
     for (const answer of r.answers) {
-      answersMap[answer.questionId] = answer.value;
+      // Extract the answer value based on which field is populated
+      const value = answer.textValue ??
+        answer.numberValue ??
+        answer.booleanValue ??
+        answer.dateValue ??
+        answer.jsonValue ??
+        null;
+      answersMap[answer.questionId] = value;
     }
 
     return {
       id: r.id,
       submittedAt: r.completedAt,
       startedAt: r.startedAt,
-      isComplete: r.isComplete,
+      isComplete: r.status === "completed",
       metadata: {
         ipAddress: r.ipAddress || undefined,
         userAgent: r.userAgent || undefined,

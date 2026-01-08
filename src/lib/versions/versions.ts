@@ -39,14 +39,14 @@ export async function createFormSnapshot(formId: string): Promise<FormSnapshot> 
     questions: formQuestions.map((q) => ({
       id: q.id,
       type: q.type,
-      title: q.title,
+      title: q.title || "",
       description: q.description || undefined,
-      required: q.required,
+      required: q.required ?? false,
       order: q.order,
       settings: (q.settings as Record<string, unknown>) || {},
       options: q.options?.map((o) => ({
         id: o.id,
-        value: o.value,
+        value: o.value || "",
         order: o.order,
       })),
     })),
@@ -166,12 +166,12 @@ async function applySnapshot(formId: string, snapshot: FormSnapshot): Promise<vo
   for (const q of snapshot.questions) {
     const [newQuestion] = await db.insert(questions).values({
       formId,
-      type: q.type,
+      type: q.type as typeof questions.$inferInsert.type,
       title: q.title,
       description: q.description,
       required: q.required,
       order: q.order,
-      settings: q.settings,
+      settings: q.settings as typeof questions.$inferInsert.settings,
     }).returning({ id: questions.id });
 
     // Insert options if any
@@ -179,6 +179,7 @@ async function applySnapshot(formId: string, snapshot: FormSnapshot): Promise<vo
       await db.insert(questionOptions).values(
         q.options.map((o) => ({
           questionId: newQuestion.id,
+          label: o.value, // Use value as label
           value: o.value,
           order: o.order,
         }))

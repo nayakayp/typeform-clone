@@ -80,7 +80,7 @@ export function DeviceBreakdownChart({
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value: number, name: string) => [
+                formatter={(value, name) => [
                   `${value} (${chartData.find((d) => d.name === name)?.percentage.toFixed(1)}%)`,
                   name,
                 ]}

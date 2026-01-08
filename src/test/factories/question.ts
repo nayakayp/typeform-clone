@@ -123,11 +123,11 @@ export const builderQuestionFactory = {
       settings: {
         allowOther: false,
         randomizeOptions: false,
-        options: [
-          { id: faker.string.uuid(), label: "Option 1" },
-          { id: faker.string.uuid(), label: "Option 2" },
-        ],
-      },
+      } as Record<string, unknown>,
+      options: [
+        { id: faker.string.uuid(), label: "Option 1", value: "option_1", order: 0, image: null, questionId: "" },
+        { id: faker.string.uuid(), label: "Option 2", value: "option_2", order: 1, image: null, questionId: "" },
+      ],
       ...overrides,
     }),
 
