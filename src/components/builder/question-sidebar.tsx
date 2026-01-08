@@ -37,10 +37,7 @@ import {
   MapPin,
   FileText,
   Shield,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
@@ -89,31 +86,11 @@ interface QuestionSidebarProps {
 }
 
 export function QuestionSidebar({ className }: QuestionSidebarProps) {
-  const { sidebarCollapsed, toggleSidebar, addQuestion } = useBuilderStore();
+  const { addQuestion } = useBuilderStore();
 
   const handleAddQuestion = (type: string) => {
     addQuestion(type);
   };
-
-  if (sidebarCollapsed) {
-    return (
-      <div
-        className={cn(
-          "flex h-full w-12 flex-col items-center border-r bg-muted/30 py-4",
-          className
-        )}
-      >
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleSidebar}
-          className="mb-4"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
-    );
-  }
 
   return (
     <div
@@ -122,13 +99,6 @@ export function QuestionSidebar({ className }: QuestionSidebarProps) {
         className
       )}
     >
-      <div className="flex items-center justify-between border-b px-4 py-3">
-        <h2 className="text-sm font-semibold">Add Question</h2>
-        <Button variant="ghost" size="icon" onClick={toggleSidebar}>
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-      </div>
-
       <div className="flex-1 overflow-y-auto p-2">
         <Accordion
           type="multiple"

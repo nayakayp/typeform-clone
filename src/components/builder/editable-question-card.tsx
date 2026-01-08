@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 
 interface EditableQuestionCardProps {
   question: BuilderQuestion;
-  questionNumber: number;
   isSelected: boolean;
   onSelect: () => void;
   children: React.ReactNode; // Question-specific preview
@@ -19,7 +18,6 @@ interface EditableQuestionCardProps {
 
 export function EditableQuestionCard({
   question,
-  questionNumber,
   isSelected,
   onSelect,
   children,
@@ -173,27 +171,17 @@ export function EditableQuestionCard({
           {...attributes}
           {...listeners}
           className={cn(
-            "text-muted-foreground mt-1 cursor-grab touch-none rounded p-1 transition-all",
-            "hover:bg-muted opacity-0 group-hover:opacity-100 active:cursor-grabbing",
-            isDragging && "opacity-100"
+            "text-muted-foreground cursor-grab touch-none rounded p-1 transition-all",
+            "hover:bg-muted active:cursor-grabbing",
+            isDragging && "opacity-50"
           )}
         >
           <GripVertical className="h-4 w-4" />
         </button>
 
         <div className="min-w-0 flex-1 space-y-2">
-          {/* Question number + required indicator */}
-          <div className="flex items-center gap-2">
-            <span className="bg-primary/10 text-primary flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
-              {questionNumber}
-            </span>
-            {question.required && (
-              <span className="text-destructive text-sm font-medium">*</span>
-            )}
-          </div>
-
-          {/* Editable title */}
-          <div className="relative">
+          {/* Editable title with required indicator */}
+          <div className="relative flex items-start gap-1">
             {isEditingTitle ? (
               <input
                 ref={titleInputRef}
@@ -217,6 +205,9 @@ export function EditableQuestionCard({
               >
                 {question.title || "Enter your question..."}
               </p>
+            )}
+            {question.required && (
+              <span className="text-destructive text-sm font-medium">*</span>
             )}
           </div>
 

@@ -19,6 +19,7 @@ import {
   X,
   MessageSquare,
   BarChart3,
+  Palette,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { ThemePanel } from "./theme-panel";
 import Link from "next/link";
 
 interface BuilderHeaderProps {
@@ -38,6 +40,7 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editedTitle, setEditedTitle] = useState("");
+  const [isThemePanelOpen, setIsThemePanelOpen] = useState(false);
   const {
     form,
     isDirty,
@@ -257,6 +260,23 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
           </Tooltip>
         </TooltipProvider>
 
+        {/* Design - Theme Editor */}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsThemePanelOpen(true)}
+              >
+                <Palette className="mr-2 h-4 w-4" />
+                Design
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Customize form appearance</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
         {/* Preview - only show when form is not published */}
         {form?.status !== "published" && (
           <Button variant="ghost" size="sm" asChild>
@@ -337,6 +357,12 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
           </Button>
         )}
       </div>
+
+      {/* Theme Panel Modal */}
+      <ThemePanel
+        open={isThemePanelOpen}
+        onClose={() => setIsThemePanelOpen(false)}
+      />
     </header>
   );
 }

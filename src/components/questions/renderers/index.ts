@@ -24,6 +24,13 @@ export { Signature } from "./Signature";
 export { VideoRecording } from "./VideoRecording";
 export { AudioRecording } from "./AudioRecording";
 
+// Advanced question renderers
+export { Payment } from "./Payment";
+export { Calendly } from "./Calendly";
+export { Address } from "./Address";
+export { Legal } from "./Legal";
+export { Captcha } from "./Captcha";
+
 // Content block renderers
 export { WelcomeScreen } from "./WelcomeScreen";
 export { Statement } from "./Statement";
@@ -60,6 +67,11 @@ import { FileUpload } from "./FileUpload";
 import { Signature } from "./Signature";
 import { VideoRecording } from "./VideoRecording";
 import { AudioRecording } from "./AudioRecording";
+import { Payment } from "./Payment";
+import { Calendly } from "./Calendly";
+import { Address } from "./Address";
+import { Legal } from "./Legal";
+import { Captcha } from "./Captcha";
 import type { QuestionRendererProps, ContentBlockProps } from "../types";
 
 // Question renderer map for dynamic rendering
@@ -95,6 +107,11 @@ export const QuestionRenderers: Record<
   signature: Signature as React.ComponentType<QuestionRendererProps<unknown>>,
   video_recording: VideoRecording as React.ComponentType<QuestionRendererProps<unknown>>,
   audio_recording: AudioRecording as React.ComponentType<QuestionRendererProps<unknown>>,
+  payment: Payment as React.ComponentType<QuestionRendererProps<unknown>>,
+  calendly: Calendly as React.ComponentType<QuestionRendererProps<unknown>>,
+  address: Address as React.ComponentType<QuestionRendererProps<unknown>>,
+  legal: Legal as React.ComponentType<QuestionRendererProps<unknown>>,
+  captcha: Captcha as React.ComponentType<QuestionRendererProps<unknown>>,
 };
 
 // Content block renderer map for dynamic rendering

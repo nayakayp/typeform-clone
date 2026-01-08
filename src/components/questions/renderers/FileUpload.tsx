@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import type { QuestionRendererProps } from "../types";
 import type { FileUploadSettings } from "@/lib/db/schema/files";
-import { formatBytes } from "@/lib/upload";
+import { formatBytes } from "@/lib/upload/utils";
 
 interface UploadedFile {
   id: string;

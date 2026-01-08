@@ -31,8 +31,9 @@ export interface FormSettings {
   scheduledCloseDate?: string;
 }
 
-// Custom theme type
+// Custom theme type - supports full theme configuration
 export interface CustomTheme {
+  // Legacy simple fields (for backwards compatibility)
   primaryColor?: string;
   backgroundColor?: string;
   textColor?: string;
@@ -40,6 +41,85 @@ export interface CustomTheme {
   buttonTextColor?: string;
   fontFamily?: string;
   backgroundImage?: string;
+
+  // Full theme structure
+  name?: string;
+  colors?: {
+    primary?: string;
+    secondary?: string;
+    background?: string;
+    foreground?: string;
+    muted?: string;
+    mutedForeground?: string;
+    accent?: string;
+    accentForeground?: string;
+    destructive?: string;
+    border?: string;
+    input?: string;
+    ring?: string;
+    questionText?: string;
+    questionBackground?: string;
+    answerText?: string;
+    answerBackground?: string;
+  };
+  background?: {
+    type?: "solid" | "gradient" | "image" | "video";
+    color?: string;
+    gradient?: {
+      type?: "linear" | "radial";
+      angle?: number;
+      stops?: Array<{ color: string; position: number }>;
+    };
+    image?: {
+      url?: string;
+      size?: "cover" | "contain" | "auto";
+      position?: "center" | "top" | "bottom" | "left" | "right";
+      repeat?: "no-repeat" | "repeat" | "repeat-x" | "repeat-y";
+      overlay?: string;
+    };
+  };
+  typography?: {
+    fontFamily?: string;
+    headingFontFamily?: string;
+    fontSize?: "small" | "medium" | "large";
+    lineHeight?: "tight" | "normal" | "relaxed";
+    fontWeight?: "light" | "normal" | "medium" | "semibold" | "bold";
+  };
+  layout?: {
+    questionAlignment?: "left" | "center" | "right";
+    maxWidth?: "sm" | "md" | "lg" | "xl" | "full";
+    padding?: "compact" | "normal" | "spacious";
+    contentPosition?: "top" | "center" | "bottom";
+  };
+  buttons?: {
+    variant?: "solid" | "outline" | "ghost";
+    radius?: "none" | "sm" | "md" | "lg" | "full";
+    size?: "sm" | "md" | "lg";
+  };
+  progressBar?: {
+    type?: "bar" | "dots" | "percentage" | "steps" | "none";
+    position?: "top" | "bottom";
+    color?: string;
+    showPercentage?: boolean;
+  };
+  branding?: {
+    logo?: string;
+    logoPosition?:
+      | "top-left"
+      | "top-center"
+      | "top-right"
+      | "bottom-left"
+      | "bottom-center"
+      | "bottom-right";
+    favicon?: string;
+    hidePoweredBy?: boolean;
+  };
+  animations?: {
+    transition?: "none" | "fade" | "slide" | "zoom" | "flip";
+    speed?: "slow" | "normal" | "fast";
+    enableHover?: boolean;
+    enableFocus?: boolean;
+  };
 }
 
 // Forms table

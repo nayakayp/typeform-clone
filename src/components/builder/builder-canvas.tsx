@@ -110,11 +110,10 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
             strategy={verticalListSortingStrategy}
           >
             <div className="space-y-3">
-              {questions.map((question, index) => (
+              {questions.map((question) => (
                 <EditableQuestionCard
                   key={question.id}
                   question={question}
-                  questionNumber={index + 1}
                   isSelected={selectedQuestionId === question.id}
                   onSelect={() => selectQuestion(question.id)}
                 >

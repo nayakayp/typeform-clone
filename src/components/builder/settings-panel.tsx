@@ -2,12 +2,10 @@
 
 import { useBuilderStore } from "@/stores/builder-store";
 import { cn } from "@/lib/utils";
-import { Settings, ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Settings } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getQuestionTypeLabel, getQuestionTypeIcon } from "@/lib/question-types";
-import { ContentTab } from "./config-panel/ContentTab";
-import { SettingsTab } from "./config-panel/SettingsTab";
+import { GeneralTab } from "./config-panel/GeneralTab";
 import { LogicTab } from "./config-panel/LogicTab";
 import type { BuilderQuestion } from "@/types/builder";
 
@@ -20,34 +18,9 @@ export function SettingsPanel({ className }: SettingsPanelProps) {
     questions,
     selectedQuestionId,
     updateQuestion,
-    previewCollapsed,
-    togglePreview,
   } = useBuilderStore();
 
   const selectedQuestion = questions.find((q) => q.id === selectedQuestionId);
-
-  // Collapsed state
-  if (previewCollapsed) {
-    return (
-      <div
-        className={cn(
-          "flex h-full w-12 flex-col items-center border-l bg-muted/30 py-4",
-          className
-        )}
-      >
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={togglePreview}
-          className="mb-4"
-          title="Expand settings"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
-        <Settings className="h-4 w-4 text-muted-foreground" />
-      </div>
-    );
-  }
 
   return (
     <div
@@ -56,22 +29,6 @@ export function SettingsPanel({ className }: SettingsPanelProps) {
         className
       )}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between border-b px-4 py-3">
-        <h2 className="flex items-center gap-2 text-sm font-semibold">
-          <Settings className="h-4 w-4" />
-          Settings
-        </h2>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={togglePreview}
-          title="Collapse settings"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
-
       {/* Content */}
       {!selectedQuestion ? (
         <EmptyState />
@@ -120,19 +77,13 @@ function QuestionConfigTabs({ question, onUpdate }: QuestionConfigTabsProps) {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="content" className="flex min-h-0 flex-1 flex-col">
-        <TabsList className="grid w-full shrink-0 grid-cols-3 rounded-none border-b bg-transparent px-4">
+      <Tabs defaultValue="general" className="flex min-h-0 flex-1 flex-col">
+        <TabsList className="grid w-full shrink-0 grid-cols-2 rounded-none border-b bg-transparent px-4">
           <TabsTrigger
-            value="content"
+            value="general"
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
           >
-            Content
-          </TabsTrigger>
-          <TabsTrigger
-            value="settings"
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
-          >
-            Settings
+            General
           </TabsTrigger>
           <TabsTrigger
             value="logic"
@@ -143,12 +94,8 @@ function QuestionConfigTabs({ question, onUpdate }: QuestionConfigTabsProps) {
         </TabsList>
 
         <div className="min-h-0 flex-1 overflow-y-auto">
-          <TabsContent value="content" className="m-0 p-4">
-            <ContentTab question={question} onUpdate={onUpdate} />
-          </TabsContent>
-
-          <TabsContent value="settings" className="m-0 p-4">
-            <SettingsTab question={question} onUpdate={onUpdate} />
+          <TabsContent value="general" className="m-0 p-4">
+            <GeneralTab question={question} onUpdate={onUpdate} />
           </TabsContent>
 
           <TabsContent value="logic" className="m-0 p-4">
