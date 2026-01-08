@@ -82,6 +82,9 @@ export interface QuestionSettings {
   allowedFileTypes?: string[];
   maxFileSize?: number;
   maxFiles?: number;
+  // Yes/No
+  yesLabel?: string;
+  noLabel?: string;
 }
 
 // Question validations type

@@ -6,6 +6,7 @@ export { EmailPreview } from "./email-preview";
 export { NumberPreview } from "./number-preview";
 export { PhonePreview } from "./phone-preview";
 export { UrlPreview } from "./url-preview";
+export { DropdownPreview } from "./dropdown-preview";
 export { DatePreview } from "./date-preview";
 export { YesNoPreview } from "./yes-no-preview";
 export { TimePreview } from "./time-preview";
