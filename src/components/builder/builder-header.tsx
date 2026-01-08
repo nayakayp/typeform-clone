@@ -40,7 +40,6 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editedTitle, setEditedTitle] = useState("");
-  const [isThemePanelOpen, setIsThemePanelOpen] = useState(false);
   const {
     form,
     isDirty,
@@ -260,18 +259,16 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
           </Tooltip>
         </TooltipProvider>
 
-        {/* Design - Theme Editor */}
+        {/* Design - Theme Editor (Popover) */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsThemePanelOpen(true)}
-              >
-                <Palette className="mr-2 h-4 w-4" />
-                Design
-              </Button>
+              <ThemePanel>
+                <Button variant="ghost" size="sm">
+                  <Palette className="mr-2 h-4 w-4" />
+                  Design
+                </Button>
+              </ThemePanel>
             </TooltipTrigger>
             <TooltipContent>Customize form appearance</TooltipContent>
           </Tooltip>
@@ -357,12 +354,6 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
           </Button>
         )}
       </div>
-
-      {/* Theme Panel Modal */}
-      <ThemePanel
-        open={isThemePanelOpen}
-        onClose={() => setIsThemePanelOpen(false)}
-      />
     </header>
   );
 }

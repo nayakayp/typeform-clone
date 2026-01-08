@@ -1,18 +1,22 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useBuilderStore } from "@/stores/builder-store";
-import { ThemeEditor } from "@/components/theme";
+import { ThemeEditor, ThemeGallery } from "@/components/theme";
 import { DEFAULT_THEME } from "@/lib/theme/defaults";
 import type { Theme } from "@/lib/theme/types";
 import type { CustomTheme } from "@/lib/db/schema/forms";
-import { X } from "lucide-react";
+import { X, GripVertical, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 interface ThemePanelProps {
-  open: boolean;
-  onClose: () => void;
+  children: React.ReactNode;
   className?: string;
 }
 
@@ -136,8 +140,10 @@ function themeToCustomTheme(theme: Theme): CustomTheme {
   };
 }
 
-export function ThemePanel({ open, onClose, className }: ThemePanelProps) {
+export function ThemePanel({ children, className }: ThemePanelProps) {
   const { form, updateFormMeta } = useBuilderStore();
+  const [isOpen, setIsOpen] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
 
   // Convert stored customTheme to full Theme object
   const theme = useMemo(() => {
@@ -158,36 +164,71 @@ export function ThemePanel({ open, onClose, className }: ThemePanelProps) {
     updateFormMeta({ customTheme: null });
   }, [updateFormMeta]);
 
-  if (!open) return null;
+  // Handle back from editor to gallery
+  const handleBackToGallery = () => {
+    setShowEditor(false);
+  };
 
   return (
-    <div
-      className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center bg-black/50",
-        className
-      )}
-    >
-      <div className="relative h-[90vh] w-[90vw] max-w-6xl overflow-hidden rounded-lg bg-background shadow-xl">
-        {/* Close button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute right-4 top-4 z-10"
-          onClick={onClose}
-        >
-          <X className="h-4 w-4" />
-        </Button>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverContent
+        className={cn(
+          "w-[420px] p-0",
+          className
+        )}
+        align="end"
+        sideOffset={8}
+      >
+        <div className="flex h-[520px] flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b px-4 py-3">
+            <div className="flex items-center gap-2">
+              {showEditor && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7"
+                  onClick={handleBackToGallery}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+              )}
+              <GripVertical className="h-4 w-4 text-muted-foreground" />
+              <span className="font-semibold">Design</span>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              onClick={() => setIsOpen(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
 
-        {/* Theme Editor */}
-        <ThemeEditor
-          theme={theme}
-          onChange={handleThemeChange}
-          onReset={handleReset}
-          showPreview={true}
-          className="h-full"
-        />
-      </div>
-    </div>
+          {/* Content */}
+          <div className="flex-1 overflow-hidden">
+            {showEditor ? (
+              <ThemeEditor
+                theme={theme}
+                onChange={handleThemeChange}
+                onReset={handleReset}
+                showPreview={false}
+                className="h-full"
+              />
+            ) : (
+              <ThemeGallery
+                currentTheme={theme}
+                onSelectTheme={handleThemeChange}
+                onEditTheme={() => setShowEditor(true)}
+                className="h-full"
+              />
+            )}
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }
 

@@ -560,9 +560,249 @@ export const sunsetTheme: ThemeTemplate = {
   },
 };
 
+// Plain Blue Theme (Teal accent)
+export const plainBlueTheme: ThemeTemplate = {
+  id: "plain-blue",
+  name: "Plain Blue",
+  description: "Clean and simple with teal accents",
+  theme: {
+    colors: {
+      primary: "#14B8A6",
+      secondary: "#6B7280",
+      background: "#FFFFFF",
+      foreground: "#1F2937",
+      muted: "#F3F4F6",
+      mutedForeground: "#6B7280",
+      accent: "#CCFBF1",
+      accentForeground: "#0D9488",
+      destructive: "#EF4444",
+      border: "#E5E7EB",
+      input: "#E5E7EB",
+      ring: "#14B8A6",
+      questionText: "#1F2937",
+      questionBackground: "transparent",
+      answerText: "#14B8A6",
+      answerBackground: "#FFFFFF",
+    },
+    background: {
+      type: "solid",
+      color: "#FFFFFF",
+    },
+    typography: DEFAULT_TYPOGRAPHY,
+    layout: DEFAULT_LAYOUT,
+    buttons: DEFAULT_BUTTONS,
+    progressBar: {
+      ...DEFAULT_PROGRESS_BAR,
+      color: "#14B8A6",
+    },
+    branding: DEFAULT_BRANDING,
+    animations: DEFAULT_ANIMATIONS,
+  },
+};
+
+// Plain Dark Theme
+export const plainDarkTheme: ThemeTemplate = {
+  id: "plain-dark",
+  name: "Plain Dark",
+  description: "Simple dark theme with subtle styling",
+  theme: {
+    colors: {
+      primary: "#374151",
+      secondary: "#6B7280",
+      background: "#F9FAFB",
+      foreground: "#1F2937",
+      muted: "#F3F4F6",
+      mutedForeground: "#6B7280",
+      accent: "#E5E7EB",
+      accentForeground: "#1F2937",
+      destructive: "#EF4444",
+      border: "#E5E7EB",
+      input: "#E5E7EB",
+      ring: "#374151",
+      questionText: "#1F2937",
+      questionBackground: "transparent",
+      answerText: "#6B7280",
+      answerBackground: "#FFFFFF",
+    },
+    background: {
+      type: "solid",
+      color: "#F9FAFB",
+    },
+    typography: DEFAULT_TYPOGRAPHY,
+    layout: DEFAULT_LAYOUT,
+    buttons: {
+      ...DEFAULT_BUTTONS,
+      variant: "solid",
+    },
+    progressBar: {
+      ...DEFAULT_PROGRESS_BAR,
+      color: "#374151",
+    },
+    branding: DEFAULT_BRANDING,
+    animations: DEFAULT_ANIMATIONS,
+  },
+};
+
+// Barceloneta Theme (Abstract waves pattern)
+export const barcelonetaTheme: ThemeTemplate = {
+  id: "barceloneta",
+  name: "Barceloneta",
+  description: "Warm sandy tones with abstract wave patterns",
+  theme: {
+    colors: {
+      primary: "#374151",
+      secondary: "#D4A574",
+      background: "#F5F0E8",
+      foreground: "#1F2937",
+      muted: "#E8E0D4",
+      mutedForeground: "#6B7280",
+      accent: "#D4A574",
+      accentForeground: "#1F2937",
+      destructive: "#EF4444",
+      border: "#D4A574",
+      input: "#E8E0D4",
+      ring: "#D4A574",
+      questionText: "#1F2937",
+      questionBackground: "transparent",
+      answerText: "#374151",
+      answerBackground: "#FFFFFF",
+    },
+    background: {
+      type: "solid",
+      color: "#F5F0E8",
+    },
+    typography: {
+      ...DEFAULT_TYPOGRAPHY,
+      fontFamily: "Raleway",
+      headingFontFamily: "Raleway",
+    },
+    layout: DEFAULT_LAYOUT,
+    buttons: {
+      ...DEFAULT_BUTTONS,
+      radius: "md",
+    },
+    progressBar: {
+      ...DEFAULT_PROGRESS_BAR,
+      color: "#D4A574",
+    },
+    branding: DEFAULT_BRANDING,
+    animations: {
+      ...DEFAULT_ANIMATIONS,
+      transition: "slide",
+    },
+  },
+};
+
+// Coral Waves Theme
+export const coralWavesTheme: ThemeTemplate = {
+  id: "coral-waves",
+  name: "Coral Waves",
+  description: "Soft coral and pink gradient waves",
+  theme: {
+    colors: {
+      primary: "#374151",
+      secondary: "#F87171",
+      background: "#FEF2F2",
+      foreground: "#1F2937",
+      muted: "#FECACA",
+      mutedForeground: "#6B7280",
+      accent: "#F87171",
+      accentForeground: "#1F2937",
+      destructive: "#DC2626",
+      border: "#FECACA",
+      input: "#FEE2E2",
+      ring: "#F87171",
+      questionText: "#1F2937",
+      questionBackground: "transparent",
+      answerText: "#374151",
+      answerBackground: "#FFFFFF",
+    },
+    background: {
+      type: "gradient",
+      gradient: {
+        type: "linear",
+        angle: 180,
+        stops: [
+          { color: "#FEF2F2", position: 0 },
+          { color: "#FEE2E2", position: 100 },
+        ],
+      },
+    },
+    typography: {
+      ...DEFAULT_TYPOGRAPHY,
+      fontFamily: "Outfit",
+      headingFontFamily: "Outfit",
+    },
+    layout: DEFAULT_LAYOUT,
+    buttons: DEFAULT_BUTTONS,
+    progressBar: {
+      ...DEFAULT_PROGRESS_BAR,
+      color: "#F87171",
+    },
+    branding: DEFAULT_BRANDING,
+    animations: DEFAULT_ANIMATIONS,
+  },
+};
+
+// Teal Lagoon Theme
+export const tealLagoonTheme: ThemeTemplate = {
+  id: "teal-lagoon",
+  name: "Teal Lagoon",
+  description: "Calming teal and seafoam gradients",
+  theme: {
+    colors: {
+      primary: "#374151",
+      secondary: "#5EEAD4",
+      background: "#F0FDFA",
+      foreground: "#1F2937",
+      muted: "#CCFBF1",
+      mutedForeground: "#6B7280",
+      accent: "#5EEAD4",
+      accentForeground: "#1F2937",
+      destructive: "#EF4444",
+      border: "#99F6E4",
+      input: "#CCFBF1",
+      ring: "#5EEAD4",
+      questionText: "#1F2937",
+      questionBackground: "transparent",
+      answerText: "#374151",
+      answerBackground: "#FFFFFF",
+    },
+    background: {
+      type: "gradient",
+      gradient: {
+        type: "linear",
+        angle: 180,
+        stops: [
+          { color: "#F0FDFA", position: 0 },
+          { color: "#CCFBF1", position: 100 },
+        ],
+      },
+    },
+    typography: {
+      ...DEFAULT_TYPOGRAPHY,
+      fontFamily: "DM Sans",
+      headingFontFamily: "DM Sans",
+    },
+    layout: DEFAULT_LAYOUT,
+    buttons: DEFAULT_BUTTONS,
+    progressBar: {
+      ...DEFAULT_PROGRESS_BAR,
+      color: "#5EEAD4",
+    },
+    branding: DEFAULT_BRANDING,
+    animations: DEFAULT_ANIMATIONS,
+  },
+};
+
 // All templates array
 export const THEME_TEMPLATES: ThemeTemplate[] = [
   defaultTheme,
+  plainBlueTheme,
+  plainDarkTheme,
+  barcelonetaTheme,
+  coralWavesTheme,
+  tealLagoonTheme,
   darkTheme,
   minimalTheme,
   vibrantTheme,

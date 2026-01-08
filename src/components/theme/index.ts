@@ -32,3 +32,14 @@ export {
 
 // Preview Components
 export { ThemePreview, default as ThemePreviewDefault } from "./ThemePreview";
+
+// Gallery Components
+export {
+  ThemePreviewCard,
+  default as ThemePreviewCardDefault,
+} from "./ThemePreviewCard";
+
+export {
+  ThemeGallery,
+  default as ThemeGalleryDefault,
+} from "./ThemeGallery";
