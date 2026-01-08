@@ -15,8 +15,8 @@ export function getInputStyleClasses(
   inputStyle: InputStyle = "underline",
   hasError?: boolean
 ): string {
-  // Match title font size: text-2xl sm:text-3xl
-  const baseClasses = "text-2xl sm:text-3xl transition-all duration-200";
+  // Match title font size: text-2xl sm:text-3xl (use ! to override base Input styles)
+  const baseClasses = "!text-2xl sm:!text-3xl transition-all duration-200";
   const errorClasses = hasError
     ? "border-destructive focus-visible:ring-destructive"
     : "";
@@ -42,8 +42,8 @@ export function getTextareaStyleClasses(
   inputStyle: InputStyle = "underline",
   hasError?: boolean
 ): string {
-  // Match title font size: text-2xl sm:text-3xl
-  const baseClasses = "text-2xl sm:text-3xl transition-all duration-200";
+  // Match title font size: text-2xl sm:text-3xl (use ! to override base Textarea styles)
+  const baseClasses = "!text-2xl sm:!text-3xl transition-all duration-200";
   const errorClasses = hasError
     ? "border-destructive focus-visible:ring-destructive"
     : "";
