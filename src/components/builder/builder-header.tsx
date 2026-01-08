@@ -17,9 +17,17 @@ import {
   Pencil,
   Check,
   X,
+  MessageSquare,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Link from "next/link";
 
 interface BuilderHeaderProps {
@@ -220,6 +228,34 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
             <Redo2 className="h-4 w-4" />
           </Button>
         </div>
+
+        {/* Responses - icon with tooltip */}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                <Link href={form ? `/forms/${form.id}/edit?tab=responses` : "#"}>
+                  <MessageSquare className="h-4 w-4" />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Responses</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        {/* Analytics - icon with tooltip */}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                <Link href={form ? `/forms/${form.id}/edit?tab=analytics` : "#"}>
+                  <BarChart3 className="h-4 w-4" />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Analytics</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
         {/* Preview - only show when form is not published */}
         {form?.status !== "published" && (
