@@ -14,6 +14,9 @@ import {
   ExternalLink,
   Globe,
   GlobeLock,
+  Pencil,
+  Check,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +28,8 @@ interface BuilderHeaderProps {
 
 export function BuilderHeader({ className }: BuilderHeaderProps) {
   const [isPublishing, setIsPublishing] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editedTitle, setEditedTitle] = useState("");
   const {
     form,
     isDirty,
@@ -39,8 +44,29 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
     setFormStatus,
   } = useBuilderStore();
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateFormMeta({ title: e.target.value });
+  const handleStartEditing = () => {
+    setEditedTitle(form?.title || "");
+    setIsEditingTitle(true);
+  };
+
+  const handleSaveTitle = () => {
+    if (editedTitle.trim()) {
+      updateFormMeta({ title: editedTitle.trim() });
+    }
+    setIsEditingTitle(false);
+  };
+
+  const handleCancelEditing = () => {
+    setIsEditingTitle(false);
+    setEditedTitle("");
+  };
+
+  const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSaveTitle();
+    } else if (e.key === "Escape") {
+      handleCancelEditing();
+    }
   };
 
   const formatLastSaved = () => {
@@ -113,12 +139,44 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
           </Button>
         </Link>
 
-        <Input
-          value={form?.title || ""}
-          onChange={handleTitleChange}
-          className="h-8 w-64 border-0 bg-transparent px-2 text-base font-semibold shadow-none focus-visible:ring-1"
-          placeholder="Untitled Form"
-        />
+        {isEditingTitle ? (
+          <div className="flex items-center gap-1">
+            <Input
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              onKeyDown={handleTitleKeyDown}
+              className="h-8 w-64 text-base font-semibold"
+              placeholder="Untitled Form"
+              autoFocus
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={handleSaveTitle}
+            >
+              <Check className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={handleCancelEditing}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        ) : (
+          <button
+            onClick={handleStartEditing}
+            className="group flex items-center gap-2 rounded-md px-2 py-1 hover:bg-muted"
+          >
+            <span className="text-base font-semibold">
+              {form?.title || "Untitled Form"}
+            </span>
+            <Pencil className="h-3.5 w-3.5 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+          </button>
+        )}
 
         <div className="flex items-center gap-1 text-xs text-muted-foreground">
           {isSaving && (
@@ -163,13 +221,17 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
           </Button>
         </div>
 
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={form ? `/f/${form.slug}?preview=true` : "#"} target="_blank">
-            <Eye className="mr-2 h-4 w-4" />
-            Preview
-          </Link>
-        </Button>
+        {/* Preview - only show when form is not published */}
+        {form?.status !== "published" && (
+          <Button variant="ghost" size="sm" asChild>
+            <Link href={form ? `/f/${form.slug}?preview=true` : "#"} target="_blank">
+              <Eye className="mr-2 h-4 w-4" />
+              Preview
+            </Link>
+          </Button>
+        )}
 
+        {/* View Live - only show when published */}
         {form?.status === "published" && (
           <Button variant="outline" size="sm" asChild>
             <Link href={`/f/${form.slug}`} target="_blank">

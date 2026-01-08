@@ -43,7 +43,7 @@ export function FormDetailTabs({
       {currentTab !== "questions" && (
         <div className="bg-background/95 supports-[backdrop-filter]:bg-background/60 border-b backdrop-blur">
           <div className="container">
-            <nav className="-mb-px flex gap-1" aria-label="Form sections">
+            <nav className="-mb-px flex justify-end gap-1" aria-label="Form sections">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = currentTab === tab.value;
@@ -115,8 +115,8 @@ function BuilderLayoutWithTabs({
 }) {
   return (
     <div className="flex h-full flex-col">
-      {/* Mini tab bar that appears above the builder */}
-      <div className="bg-muted/30 flex items-center gap-1 border-b px-4 py-2">
+      {/* Mini tab bar that appears above the builder - aligned right */}
+      <div className="flex items-center justify-end gap-1 border-b bg-muted/30 px-4 py-2">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = currentTab === tab.value;
