@@ -36,6 +36,10 @@ import {
   FileUploadPreview,
   RankingPreview,
   PictureChoicePreview,
+  AudioRecordingPreview,
+  WelcomeScreenPreview,
+  MatrixPreview,
+  ThankYouScreenPreview,
 } from "./question-previews";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
@@ -169,6 +173,18 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
                   )}
                   {question.type === "picture_choice" && (
                     <PictureChoicePreview question={question} />
+                  )}
+                  {question.type === "audio_recording" && (
+                    <AudioRecordingPreview question={question} />
+                  )}
+                  {question.type === "matrix" && (
+                    <MatrixPreview question={question} />
+                  )}
+                  {question.type === "welcome_screen" && (
+                    <WelcomeScreenPreview question={question} />
+                  )}
+                  {question.type === "thank_you_screen" && (
+                    <ThankYouScreenPreview question={question} />
                   )}
                 </EditableQuestionCard>
               ))}

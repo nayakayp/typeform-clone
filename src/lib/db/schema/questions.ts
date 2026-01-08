@@ -87,6 +87,8 @@ export interface QuestionSettings {
   noLabel?: string;
   // Statement
   buttonText?: string;
+  // Audio/Video recording
+  maxDuration?: string;
 }
 
 // Question validations type

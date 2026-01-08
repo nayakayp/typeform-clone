@@ -18,3 +18,7 @@ export { PictureChoicePreview } from "./picture-choice-preview";
 export { SignaturePreview } from "./signature-preview";
 export { FileUploadPreview } from "./file-upload-preview";
 export { RankingPreview } from "./ranking-preview";
+export { MatrixPreview } from "./matrix-preview";
+export { WelcomeScreenPreview } from "./welcome-screen-preview";
+export { AudioRecordingPreview } from "./audio-recording-preview";
+export { ThankYouScreenPreview } from "./thank-you-screen-preview";
