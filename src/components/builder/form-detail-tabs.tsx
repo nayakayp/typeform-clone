@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { BuilderLayout } from "./builder-layout";
 import { FormResponses } from "@/components/responses/FormResponses";
 import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
@@ -27,8 +30,14 @@ export function FormDetailTabs({
           <BuilderLayout form={form} questions={questions} />
         )}
         {currentTab === "responses" && (
-          <div className="container py-8">
+          <div className="container max-w-5xl py-8">
             <div className="mb-6">
+              <Button variant="ghost" size="sm" className="mb-4 -ml-2 gap-2" asChild>
+                <Link href={`/forms/${form.id}/edit`}>
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Editor
+                </Link>
+              </Button>
               <h1 className="text-2xl font-bold tracking-tight">
                 {form.title}
               </h1>
@@ -38,7 +47,15 @@ export function FormDetailTabs({
           </div>
         )}
         {currentTab === "analytics" && (
-          <div className="container py-8">
+          <div className="container max-w-5xl py-8">
+            <div className="mb-6">
+              <Button variant="ghost" size="sm" className="mb-4 -ml-2 gap-2" asChild>
+                <Link href={`/forms/${form.id}/edit`}>
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Editor
+                </Link>
+              </Button>
+            </div>
             <AnalyticsDashboard formId={form.id} />
           </div>
         )}

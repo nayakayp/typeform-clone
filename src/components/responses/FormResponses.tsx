@@ -50,9 +50,6 @@ import {
   Globe,
   Calendar,
   FileText,
-  TrendingUp,
-  ArrowUpRight,
-  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -114,22 +111,22 @@ export function FormResponses({ formId }: FormResponsesProps) {
     switch (status) {
       case "completed":
         return (
-          <Badge className="gap-1.5 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 text-emerald-500 border-emerald-500/30 shadow-sm shadow-emerald-500/10">
-            <CheckCircle2 className="h-3.5 w-3.5" />
+          <Badge variant="outline" className="gap-1.5 border-emerald-500/50 bg-emerald-500/10 text-emerald-500">
+            <CheckCircle2 className="h-3 w-3" />
             Complete
           </Badge>
         );
       case "in_progress":
         return (
-          <Badge className="gap-1.5 bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-500 border-amber-500/30 shadow-sm shadow-amber-500/10">
-            <Clock className="h-3.5 w-3.5" />
+          <Badge variant="outline" className="gap-1.5 border-primary/50 bg-primary/10 text-primary">
+            <Clock className="h-3 w-3" />
             In Progress
           </Badge>
         );
       default:
         return (
-          <Badge className="gap-1.5 bg-gradient-to-r from-slate-500/20 to-slate-600/20 text-slate-400 border-slate-500/30">
-            <XCircle className="h-3.5 w-3.5" />
+          <Badge variant="outline" className="gap-1.5">
+            <XCircle className="h-3 w-3" />
             Partial
           </Badge>
         );
@@ -144,124 +141,94 @@ export function FormResponses({ formId }: FormResponsesProps) {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} className="h-32 w-full rounded-2xl" />
+            <Skeleton key={i} className="h-24 w-full rounded-lg" />
           ))}
         </div>
-        <Skeleton className="h-[500px] w-full rounded-2xl" />
+        <Skeleton className="h-96 w-full rounded-lg" />
       </div>
     );
   }
 
   if (responses.length === 0) {
     return (
-      <div className="relative overflow-hidden rounded-2xl border border-dashed border-white/10 bg-gradient-to-br from-white/5 to-transparent p-12">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
-        <div className="relative flex flex-col items-center justify-center text-center">
-          <div className="mb-6 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 p-6 ring-8 ring-primary/5 backdrop-blur-sm">
-            <MessageSquare className="h-12 w-12 text-primary" />
+      <Card className="border-dashed">
+        <CardContent className="flex flex-col items-center justify-center py-16">
+          <div className="rounded-full bg-primary/10 p-4 mb-4">
+            <MessageSquare className="h-8 w-8 text-primary" />
           </div>
-          <h3 className="text-2xl font-bold mb-3 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
-            No responses yet
-          </h3>
-          <p className="text-muted-foreground max-w-md leading-relaxed">
-            Share your form to start collecting responses. They&apos;ll appear here
-            as they come in with real-time updates.
+          <h3 className="text-lg font-semibold mb-2">No responses yet</h3>
+          <p className="text-muted-foreground text-center max-w-sm text-sm">
+            Share your form to start collecting responses. They&apos;ll appear here as they come in.
           </p>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards - Premium Glassmorphism Design */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total Responses */}
-        <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-violet-500/10 via-purple-500/5 to-transparent p-6 backdrop-blur-sm transition-all hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5">
-          <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-          <div className="relative">
-            <div className="flex items-center justify-between mb-4">
-              <div className="rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 p-3 ring-4 ring-violet-500/10">
-                <FileText className="h-5 w-5 text-violet-400" />
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="rounded-lg bg-primary/10 p-2">
+                <FileText className="h-4 w-4 text-primary" />
               </div>
-              <div className="flex items-center gap-1 text-xs text-violet-400/80">
-                <TrendingUp className="h-3.5 w-3.5" />
-                <span>All time</span>
+              <div>
+                <p className="text-2xl font-bold">{responses.length}</p>
+                <p className="text-xs text-muted-foreground">Total</p>
               </div>
             </div>
-            <p className="text-4xl font-bold bg-gradient-to-r from-violet-300 to-purple-400 bg-clip-text text-transparent">
-              {responses.length}
-            </p>
-            <p className="text-sm text-muted-foreground mt-1">Total Responses</p>
-          </div>
-        </div>
-
-        {/* Completed */}
-        <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-emerald-500/10 via-green-500/5 to-transparent p-6 backdrop-blur-sm transition-all hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-          <div className="relative">
-            <div className="flex items-center justify-between mb-4">
-              <div className="rounded-xl bg-gradient-to-br from-emerald-500/20 to-green-500/20 p-3 ring-4 ring-emerald-500/10">
-                <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="rounded-lg bg-emerald-500/10 p-2">
+                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
               </div>
-              <Sparkles className="h-4 w-4 text-emerald-400/50" />
-            </div>
-            <p className="text-4xl font-bold bg-gradient-to-r from-emerald-300 to-green-400 bg-clip-text text-transparent">
-              {completedCount}
-            </p>
-            <p className="text-sm text-muted-foreground mt-1">Completed</p>
-          </div>
-        </div>
-
-        {/* In Progress */}
-        <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-transparent p-6 backdrop-blur-sm transition-all hover:border-amber-500/30 hover:shadow-lg hover:shadow-amber-500/5">
-          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-          <div className="relative">
-            <div className="flex items-center justify-between mb-4">
-              <div className="rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 p-3 ring-4 ring-amber-500/10">
-                <Clock className="h-5 w-5 text-amber-400" />
+              <div>
+                <p className="text-2xl font-bold">{completedCount}</p>
+                <p className="text-xs text-muted-foreground">Completed</p>
               </div>
             </div>
-            <p className="text-4xl font-bold bg-gradient-to-r from-amber-300 to-orange-400 bg-clip-text text-transparent">
-              {inProgressCount}
-            </p>
-            <p className="text-sm text-muted-foreground mt-1">In Progress</p>
-          </div>
-        </div>
-
-        {/* Completion Rate */}
-        <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-cyan-500/10 via-blue-500/5 to-transparent p-6 backdrop-blur-sm transition-all hover:border-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/5">
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-          <div className="relative">
-            <div className="flex items-center justify-between mb-4">
-              <div className="rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 p-3 ring-4 ring-cyan-500/10">
-                <TrendingUp className="h-5 w-5 text-cyan-400" />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="rounded-lg bg-primary/10 p-2">
+                <Clock className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{inProgressCount}</p>
+                <p className="text-xs text-muted-foreground">In Progress</p>
               </div>
             </div>
-            <p className="text-4xl font-bold bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">
-              {completionRate}%
-            </p>
-            <p className="text-sm text-muted-foreground mt-1">Completion Rate</p>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="rounded-lg bg-emerald-500/10 p-2">
+                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{completionRate}%</p>
+                <p className="text-xs text-muted-foreground">Completion</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Header with Export */}
       <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold">All Responses</h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Click on a response to view details
-          </p>
-        </div>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="gap-2 border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all" 
-          asChild
-        >
+        <h2 className="font-semibold">All Responses</h2>
+        <Button variant="outline" size="sm" className="gap-2" asChild>
           <a href={`/api/forms/${formId}/responses/export?format=csv`} download>
             <Download className="h-4 w-4" />
             Export CSV
@@ -269,60 +236,48 @@ export function FormResponses({ formId }: FormResponsesProps) {
         </Button>
       </div>
 
-      {/* Responses Table - Premium Design */}
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm">
+      {/* Responses Table */}
+      <Card>
         <Table>
           <TableHeader>
-            <TableRow className="border-b border-white/10 bg-white/5 hover:bg-white/5">
-              <TableHead className="font-semibold text-white/80">Respondent</TableHead>
-              <TableHead className="font-semibold text-white/80">Status</TableHead>
-              <TableHead className="font-semibold text-white/80">Submitted</TableHead>
-              <TableHead className="font-semibold text-white/80 text-center">Answers</TableHead>
-              <TableHead className="w-[70px]"></TableHead>
+            <TableRow>
+              <TableHead>Respondent</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Submitted</TableHead>
+              <TableHead className="text-center">Answers</TableHead>
+              <TableHead className="w-12"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {responses.map((response, index) => (
+            {responses.map((response) => (
               <TableRow 
                 key={response.id}
-                className="group cursor-pointer border-b border-white/5 transition-all hover:bg-white/5"
+                className="cursor-pointer"
                 onClick={() => setSelectedResponse(response)}
               >
-                <TableCell className="py-4">
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-primary/30 to-primary/10 text-primary font-semibold text-sm ring-2 ring-primary/20">
-                        {response.email ? response.email[0].toUpperCase() : "A"}
-                      </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-500 ring-2 ring-background" />
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary font-medium text-sm">
+                      {response.email ? response.email[0].toUpperCase() : "A"}
                     </div>
                     <div>
-                      <div className="font-medium text-white group-hover:text-primary transition-colors flex items-center gap-2">
+                      <div className="font-medium text-sm">
                         {response.email || "Anonymous"}
-                        <ArrowUpRight className="h-3.5 w-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
                       </div>
-                      <div className="text-xs text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                        <Globe className="h-3 w-3" />
+                      <div className="text-xs text-muted-foreground">
                         {response.ipAddress || "Unknown IP"}
                       </div>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>{getStatusBadge(response.status)}</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4 text-muted-foreground/60" />
-                    <span className="text-sm">
-                      {formatDistanceToNow(new Date(response.createdAt), {
-                        addSuffix: true,
-                      })}
-                    </span>
-                  </div>
+                <TableCell className="text-sm text-muted-foreground">
+                  {formatDistanceToNow(new Date(response.createdAt), {
+                    addSuffix: true,
+                  })}
                 </TableCell>
                 <TableCell className="text-center">
-                  <span className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-white/10 to-white/5 px-3 py-1 text-sm font-medium ring-1 ring-white/10">
-                    {response.answers?.length || 0}
-                  </span>
+                  <Badge variant="secondary">{response.answers?.length || 0}</Badge>
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>
@@ -330,31 +285,30 @@ export function FormResponses({ formId }: FormResponsesProps) {
                       <Button 
                         variant="ghost" 
                         size="icon"
-                        className="opacity-0 group-hover:opacity-100 transition-all hover:bg-white/10"
+                        className="h-8 w-8"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-44 border-white/10 bg-background/95 backdrop-blur-xl">
+                    <DropdownMenuContent align="end">
                       <DropdownMenuItem 
-                        className="gap-2"
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedResponse(response);
                         }}
                       >
-                        <Eye className="h-4 w-4" />
-                        View Details
+                        <Eye className="h-4 w-4 mr-2" />
+                        View
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        className="gap-2 text-destructive focus:text-destructive"
+                        className="text-destructive focus:text-destructive"
                         onClick={(e) => {
                           e.stopPropagation();
                           setDeleteResponseId(response.id);
                         }}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4 mr-2" />
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -364,27 +318,24 @@ export function FormResponses({ formId }: FormResponsesProps) {
             ))}
           </TableBody>
         </Table>
-      </div>
+      </Card>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog
         open={!!deleteResponseId}
         onOpenChange={() => setDeleteResponseId(null)}
       >
-        <AlertDialogContent className="border-white/10 bg-background/95 backdrop-blur-xl">
+        <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Response</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this response? This action cannot be
-              undone.
+              Are you sure you want to delete this response? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="border-white/10">Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() =>
-                deleteResponseId && deleteResponseMutation.mutate(deleteResponseId)
-              }
+              onClick={() => deleteResponseId && deleteResponseMutation.mutate(deleteResponseId)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               Delete
@@ -393,91 +344,49 @@ export function FormResponses({ formId }: FormResponsesProps) {
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Response Details Dialog - Premium Design */}
+      {/* Response Details Dialog */}
       <Dialog open={!!selectedResponse} onOpenChange={() => setSelectedResponse(null)}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto border-white/10 bg-background/95 backdrop-blur-xl">
+        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-4">
-              <div className="relative">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 text-primary font-bold text-lg ring-4 ring-primary/10">
-                  {selectedResponse?.email ? selectedResponse.email[0].toUpperCase() : "A"}
-                </div>
-              </div>
-              <div>
-                <span className="text-xl">Response Details</span>
-                <p className="text-sm font-normal text-muted-foreground mt-1">
-                  {selectedResponse?.email || "Anonymous Respondent"}
-                </p>
-              </div>
-            </DialogTitle>
+            <DialogTitle>Response Details</DialogTitle>
           </DialogHeader>
           {selectedResponse && (
-            <div className="space-y-6 mt-6">
-              {/* Respondent Info Cards */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-4">
-                  <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                    <User className="h-4 w-4" />
-                    <span className="text-xs uppercase tracking-wider font-medium">Respondent</span>
-                  </div>
-                  <p className="font-semibold text-white">{selectedResponse.email || "Anonymous"}</p>
+            <div className="space-y-4 mt-2">
+              {/* Info Grid */}
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="space-y-1">
+                  <p className="text-muted-foreground">Respondent</p>
+                  <p className="font-medium">{selectedResponse.email || "Anonymous"}</p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-4">
-                  <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                    <Globe className="h-4 w-4" />
-                    <span className="text-xs uppercase tracking-wider font-medium">IP Address</span>
-                  </div>
-                  <p className="font-semibold text-white">{selectedResponse.ipAddress || "Unknown"}</p>
+                <div className="space-y-1">
+                  <p className="text-muted-foreground">IP Address</p>
+                  <p className="font-medium">{selectedResponse.ipAddress || "Unknown"}</p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-4">
-                  <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                    <Calendar className="h-4 w-4" />
-                    <span className="text-xs uppercase tracking-wider font-medium">Submitted</span>
-                  </div>
-                  <p className="font-semibold text-white">
-                    {format(new Date(selectedResponse.createdAt), "PPpp")}
-                  </p>
+                <div className="space-y-1">
+                  <p className="text-muted-foreground">Submitted</p>
+                  <p className="font-medium">{format(new Date(selectedResponse.createdAt), "PPp")}</p>
                 </div>
-                <div className="rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-4">
-                  <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                    <FileText className="h-4 w-4" />
-                    <span className="text-xs uppercase tracking-wider font-medium">Status</span>
-                  </div>
-                  <div className="mt-1">{getStatusBadge(selectedResponse.status)}</div>
+                <div className="space-y-1">
+                  <p className="text-muted-foreground">Status</p>
+                  <div>{getStatusBadge(selectedResponse.status)}</div>
                 </div>
               </div>
 
-              {/* Answers Section */}
-              <div>
-                <h4 className="font-bold mb-4 flex items-center gap-2 text-lg">
-                  <div className="rounded-lg bg-primary/10 p-2">
-                    <MessageSquare className="h-4 w-4 text-primary" />
-                  </div>
-                  Answers
-                  <span className="text-sm font-normal text-muted-foreground">
-                    ({selectedResponse.answers.length})
-                  </span>
-                </h4>
+              {/* Answers */}
+              <div className="border-t pt-4">
+                <h4 className="font-medium mb-3">Answers ({selectedResponse.answers.length})</h4>
                 {selectedResponse.answers.length === 0 ? (
-                  <div className="rounded-xl border border-dashed border-white/10 bg-white/5 p-8 text-center">
-                    <p className="text-muted-foreground">No answers recorded</p>
-                  </div>
+                  <p className="text-sm text-muted-foreground">No answers recorded</p>
                 ) : (
                   <div className="space-y-3">
                     {selectedResponse.answers.map((answer, index) => (
-                      <div 
-                        key={answer.questionId} 
-                        className="group rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-5 transition-all hover:border-primary/30 hover:bg-white/[0.07]"
-                      >
-                        <p className="text-sm text-muted-foreground mb-2 flex items-center gap-2">
-                          <span className="inline-flex items-center justify-center h-5 w-5 rounded-md bg-white/10 text-xs font-medium">
-                            {index + 1}
-                          </span>
+                      <div key={answer.questionId} className="rounded-lg border p-3">
+                        <p className="text-xs text-muted-foreground mb-1">
                           {answer.questionTitle || `Question ${index + 1}`}
                         </p>
-                        <p className="font-medium text-white text-lg">
+                        <p className="text-sm font-medium">
                           {answer.textValue || answer.numberValue || (
-                            <span className="text-muted-foreground italic">No answer provided</span>
+                            <span className="text-muted-foreground italic">No answer</span>
                           )}
                         </p>
                       </div>
