@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Link from "next/link";
 import { formatDistanceToNow, format } from "date-fns";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -160,10 +159,10 @@ export function FormResponses({ formId }: FormResponsesProps) {
     <>
       <div className="flex justify-end mb-4">
         <Button variant="outline" asChild>
-          <Link href={`/api/forms/${formId}/responses/export?format=csv`}>
+          <a href={`/api/forms/${formId}/responses/export?format=csv`} download>
             <Download className="h-4 w-4 mr-2" />
             Export CSV
-          </Link>
+          </a>
         </Button>
       </div>
 
