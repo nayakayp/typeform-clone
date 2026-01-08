@@ -14,3 +14,5 @@ export { NpsPreview } from "./nps-preview";
 export { OpinionScalePreview } from "./opinion-scale-preview";
 export { RatingPreview } from "./rating-preview";
 export { StatementPreview } from "./statement-preview";
+export { SignaturePreview } from "./signature-preview";
+export { FileUploadPreview } from "./file-upload-preview";
