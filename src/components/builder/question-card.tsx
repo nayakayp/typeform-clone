@@ -113,7 +113,7 @@ export function QuestionCard({ question, index }: QuestionCardProps) {
             value={question.title || ""}
             onChange={handleTitleChange}
             placeholder="Enter your question..."
-            className="border-0 bg-transparent px-0 text-base font-medium shadow-none focus-visible:ring-0"
+            className="border-0 bg-transparent text-base font-medium shadow-none focus-visible:ring-0"
           />
 
           {isSelected && (
@@ -121,7 +121,7 @@ export function QuestionCard({ question, index }: QuestionCardProps) {
               value={question.description || ""}
               onChange={handleDescriptionChange}
               placeholder="Add a description (optional)"
-              className="min-h-[60px] resize-none border-0 bg-transparent px-0 text-sm text-muted-foreground shadow-none focus-visible:ring-0"
+              className="min-h-[60px] resize-none border-0 bg-transparent text-sm text-muted-foreground shadow-none focus-visible:ring-0"
             />
           )}
         </div>

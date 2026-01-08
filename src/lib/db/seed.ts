@@ -10,7 +10,7 @@ import {
   themes,
   accounts,
 } from "./schema";
-import { hash } from "bcryptjs";
+import { hashPassword } from "better-auth/crypto";
 
 // Generate a nanoid-style ID (better-auth compatible)
 function generateId() {
@@ -40,7 +40,7 @@ async function seed() {
   console.log("✅ Created test user:", testUser.email);
 
   // Create account with password for the demo user
-  const hashedPassword = await hash("demo123", 10);
+  const hashedPassword = await hashPassword("demo1234");
   await db.insert(accounts).values({
     id: generateId(),
     userId: testUser.id,
@@ -244,7 +244,7 @@ async function seed() {
   console.log("\n🎉 Seed completed successfully!");
   console.log("\nTest credentials:");
   console.log("  Email: demo@example.com");
-  console.log("  Password: demo123");
+  console.log("  Password: demo1234");
   console.log("  Workspace: demo-workspace");
   console.log("  Form slug: customer-feedback");
 
