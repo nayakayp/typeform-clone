@@ -34,6 +34,8 @@ import {
   NpsPreview,
   SignaturePreview,
   FileUploadPreview,
+  RankingPreview,
+  PictureChoicePreview,
 } from "./question-previews";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
@@ -158,6 +160,15 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
                   )}
                   {question.type === "signature" && (
                     <SignaturePreview question={question} />
+                  )}
+                  {question.type === "file_upload" && (
+                    <FileUploadPreview question={question} />
+                  )}
+                  {question.type === "ranking" && (
+                    <RankingPreview question={question} />
+                  )}
+                  {question.type === "picture_choice" && (
+                    <PictureChoicePreview question={question} />
                   )}
                 </EditableQuestionCard>
               ))}
