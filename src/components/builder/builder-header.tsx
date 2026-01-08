@@ -236,7 +236,7 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-                <Link href={form ? `/forms/${form.id}/edit?tab=responses` : "#"}>
+                <Link href={form ? `/forms/${form.id}/responses` : "#"}>
                   <MessageSquare className="h-4 w-4" />
                 </Link>
               </Button>
@@ -250,7 +250,7 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-                <Link href={form ? `/forms/${form.id}/edit?tab=analytics` : "#"}>
+                <Link href={form ? `/forms/${form.id}/analytics` : "#"}>
                   <BarChart3 className="h-4 w-4" />
                 </Link>
               </Button>
