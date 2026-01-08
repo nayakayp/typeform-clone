@@ -62,6 +62,8 @@ interface Response {
     questionId: string;
     textValue: string | null;
     numberValue: string | null;
+    questionTitle: string | null;
+    questionType: string | null;
   }>;
 }
 
@@ -287,7 +289,7 @@ export function FormResponses({ formId }: FormResponsesProps) {
                     {selectedResponse.answers.map((answer, index) => (
                       <div key={answer.questionId} className="border rounded-lg p-3">
                         <p className="text-sm text-muted-foreground mb-1">
-                          Question {index + 1}
+                          {answer.questionTitle || `Question ${index + 1}`}
                         </p>
                         <p className="font-medium">
                           {answer.textValue || answer.numberValue || "No answer"}

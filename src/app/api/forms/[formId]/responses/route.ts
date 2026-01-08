@@ -45,14 +45,18 @@ export async function GET(
       whereConditions.push(eq(responses.status, status));
     }
 
-    // Fetch responses with answers
+    // Fetch responses with answers and question data
     const formResponses = await db.query.responses.findMany({
       where: and(...whereConditions),
       orderBy: [desc(responses.createdAt)],
       limit,
       offset,
       with: {
-        answers: true,
+        answers: {
+          with: {
+            question: true,
+          },
+        },
       },
     });
 
@@ -76,6 +80,8 @@ export async function GET(
           questionId: a.questionId,
           textValue: a.textValue,
           numberValue: a.numberValue,
+          questionTitle: a.question?.title || null,
+          questionType: a.question?.type || null,
         })),
       })),
       pagination: {
