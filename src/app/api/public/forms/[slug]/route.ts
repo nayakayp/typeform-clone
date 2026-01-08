@@ -32,7 +32,7 @@ export async function GET(
 
       // Find form by slug without status check, but verify ownership
       form = await db.query.forms.findFirst({
-        where: and(eq(forms.slug, slug), eq(forms.userId, session.user.id)),
+        where: and(eq(forms.slug, slug), eq(forms.createdBy, session.user.id)),
         with: {
           questions: {
             orderBy: [asc(questions.order)],
