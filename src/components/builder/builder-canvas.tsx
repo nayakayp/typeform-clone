@@ -27,6 +27,7 @@ import {
   TimePreview,
   YesNoPreview,
   DatePreview,
+  DropdownPreview,
 } from "./question-previews";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
@@ -133,6 +134,9 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
                   )}
                   {question.type === "date" && (
                     <DatePreview question={question} />
+                  )}
+                  {question.type === "dropdown" && (
+                    <DropdownPreview question={question} />
                   )}
                 </EditableQuestionCard>
               ))}
