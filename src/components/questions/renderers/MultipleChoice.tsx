@@ -64,16 +64,16 @@ export function MultipleChoice({
           <div
             key={option.id}
             className={cn(
-              "hover:bg-accent flex items-center space-x-3 rounded-lg border p-3 transition-colors",
+              "hover:bg-accent flex items-center space-x-3 rounded-lg border p-4 transition-colors",
               value === option.id && "border-primary bg-primary/5"
             )}
           >
-            <RadioGroupItem value={option.id} id={option.id} />
+            <RadioGroupItem value={option.id} id={option.id} className="h-5 w-5" />
             <Label
               htmlFor={option.id}
-              className="flex flex-1 cursor-pointer items-center gap-2"
+              className="flex flex-1 cursor-pointer items-center gap-3 text-2xl sm:text-3xl"
             >
-              <span className="bg-muted flex h-6 w-6 items-center justify-center rounded text-xs font-medium">
+              <span className="bg-muted flex h-8 w-8 items-center justify-center rounded text-sm font-medium">
                 {String.fromCharCode(65 + index)}
               </span>
               <span>{option.label}</span>
@@ -84,16 +84,16 @@ export function MultipleChoice({
         {settings?.allowOther && (
           <div
             className={cn(
-              "hover:bg-accent flex items-center space-x-3 rounded-lg border p-3 transition-colors",
+              "hover:bg-accent flex items-center space-x-3 rounded-lg border p-4 transition-colors",
               isOtherSelected && "border-primary bg-primary/5"
             )}
           >
-            <RadioGroupItem value="__other__" id="__other__" />
+            <RadioGroupItem value="__other__" id="__other__" className="h-5 w-5" />
             <Label
               htmlFor="__other__"
-              className="flex flex-1 cursor-pointer items-center gap-2"
+              className="flex flex-1 cursor-pointer items-center gap-3 text-2xl sm:text-3xl"
             >
-              <span className="bg-muted flex h-6 w-6 items-center justify-center rounded text-xs font-medium">
+              <span className="bg-muted flex h-8 w-8 items-center justify-center rounded text-sm font-medium">
                 {String.fromCharCode(65 + options.length)}
               </span>
               <span>Other</span>

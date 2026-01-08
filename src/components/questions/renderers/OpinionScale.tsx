@@ -30,7 +30,7 @@ export function OpinionScale({
             type="button"
             disabled={disabled}
             className={cn(
-              "flex h-12 w-12 items-center justify-center rounded-lg border-2 text-lg font-medium transition-all",
+              "flex h-16 w-16 items-center justify-center rounded-lg border-2 text-2xl sm:text-3xl font-medium transition-all",
               value === num
                 ? "border-primary bg-primary text-primary-foreground"
                 : "border-border bg-background hover:border-primary/50 hover:bg-accent",

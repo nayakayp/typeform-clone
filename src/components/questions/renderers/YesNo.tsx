@@ -25,13 +25,13 @@ export function YesNo({
           variant={value === true ? "default" : "outline"}
           size="lg"
           className={cn(
-            "flex-1 gap-2 text-lg",
+            "flex-1 gap-3 text-2xl sm:text-3xl h-auto py-4",
             value === true && "ring-primary ring-2 ring-offset-2"
           )}
           onClick={() => onChange(true)}
           disabled={disabled}
         >
-          <ThumbsUp className="h-5 w-5" />
+          <ThumbsUp className="h-6 w-6" />
           {yesLabel}
           <span className="bg-muted text-muted-foreground ml-auto rounded px-2 py-0.5 text-xs font-medium">
             Y
@@ -43,13 +43,13 @@ export function YesNo({
           variant={value === false ? "default" : "outline"}
           size="lg"
           className={cn(
-            "flex-1 gap-2 text-lg",
+            "flex-1 gap-3 text-2xl sm:text-3xl h-auto py-4",
             value === false && "ring-primary ring-2 ring-offset-2"
           )}
           onClick={() => onChange(false)}
           disabled={disabled}
         >
-          <ThumbsDown className="h-5 w-5" />
+          <ThumbsDown className="h-6 w-6" />
           {noLabel}
           <span className="bg-muted text-muted-foreground ml-auto rounded px-2 py-0.5 text-xs font-medium">
             N

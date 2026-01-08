@@ -48,7 +48,7 @@ export function Rating({
             >
               <IconComponent
                 className={cn(
-                  "h-8 w-8 transition-colors",
+                  "h-10 w-10 transition-colors",
                   rating <= displayValue
                     ? icon === "heart"
                       ? "fill-red-500 text-red-500"

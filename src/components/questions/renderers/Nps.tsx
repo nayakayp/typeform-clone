@@ -33,7 +33,7 @@ export function Nps({
             type="button"
             disabled={disabled}
             className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-lg text-sm font-medium transition-all",
+              "flex h-12 w-12 items-center justify-center rounded-lg text-lg font-medium transition-all",
               value === num ? getSelectedColorClass(num) : getColorClass(num),
               disabled && "cursor-not-allowed opacity-50"
             )}
