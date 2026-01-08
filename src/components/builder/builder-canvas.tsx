@@ -20,8 +20,10 @@ import {
   LongTextPreview,
   EmailPreview,
   MultipleChoicePreview,
+  CheckboxesPreview,
   UrlPreview,
   NumberPreview,
+  PhonePreview,
 } from "./question-previews";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
@@ -108,11 +110,17 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
                   {question.type === "multiple_choice" && (
                     <MultipleChoicePreview question={question} />
                   )}
+                  {question.type === "checkboxes" && (
+                    <CheckboxesPreview question={question} />
+                  )}
                   {question.type === "url" && (
                     <UrlPreview question={question} />
                   )}
                   {question.type === "number" && (
                     <NumberPreview question={question} />
+                  )}
+                  {question.type === "phone" && (
+                    <PhonePreview question={question} />
                   )}
                 </EditableQuestionCard>
               ))}
