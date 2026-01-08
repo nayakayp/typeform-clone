@@ -6,7 +6,7 @@ interface RatingPreviewProps {
 }
 
 export function RatingPreview({ question }: RatingPreviewProps) {
-  const maxRating = question.settings?.maxRating || 5;
+  const maxRating = question.settings?.ratingScale || 5;
 
   return (
     <div className="flex items-center gap-1">
