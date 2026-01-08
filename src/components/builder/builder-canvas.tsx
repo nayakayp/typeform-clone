@@ -43,6 +43,7 @@ import {
   ThankYouScreenPreview,
   ImageBlockPreview,
   RedirectPreview,
+  VideoEmbedPreview,
 } from "./question-previews";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
@@ -197,6 +198,9 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
                   )}
                   {question.type === "redirect" && (
                     <RedirectPreview question={question} />
+                  )}
+                  {question.type === "video_embed" && (
+                    <VideoEmbedPreview question={question} />
                   )}
                 </EditableQuestionCard>
               ))}
