@@ -85,6 +85,8 @@ export interface QuestionSettings {
   // Yes/No
   yesLabel?: string;
   noLabel?: string;
+  // Statement
+  buttonText?: string;
 }
 
 // Question validations type
