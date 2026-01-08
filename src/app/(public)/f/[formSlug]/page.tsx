@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { FormRenderer } from "@/components/form-renderer";
 import { Loader2, AlertCircle } from "lucide-react";
 
@@ -40,6 +41,8 @@ interface FormData {
 }
 
 export default function FormPage({ params }: FormPageProps) {
+  const searchParams = useSearchParams();
+  const isPreview = searchParams.get("preview") === "true";
   const [formSlug, setFormSlug] = useState<string | null>(null);
   const [form, setForm] = useState<FormData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +57,12 @@ export default function FormPage({ params }: FormPageProps) {
 
     async function fetchForm() {
       try {
-        const res = await fetch(`/api/public/forms/${formSlug}`);
+        const url = isPreview
+          ? `/api/public/forms/${formSlug}?preview=true`
+          : `/api/public/forms/${formSlug}`;
+        const res = await fetch(url, {
+          credentials: "include",
+        });
         if (!res.ok) {
           const data = await res.json();
           throw new Error(data.error || "Form not found");
@@ -69,7 +77,7 @@ export default function FormPage({ params }: FormPageProps) {
     }
 
     fetchForm();
-  }, [formSlug]);
+  }, [formSlug, isPreview]);
 
   if (loading) {
     return (

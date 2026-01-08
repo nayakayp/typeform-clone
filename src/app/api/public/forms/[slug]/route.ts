@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { forms, questions, questionOptions, themes } from "@/lib/db/schema";
+import { forms, questions, questionOptions } from "@/lib/db/schema";
 import { eq, and, asc } from "drizzle-orm";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 // GET /api/public/forms/[slug] - Get a public form by slug
 export async function GET(
@@ -10,47 +12,85 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
+    const { searchParams } = new URL(request.url);
+    const isPreview = searchParams.get("preview") === "true";
 
-    // Find form by slug
-    const form = await db.query.forms.findFirst({
-      where: and(
-        eq(forms.slug, slug),
-        eq(forms.status, "published")
-      ),
-      with: {
-        questions: {
-          orderBy: [asc(questions.order)],
-          with: {
-            options: {
-              orderBy: [asc(questionOptions.order)],
+    let form;
+
+    if (isPreview) {
+      // For preview mode, verify the user owns the form
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
+
+      if (!session?.user?.id) {
+        return NextResponse.json(
+          { error: "Authentication required for preview" },
+          { status: 401 }
+        );
+      }
+
+      // Find form by slug without status check, but verify ownership
+      form = await db.query.forms.findFirst({
+        where: and(eq(forms.slug, slug), eq(forms.userId, session.user.id)),
+        with: {
+          questions: {
+            orderBy: [asc(questions.order)],
+            with: {
+              options: {
+                orderBy: [asc(questionOptions.order)],
+              },
             },
           },
+          theme: true,
         },
-        theme: true,
-      },
-    });
+      });
 
-    if (!form) {
-      return NextResponse.json(
-        { error: "Form not found" },
-        { status: 404 }
-      );
-    }
+      if (!form) {
+        return NextResponse.json(
+          { error: "Form not found or you don't have access" },
+          { status: 404 }
+        );
+      }
+    } else {
+      // Normal public access - require published status
+      form = await db.query.forms.findFirst({
+        where: and(eq(forms.slug, slug), eq(forms.status, "published")),
+        with: {
+          questions: {
+            orderBy: [asc(questions.order)],
+            with: {
+              options: {
+                orderBy: [asc(questionOptions.order)],
+              },
+            },
+          },
+          theme: true,
+        },
+      });
 
-    // Check if form is closed
-    if (form.closeAt && new Date(form.closeAt) < new Date()) {
-      return NextResponse.json(
-        { error: "This form is no longer accepting responses" },
-        { status: 410 }
-      );
-    }
+      if (!form) {
+        return NextResponse.json(
+          { error: "Form not found" },
+          { status: 404 }
+        );
+      }
 
-    // Check if form is scheduled to open later
-    if (form.openAt && new Date(form.openAt) > new Date()) {
-      return NextResponse.json(
-        { error: "This form is not yet open for responses" },
-        { status: 403 }
-      );
+      // Check if form is closed (skip for preview)
+      if (form.closeAt && new Date(form.closeAt) < new Date()) {
+        return NextResponse.json(
+          { error: "This form is no longer accepting responses" },
+          { status: 410 }
+        );
+      }
+
+      // Check if form is scheduled to open later (skip for preview)
+      if (form.openAt && new Date(form.openAt) > new Date()) {
+        return NextResponse.json(
+          { error: "This form is not yet open for responses" },
+          { status: 403 }
+        );
+      }
     }
 
     // Return form data (excluding sensitive fields)

@@ -164,7 +164,7 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
         </div>
 
         <Button variant="ghost" size="sm" asChild>
-          <Link href={form ? `/f/${form.slug}` : "#"} target="_blank">
+          <Link href={form ? `/f/${form.slug}?preview=true` : "#"} target="_blank">
             <Eye className="mr-2 h-4 w-4" />
             Preview
           </Link>

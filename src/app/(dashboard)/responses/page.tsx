@@ -3,8 +3,14 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -76,6 +82,7 @@ export default function ResponsesPage() {
   const queryClient = useQueryClient();
   const [selectedFormId, setSelectedFormId] = useState<string | null>(null);
   const [deleteResponseId, setDeleteResponseId] = useState<string | null>(null);
+  const [selectedResponse, setSelectedResponse] = useState<Response | null>(null);
 
   const { data: formsData, isLoading: formsLoading } = useQuery({
     queryKey: ["forms-for-responses"],
@@ -262,7 +269,7 @@ export default function ResponsesPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setSelectedResponse(response)}>
                           <Eye className="h-4 w-4 mr-2" />
                           View Details
                         </DropdownMenuItem>
@@ -309,6 +316,61 @@ export default function ResponsesPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Response Details Dialog */}
+      <Dialog open={!!selectedResponse} onOpenChange={() => setSelectedResponse(null)}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Response Details</DialogTitle>
+          </DialogHeader>
+          {selectedResponse && (
+            <div className="space-y-6">
+              {/* Respondent Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Respondent</p>
+                  <p className="font-medium">{selectedResponse.email || "Anonymous"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">IP Address</p>
+                  <p className="font-medium">{selectedResponse.ipAddress || "Unknown"}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Submitted</p>
+                  <p className="font-medium">
+                    {format(new Date(selectedResponse.createdAt), "PPpp")}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Status</p>
+                  {getStatusBadge(selectedResponse.status)}
+                </div>
+              </div>
+
+              {/* Answers */}
+              <div>
+                <h4 className="font-semibold mb-3">Answers</h4>
+                {selectedResponse.answers.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">No answers recorded</p>
+                ) : (
+                  <div className="space-y-3">
+                    {selectedResponse.answers.map((answer, index) => (
+                      <div key={answer.questionId} className="border rounded-lg p-3">
+                        <p className="text-sm text-muted-foreground mb-1">
+                          Question {index + 1}
+                        </p>
+                        <p className="font-medium">
+                          {answer.textValue || answer.numberValue || "No answer"}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
