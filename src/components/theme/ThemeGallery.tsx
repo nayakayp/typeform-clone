@@ -7,7 +7,6 @@
 
 import { useState, useMemo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { ThemePreviewCard } from "./ThemePreviewCard";
 import { THEME_TEMPLATES } from "@/lib/theme";
 import type { Theme } from "@/lib/theme/types";
@@ -89,18 +88,18 @@ export function ThemeGallery({
   };
 
   return (
-    <div className={cn("flex flex-col", className)}>
+    <div className={cn("flex h-full flex-col overflow-hidden", className)}>
       <Tabs
         value={activeTab}
         onValueChange={(v) => setActiveTab(v as "my-themes" | "gallery")}
-        className="flex h-full flex-col"
+        className="flex h-full flex-col overflow-hidden"
       >
-        <TabsList className="mx-4 mt-2 grid w-auto grid-cols-2">
+        <TabsList className="mx-4 mt-2 grid w-auto shrink-0 grid-cols-2">
           <TabsTrigger value="my-themes">My themes</TabsTrigger>
           <TabsTrigger value="gallery">Gallery</TabsTrigger>
         </TabsList>
 
-        <ScrollArea className="flex-1 px-4 py-4">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
           {/* My Themes Tab */}
           <TabsContent value="my-themes" className="mt-0">
             <div className="grid grid-cols-2 gap-3">
@@ -137,7 +136,7 @@ export function ThemeGallery({
 
           {/* Gallery Tab */}
           <TabsContent value="gallery" className="mt-0">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 pb-4">
               {THEME_TEMPLATES.map((template) => (
                 <ThemePreviewCard
                   key={template.id}
@@ -150,7 +149,7 @@ export function ThemeGallery({
               ))}
             </div>
           </TabsContent>
-        </ScrollArea>
+        </div>
       </Tabs>
     </div>
   );
