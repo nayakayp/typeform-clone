@@ -57,7 +57,7 @@ export function Number({
     <div className="space-y-2">
       <div className="flex items-center gap-2">
         {settings?.prefix && (
-          <span className="text-muted-foreground text-lg">
+          <span className="text-muted-foreground text-2xl sm:text-3xl">
             {settings.prefix}
           </span>
         )}
@@ -110,7 +110,7 @@ export function Number({
           )}
         </div>
         {settings?.suffix && (
-          <span className="text-muted-foreground text-lg">
+          <span className="text-muted-foreground text-2xl sm:text-3xl">
             {settings.suffix}
           </span>
         )}

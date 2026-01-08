@@ -58,12 +58,12 @@ export function DatePicker({
             variant="outline"
             disabled={disabled}
             className={cn(
-              "w-full justify-start text-left text-lg font-normal",
+              "w-full justify-start text-left text-2xl sm:text-3xl font-normal h-auto py-3",
               !value && "text-muted-foreground",
               error && "border-destructive"
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon className="mr-3 h-6 w-6" />
             {value ? (
               format(value, formatStr)
             ) : (

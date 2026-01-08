@@ -25,7 +25,7 @@ export function Dropdown({
       <Select value={value || ""} onValueChange={onChange} disabled={disabled}>
         <SelectTrigger
           className={cn(
-            "w-full text-lg",
+            "w-full text-2xl sm:text-3xl h-auto py-3",
             error && "border-destructive focus:ring-destructive"
           )}
         >

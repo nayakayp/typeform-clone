@@ -22,7 +22,7 @@ export function Email({
     <div className="space-y-2">
       <div className="relative">
         <Mail className={cn(
-          "text-muted-foreground absolute top-1/2 h-4 w-4 -translate-y-1/2",
+          "text-muted-foreground absolute top-1/2 h-6 w-6 -translate-y-1/2",
           isUnderlineOrBorderless ? "left-0" : "left-3"
         )} />
         <Input
@@ -34,7 +34,7 @@ export function Email({
           autoFocus={autoFocus}
           autoComplete="off"
           className={cn(
-            isUnderlineOrBorderless ? "pl-6" : "pl-10",
+            isUnderlineOrBorderless ? "pl-8" : "pl-12",
             getInputStyleClasses(inputStyle, !!error)
           )}
         />
