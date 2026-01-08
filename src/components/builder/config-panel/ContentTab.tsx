@@ -2,7 +2,6 @@
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import type { BuilderQuestion } from "@/types/builder";
 import { ImagePlus, X, Video } from "lucide-react";
@@ -32,33 +31,6 @@ export function ContentTab({ question, onUpdate }: ContentTabProps) {
 
   return (
     <div className="space-y-6">
-      {/* Question Title */}
-      <div className="space-y-2">
-        <Label htmlFor="title">Question</Label>
-        <Textarea
-          id="title"
-          value={question.title || ""}
-          onChange={(e) => onUpdate({ title: e.target.value })}
-          placeholder="Your question here..."
-          className="min-h-[80px] resize-none"
-        />
-        <p className="text-xs text-muted-foreground">
-          Use @ to insert previous answers (piping)
-        </p>
-      </div>
-
-      {/* Description */}
-      <div className="space-y-2">
-        <Label htmlFor="description">Description (optional)</Label>
-        <Textarea
-          id="description"
-          value={question.description || ""}
-          onChange={(e) => onUpdate({ description: e.target.value || null })}
-          placeholder="Add a description or helper text..."
-          className="min-h-[60px] resize-none"
-        />
-      </div>
-
       {/* Placeholder (for input types) */}
       {["short_text", "long_text", "email", "phone", "number", "url"].includes(
         question.type
@@ -78,19 +50,19 @@ export function ContentTab({ question, onUpdate }: ContentTabProps) {
       <div className="space-y-2">
         <Label>Image or Video</Label>
 
-        {(question.image || question.video) ? (
-          <div className="relative rounded-lg border bg-muted/50 p-4">
+        {question.image || question.video ? (
+          <div className="bg-muted/50 relative rounded-lg border p-4">
             <div className="flex items-center gap-3">
               {question.image ? (
                 <>
-                  <ImagePlus className="h-8 w-8 text-muted-foreground" />
+                  <ImagePlus className="text-muted-foreground h-8 w-8" />
                   <div className="flex-1 truncate text-sm">
                     {question.image}
                   </div>
                 </>
               ) : (
                 <>
-                  <Video className="h-8 w-8 text-muted-foreground" />
+                  <Video className="text-muted-foreground h-8 w-8" />
                   <div className="flex-1 truncate text-sm">
                     {question.video}
                   </div>
@@ -114,7 +86,7 @@ export function ContentTab({ question, onUpdate }: ContentTabProps) {
                 size="sm"
                 onClick={() => setMediaType("image")}
               >
-                <ImagePlus className="h-4 w-4 mr-1" />
+                <ImagePlus className="mr-1 h-4 w-4" />
                 Image
               </Button>
               <Button
@@ -122,7 +94,7 @@ export function ContentTab({ question, onUpdate }: ContentTabProps) {
                 size="sm"
                 onClick={() => setMediaType("video")}
               >
-                <Video className="h-4 w-4 mr-1" />
+                <Video className="mr-1 h-4 w-4" />
                 Video
               </Button>
             </div>
@@ -152,7 +124,7 @@ export function ContentTab({ question, onUpdate }: ContentTabProps) {
             className="w-full"
             onClick={() => setShowMediaInput(true)}
           >
-            <ImagePlus className="h-4 w-4 mr-2" />
+            <ImagePlus className="mr-2 h-4 w-4" />
             Add Image or Video
           </Button>
         )}
