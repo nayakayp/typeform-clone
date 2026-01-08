@@ -1,15 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { UserDropdown } from "@/components/auth/user-dropdown";
-import { FileText, Plus, Settings } from "lucide-react";
+import { FileText, Plus } from "lucide-react";
 
 export function DashboardHeader() {
-  const pathname = usePathname();
-
   return (
     <header className="flex h-14 items-center justify-between border-b bg-background px-6">
       {/* Logo */}
@@ -28,18 +24,6 @@ export function DashboardHeader() {
             New Form
           </Link>
         </Button>
-
-        <Link
-          href="/settings"
-          className={cn(
-            "flex h-9 w-9 items-center justify-center rounded-md transition-colors",
-            pathname.startsWith("/settings")
-              ? "bg-muted text-foreground"
-              : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-          )}
-        >
-          <Settings className="h-4 w-4" />
-        </Link>
 
         <UserDropdown />
       </div>
