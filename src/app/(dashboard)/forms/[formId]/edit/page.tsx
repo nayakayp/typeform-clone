@@ -4,15 +4,17 @@ import { forms, questions, questionOptions } from "@/lib/db/schema";
 import { eq, asc } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { BuilderLayout } from "@/components/builder";
+import { FormDetailTabs } from "@/components/builder/form-detail-tabs";
 import type { BuilderQuestion } from "@/types/builder";
 
 interface FormEditPageProps {
   params: Promise<{ formId: string }>;
+  searchParams: Promise<{ tab?: string }>;
 }
 
-export default async function FormEditPage({ params }: FormEditPageProps) {
+export default async function FormEditPage({ params, searchParams }: FormEditPageProps) {
   const { formId } = await params;
+  const { tab } = await searchParams;
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -47,5 +49,11 @@ export default async function FormEditPage({ params }: FormEditPageProps) {
     isDeleted: false,
   }));
 
-  return <BuilderLayout form={form} questions={builderQuestions} />;
+  // Validate tab parameter
+  const validTabs = ["questions", "responses", "analytics"] as const;
+  const currentTab = validTabs.includes(tab as typeof validTabs[number])
+    ? (tab as typeof validTabs[number])
+    : "questions";
+
+  return <FormDetailTabs form={form} questions={builderQuestions} currentTab={currentTab} />;
 }

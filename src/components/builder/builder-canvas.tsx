@@ -95,10 +95,10 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
 
   return (
     <div
-      className={cn("flex-1 overflow-y-auto bg-background p-6", className)}
+      className={cn("flex-1 overflow-y-auto bg-background", className)}
       onClick={handleCanvasClick}
     >
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-2xl py-6">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}

@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { Settings, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { getQuestionTypeLabel, getQuestionTypeIcon } from "@/lib/question-types";
 import { ContentTab } from "./config-panel/ContentTab";
 import { SettingsTab } from "./config-panel/SettingsTab";
@@ -110,7 +109,7 @@ function QuestionConfigTabs({ question, onUpdate }: QuestionConfigTabsProps) {
   const typeLabel = getQuestionTypeLabel(question.type);
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden">
+    <div className="flex min-h-0 flex-1 flex-col">
       {/* Question Type Header */}
       <div className="flex items-center gap-2 border-b px-4 py-3">
         {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
@@ -121,8 +120,8 @@ function QuestionConfigTabs({ question, onUpdate }: QuestionConfigTabsProps) {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="content" className="flex flex-1 flex-col overflow-hidden">
-        <TabsList className="grid w-full grid-cols-3 rounded-none border-b bg-transparent px-4">
+      <Tabs defaultValue="content" className="flex min-h-0 flex-1 flex-col">
+        <TabsList className="grid w-full shrink-0 grid-cols-3 rounded-none border-b bg-transparent px-4">
           <TabsTrigger
             value="content"
             className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
@@ -143,7 +142,7 @@ function QuestionConfigTabs({ question, onUpdate }: QuestionConfigTabsProps) {
           </TabsTrigger>
         </TabsList>
 
-        <ScrollArea className="flex-1">
+        <div className="min-h-0 flex-1 overflow-y-auto">
           <TabsContent value="content" className="m-0 p-4">
             <ContentTab question={question} onUpdate={onUpdate} />
           </TabsContent>
@@ -155,7 +154,7 @@ function QuestionConfigTabs({ question, onUpdate }: QuestionConfigTabsProps) {
           <TabsContent value="logic" className="m-0 p-4">
             <LogicTab question={question} />
           </TabsContent>
-        </ScrollArea>
+        </div>
       </Tabs>
     </div>
   );
