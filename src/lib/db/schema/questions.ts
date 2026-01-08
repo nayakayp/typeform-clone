@@ -85,8 +85,9 @@ export interface QuestionSettings {
   // Yes/No
   yesLabel?: string;
   noLabel?: string;
-  // Statement
+  // Statement / Thank You Screen
   buttonText?: string;
+  redirectUrl?: string;
   // Audio/Video recording
   maxDuration?: string;
 }
