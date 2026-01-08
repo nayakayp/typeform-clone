@@ -14,7 +14,13 @@ import {
 import { useState } from "react";
 import { useBuilderStore } from "@/stores/builder-store";
 import { useBuilderSensors } from "@/lib/dnd";
-import { QuestionCard } from "./question-card";
+import { EditableQuestionCard } from "./editable-question-card";
+import {
+  ShortTextPreview,
+  LongTextPreview,
+  EmailPreview,
+  MultipleChoicePreview,
+} from "./question-previews";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,8 +31,13 @@ interface BuilderCanvasProps {
 }
 
 export function BuilderCanvas({ className }: BuilderCanvasProps) {
-  const { questions, reorderQuestions, selectQuestion, addQuestion } =
-    useBuilderStore();
+  const {
+    questions,
+    reorderQuestions,
+    selectQuestion,
+    addQuestion,
+    selectedQuestionId,
+  } = useBuilderStore();
   const sensors = useBuilderSensors();
   const [activeQuestion, setActiveQuestion] = useState<BuilderQuestion | null>(
     null
@@ -76,11 +87,23 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
           >
             <div className="space-y-3">
               {questions.map((question, index) => (
-                <QuestionCard
+                <EditableQuestionCard
                   key={question.id}
                   question={question}
-                  index={index}
-                />
+                  questionNumber={index + 1}
+                  isSelected={selectedQuestionId === question.id}
+                  onSelect={() => selectQuestion(question.id)}
+                >
+                  {question.type === "short_text" && (
+                    <ShortTextPreview question={question} />
+                  )}
+                  {question.type === "long_text" && (
+                    <LongTextPreview question={question} />
+                  )}
+                  {question.type === "email" && (
+                    <EmailPreview question={question} />
+                  )}
+                </EditableQuestionCard>
               ))}
             </div>
           </SortableContext>

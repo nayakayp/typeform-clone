@@ -10,6 +10,7 @@ export { QuestionConfigPanel } from "./config-panel";
 export { PipingTextarea } from "./PipingTextarea";
 export * from "./config-panel";
 export * from "./logic";
+export * from "./question-previews";
 
 // Advanced Features
 export { VersionHistoryPanel } from "./VersionHistoryPanel";
