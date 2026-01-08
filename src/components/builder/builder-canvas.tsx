@@ -24,6 +24,8 @@ import {
   UrlPreview,
   NumberPreview,
   PhonePreview,
+  TimePreview,
+  YesNoPreview,
 } from "./question-previews";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
@@ -121,6 +123,12 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
                   )}
                   {question.type === "phone" && (
                     <PhonePreview question={question} />
+                  )}
+                  {question.type === "time" && (
+                    <TimePreview question={question} />
+                  )}
+                  {question.type === "yes_no" && (
+                    <YesNoPreview question={question} />
                   )}
                 </EditableQuestionCard>
               ))}
