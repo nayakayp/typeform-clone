@@ -42,6 +42,7 @@ import {
   MatrixPreview,
   ThankYouScreenPreview,
   ImageBlockPreview,
+  RedirectPreview,
 } from "./question-previews";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
@@ -193,6 +194,9 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
                   )}
                   {question.type === "image_block" && (
                     <ImageBlockPreview question={question} />
+                  )}
+                  {question.type === "redirect" && (
+                    <RedirectPreview question={question} />
                   )}
                 </EditableQuestionCard>
               ))}
