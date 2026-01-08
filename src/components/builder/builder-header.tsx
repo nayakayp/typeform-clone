@@ -10,6 +10,7 @@ import {
   Eye,
   Settings,
   Loader2,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -118,11 +119,20 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
         </div>
 
         <Button variant="ghost" size="sm" asChild>
-          <Link href={form ? `/forms/${form.id}/preview` : "#"} target="_blank">
+          <Link href={form ? `/f/${form.slug}` : "#"} target="_blank">
             <Eye className="mr-2 h-4 w-4" />
             Preview
           </Link>
         </Button>
+
+        {form?.status === "published" && (
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/f/${form.slug}`} target="_blank">
+              <ExternalLink className="mr-2 h-4 w-4" />
+              View Live
+            </Link>
+          </Button>
+        )}
 
         <Button variant="ghost" size="sm" asChild>
           <Link href={form ? `/forms/${form.id}/settings` : "#"}>
