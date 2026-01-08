@@ -103,6 +103,9 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
                   {question.type === "email" && (
                     <EmailPreview question={question} />
                   )}
+                  {question.type === "multiple_choice" && (
+                    <MultipleChoicePreview question={question} />
+                  )}
                 </EditableQuestionCard>
               ))}
             </div>
