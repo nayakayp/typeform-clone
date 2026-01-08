@@ -89,7 +89,7 @@ export const DEFAULT_BRANDING: ThemeBranding = {
 
 // Default animations
 export const DEFAULT_ANIMATIONS: ThemeAnimations = {
-  transition: "fade",
+  transition: "slide",
   speed: "normal",
   enableHover: true,
   enableFocus: true,
