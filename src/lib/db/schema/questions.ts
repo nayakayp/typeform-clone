@@ -90,6 +90,9 @@ export interface QuestionSettings {
   redirectUrl?: string;
   // Audio/Video recording
   maxDuration?: string;
+  // Matrix
+  matrixRows?: string[];
+  matrixColumns?: string[];
 }
 
 // Question validations type

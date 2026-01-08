@@ -8,8 +8,8 @@ interface MatrixPreviewProps {
 
 export function MatrixPreview({ question }: MatrixPreviewProps) {
   // Get rows and columns from settings/options
-  const rows = question.settings?.matrixRows || ["Row 1", "Row 2"];
-  const columns = question.settings?.matrixColumns || [
+  const rows: string[] = question.settings?.matrixRows || ["Row 1", "Row 2"];
+  const columns: string[] = question.settings?.matrixColumns || [
     "Column 1",
     "Column 2",
     "Column 3",
