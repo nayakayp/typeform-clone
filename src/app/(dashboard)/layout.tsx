@@ -1,6 +1,6 @@
 "use client";
 
-import { DashboardSidebar } from "@/components/dashboard";
+import { DashboardHeader } from "@/components/dashboard";
 
 export default function DashboardLayout({
   children,
@@ -8,8 +8,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen">
-      <DashboardSidebar />
+    <div className="flex min-h-screen flex-col">
+      <DashboardHeader />
       <main className="flex-1 overflow-auto px-6">{children}</main>
     </div>
   );
