@@ -7,7 +7,6 @@ import { QuestionSidebar } from "./question-sidebar";
 import { BuilderCanvas } from "./builder-canvas";
 import { SettingsPanel } from "./settings-panel";
 import { BuilderHeader } from "./builder-header";
-import { QuestionConfigPanel } from "./config-panel";
 import type { Form } from "@/lib/db/schema/forms";
 import type { BuilderQuestion } from "@/types/builder";
 
@@ -38,7 +37,6 @@ export function BuilderLayout({ form, questions }: BuilderLayoutProps) {
         <BuilderCanvas />
         <SettingsPanel />
       </div>
-      <QuestionConfigPanel />
     </div>
   );
 }

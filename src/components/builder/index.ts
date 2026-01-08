@@ -6,7 +6,6 @@ export { QuestionCard } from "./question-card";
 export { EditableQuestionCard } from "./editable-question-card";
 export { PreviewPanel } from "./preview-panel";
 export { SettingsPanel } from "./settings-panel";
-export { QuestionConfigPanel } from "./config-panel";
 export { PipingTextarea } from "./PipingTextarea";
 export * from "./config-panel";
 export * from "./logic";

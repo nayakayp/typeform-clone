@@ -29,19 +29,11 @@ export function EditableQuestionCard({
 
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const [titleValue, setTitleValue] = useState(question.title || "");
-  const [descriptionValue, setDescriptionValue] = useState(
-    question.description || ""
-  );
+  const [titleValue, setTitleValue] = useState("");
+  const [descriptionValue, setDescriptionValue] = useState("");
 
   const titleInputRef = useRef<HTMLInputElement>(null);
   const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
-
-  // Sync local state with question prop
-  useEffect(() => {
-    setTitleValue(question.title || "");
-    setDescriptionValue(question.description || "");
-  }, [question.title, question.description]);
 
   // Focus input when editing starts
   useEffect(() => {
@@ -72,6 +64,7 @@ export function EditableQuestionCard({
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent canvas from deselecting
     // Prevent selection when clicking on interactive elements
     if ((e.target as HTMLElement).closest("button, input, textarea")) {
       return;
@@ -81,6 +74,7 @@ export function EditableQuestionCard({
 
   // Title editing handlers
   const handleTitleClick = () => {
+    setTitleValue(question.title || "");
     setIsEditingTitle(true);
   };
 
@@ -103,6 +97,7 @@ export function EditableQuestionCard({
 
   // Description editing handlers
   const handleDescriptionClick = () => {
+    setDescriptionValue(question.description || "");
     setIsEditingDescription(true);
   };
 
@@ -136,9 +131,9 @@ export function EditableQuestionCard({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "group relative rounded-xl border-2 bg-card transition-all duration-200",
+        "group bg-card relative rounded-xl border-2 transition-all duration-200",
         isSelected
-          ? "border-primary bg-primary/5 ring-2 ring-primary/20"
+          ? "border-primary bg-primary/5 ring-primary/20 ring-2"
           : "border-border hover:border-muted-foreground/30",
         isDragging && "opacity-50 shadow-lg",
         "hover:shadow-md"
@@ -148,14 +143,14 @@ export function EditableQuestionCard({
       {/* Hover actions - top right */}
       <div
         className={cn(
-          "absolute -top-3 right-3 z-10 flex items-center gap-1 rounded-md border bg-background p-1 shadow-sm transition-opacity",
+          "bg-background absolute -top-3 right-3 z-10 flex items-center gap-1 rounded-md border p-1 shadow-sm transition-opacity",
           "opacity-0 group-hover:opacity-100"
         )}
       >
         <Button
           variant="ghost"
           size="icon"
-          className="h-7 w-7 text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground h-7 w-7"
           onClick={handleDuplicate}
           title="Duplicate question"
         >
@@ -164,7 +159,7 @@ export function EditableQuestionCard({
         <Button
           variant="ghost"
           size="icon"
-          className="h-7 w-7 text-muted-foreground hover:text-destructive"
+          className="text-muted-foreground hover:text-destructive h-7 w-7"
           onClick={handleDelete}
           title="Delete question"
         >
@@ -178,8 +173,8 @@ export function EditableQuestionCard({
           {...attributes}
           {...listeners}
           className={cn(
-            "mt-1 cursor-grab touch-none rounded p-1 text-muted-foreground transition-all",
-            "opacity-0 group-hover:opacity-100 hover:bg-muted active:cursor-grabbing",
+            "text-muted-foreground mt-1 cursor-grab touch-none rounded p-1 transition-all",
+            "hover:bg-muted opacity-0 group-hover:opacity-100 active:cursor-grabbing",
             isDragging && "opacity-100"
           )}
         >
@@ -189,11 +184,11 @@ export function EditableQuestionCard({
         <div className="min-w-0 flex-1 space-y-2">
           {/* Question number + required indicator */}
           <div className="flex items-center gap-2">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+            <span className="bg-primary/10 text-primary flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
               {questionNumber}
             </span>
             {question.required && (
-              <span className="text-sm font-medium text-destructive">*</span>
+              <span className="text-destructive text-sm font-medium">*</span>
             )}
           </div>
 
@@ -207,7 +202,7 @@ export function EditableQuestionCard({
                 onChange={(e) => setTitleValue(e.target.value)}
                 onBlur={handleTitleBlur}
                 onKeyDown={handleTitleKeyDown}
-                className="w-full border-0 bg-transparent text-base font-medium outline-none ring-0 placeholder:text-muted-foreground/60 focus:ring-0"
+                className="placeholder:text-muted-foreground/60 w-full border-0 bg-transparent text-base font-medium ring-0 outline-none focus:ring-0"
                 placeholder="Enter your question..."
               />
             ) : (
@@ -215,12 +210,12 @@ export function EditableQuestionCard({
                 onClick={handleTitleClick}
                 className={cn(
                   "cursor-text text-base font-medium transition-colors",
-                  titleValue
+                  question.title
                     ? "text-foreground"
                     : "text-muted-foreground/60 italic"
                 )}
               >
-                {titleValue || "Enter your question..."}
+                {question.title || "Enter your question..."}
               </p>
             )}
           </div>
@@ -234,7 +229,7 @@ export function EditableQuestionCard({
                 onChange={(e) => setDescriptionValue(e.target.value)}
                 onBlur={handleDescriptionBlur}
                 onKeyDown={handleDescriptionKeyDown}
-                className="min-h-[40px] w-full resize-none border-0 bg-transparent text-sm text-muted-foreground outline-none ring-0 placeholder:text-muted-foreground/50 focus:ring-0"
+                className="text-muted-foreground placeholder:text-muted-foreground/50 min-h-[40px] w-full resize-none border-0 bg-transparent text-sm ring-0 outline-none focus:ring-0"
                 placeholder="Add a description (optional)"
                 rows={2}
               />
@@ -243,12 +238,12 @@ export function EditableQuestionCard({
                 onClick={handleDescriptionClick}
                 className={cn(
                   "cursor-text text-sm transition-colors",
-                  descriptionValue
+                  question.description
                     ? "text-muted-foreground"
                     : "text-muted-foreground/50 italic"
                 )}
               >
-                {descriptionValue || "Add a description (optional)"}
+                {question.description || "Add a description (optional)"}
               </p>
             )}
           </div>
