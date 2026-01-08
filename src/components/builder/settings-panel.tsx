@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getQuestionTypeLabel, getQuestionTypeIcon } from "@/lib/question-types";
+import type { BuilderQuestion } from "@/types/builder";
 
 interface SettingsPanelProps {
   className?: string;
@@ -105,13 +106,8 @@ function EmptyState() {
 }
 
 interface QuestionSettingsProps {
-  question: {
-    id: string;
-    type: string;
-    title: string | null;
-    required: boolean;
-  };
-  onUpdate: (updates: Partial<{ required: boolean }>) => void;
+  question: BuilderQuestion;
+  onUpdate: (updates: Partial<BuilderQuestion>) => void;
 }
 
 function QuestionSettings({ question, onUpdate }: QuestionSettingsProps) {
@@ -152,7 +148,7 @@ function QuestionSettings({ question, onUpdate }: QuestionSettingsProps) {
             </div>
             <Switch
               id="required"
-              checked={question.required}
+              checked={question.required ?? false}
               onCheckedChange={(checked) => onUpdate({ required: checked })}
             />
           </div>
