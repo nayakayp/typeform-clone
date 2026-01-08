@@ -1,6 +1,6 @@
 /**
  * Pre-built Theme Templates
- * These templates provide quick starting points for form styling
+ * All themes share the same effects/animations - only colors and fonts differ
  */
 
 import type { ThemeTemplate } from "./types";
@@ -14,13 +14,42 @@ import {
   DEFAULT_ANIMATIONS,
 } from "./defaults";
 
+// Shared configuration for all themes (effects, animations, layout)
+const SHARED_CONFIG = {
+  layout: DEFAULT_LAYOUT,
+  buttons: DEFAULT_BUTTONS,
+  formElements: DEFAULT_FORM_ELEMENTS,
+  progressBar: DEFAULT_PROGRESS_BAR,
+  branding: DEFAULT_BRANDING,
+  animations: DEFAULT_ANIMATIONS,
+};
+
+// Helper to create theme with shared config
+function createTheme(
+  colors: ThemeTemplate["theme"]["colors"],
+  background: ThemeTemplate["theme"]["background"],
+  typography: ThemeTemplate["theme"]["typography"],
+  progressBarColor?: string
+): ThemeTemplate["theme"] {
+  return {
+    colors,
+    background,
+    typography,
+    ...SHARED_CONFIG,
+    progressBar: {
+      ...DEFAULT_PROGRESS_BAR,
+      color: progressBarColor || colors.primary,
+    },
+  };
+}
+
 // Default (Clean Blue) Theme
 export const defaultTheme: ThemeTemplate = {
   id: "default",
   name: "Default",
   description: "Clean and professional blue theme",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#0066FF",
       secondary: "#6B7280",
       background: "#FFFFFF",
@@ -38,18 +67,12 @@ export const defaultTheme: ThemeTemplate = {
       answerText: "#374151",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "solid",
       color: "#FFFFFF",
     },
-    typography: DEFAULT_TYPOGRAPHY,
-    layout: DEFAULT_LAYOUT,
-    buttons: DEFAULT_BUTTONS,
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: DEFAULT_PROGRESS_BAR,
-    branding: DEFAULT_BRANDING,
-    animations: DEFAULT_ANIMATIONS,
-  },
+    DEFAULT_TYPOGRAPHY
+  ),
 };
 
 // Typeform Classic - Matches Typeform's signature style
@@ -57,8 +80,8 @@ export const typeformClassicTheme: ThemeTemplate = {
   id: "typeform-classic",
   name: "Typeform Classic",
   description: "Classic Typeform style with underline inputs and badge numbers",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#3B5998",
       secondary: "#6B7280",
       background: "#FFFFFF",
@@ -76,43 +99,17 @@ export const typeformClassicTheme: ThemeTemplate = {
       answerText: "#1F2937",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "solid",
       color: "#FFFFFF",
     },
-    typography: {
+    {
       ...DEFAULT_TYPOGRAPHY,
       fontFamily: "Inter",
       headingFontFamily: "Inter",
       fontSize: "large",
-    },
-    layout: {
-      ...DEFAULT_LAYOUT,
-      questionAlignment: "left",
-    },
-    buttons: {
-      variant: "solid",
-      radius: "sm",
-      size: "md",
-      submitText: "OK",
-    },
-    formElements: {
-      inputStyle: "underline",
-      questionNumberStyle: "badge",
-      navigationStyle: "corner-arrows",
-    },
-    progressBar: {
-      type: "bar",
-      position: "top",
-      showPercentage: false,
-      color: "#3B5998",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: {
-      ...DEFAULT_ANIMATIONS,
-      transition: "slide",
-    },
-  },
+    }
+  ),
 };
 
 // Dark Mode Theme
@@ -120,8 +117,8 @@ export const darkTheme: ThemeTemplate = {
   id: "dark",
   name: "Dark Mode",
   description: "Modern dark theme for low-light environments",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#3B82F6",
       secondary: "#9CA3AF",
       background: "#111827",
@@ -139,27 +136,15 @@ export const darkTheme: ThemeTemplate = {
       answerText: "#E5E7EB",
       answerBackground: "#1F2937",
     },
-    background: {
+    {
       type: "solid",
       color: "#111827",
     },
-    typography: {
+    {
       ...DEFAULT_TYPOGRAPHY,
       fontFamily: "Inter",
-    },
-    layout: DEFAULT_LAYOUT,
-    buttons: {
-      ...DEFAULT_BUTTONS,
-      variant: "solid",
-    },
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      ...DEFAULT_PROGRESS_BAR,
-      color: "#3B82F6",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: DEFAULT_ANIMATIONS,
-  },
+    }
+  ),
 };
 
 // Minimal Theme
@@ -167,8 +152,8 @@ export const minimalTheme: ThemeTemplate = {
   id: "minimal",
   name: "Minimal",
   description: "Clean black and white minimalist design",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#000000",
       secondary: "#737373",
       background: "#FFFFFF",
@@ -186,42 +171,18 @@ export const minimalTheme: ThemeTemplate = {
       answerText: "#262626",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "solid",
       color: "#FFFFFF",
     },
-    typography: {
+    {
       fontFamily: "Inter",
       headingFontFamily: "Inter",
       fontSize: "medium",
       lineHeight: "relaxed",
       fontWeight: "light",
-    },
-    layout: {
-      ...DEFAULT_LAYOUT,
-      questionAlignment: "left",
-      padding: "spacious",
-    },
-    buttons: {
-      variant: "outline",
-      radius: "none",
-      size: "md",
-    },
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      type: "bar",
-      position: "top",
-      showPercentage: false,
-      color: "#000000",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: {
-      transition: "fade",
-      speed: "slow",
-      enableHover: true,
-      enableFocus: true,
-    },
-  },
+    }
+  ),
 };
 
 // Vibrant Theme
@@ -229,8 +190,8 @@ export const vibrantTheme: ThemeTemplate = {
   id: "vibrant",
   name: "Vibrant",
   description: "Bold and colorful design that stands out",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#8B5CF6",
       secondary: "#EC4899",
       background: "#FDFBFF",
@@ -248,7 +209,7 @@ export const vibrantTheme: ThemeTemplate = {
       answerText: "#4C1D95",
       answerBackground: "#F5F3FF",
     },
-    background: {
+    {
       type: "gradient",
       gradient: {
         type: "linear",
@@ -260,37 +221,14 @@ export const vibrantTheme: ThemeTemplate = {
         ],
       },
     },
-    typography: {
+    {
       fontFamily: "Poppins",
       headingFontFamily: "Poppins",
       fontSize: "large",
       lineHeight: "normal",
       fontWeight: "medium",
-    },
-    layout: {
-      ...DEFAULT_LAYOUT,
-      questionAlignment: "center",
-    },
-    buttons: {
-      variant: "solid",
-      radius: "full",
-      size: "lg",
-    },
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      type: "dots",
-      position: "bottom",
-      showPercentage: false,
-      color: "#8B5CF6",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: {
-      transition: "zoom",
-      speed: "fast",
-      enableHover: true,
-      enableFocus: true,
-    },
-  },
+    }
+  ),
 };
 
 // Corporate Theme
@@ -298,8 +236,8 @@ export const corporateTheme: ThemeTemplate = {
   id: "corporate",
   name: "Corporate",
   description: "Professional theme for business forms",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#1E40AF",
       secondary: "#64748B",
       background: "#F8FAFC",
@@ -317,46 +255,18 @@ export const corporateTheme: ThemeTemplate = {
       answerText: "#1E293B",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "solid",
       color: "#F8FAFC",
     },
-    typography: {
+    {
       fontFamily: "Source Sans Pro",
       headingFontFamily: "Source Sans Pro",
       fontSize: "medium",
       lineHeight: "normal",
       fontWeight: "normal",
-    },
-    layout: {
-      questionAlignment: "left",
-      maxWidth: "md",
-      padding: "normal",
-      contentPosition: "center",
-    },
-    buttons: {
-      variant: "solid",
-      radius: "sm",
-      size: "md",
-    },
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      type: "percentage",
-      position: "top",
-      showPercentage: true,
-      color: "#1E40AF",
-    },
-    branding: {
-      logoPosition: "top-left",
-      hidePoweredBy: false,
-    },
-    animations: {
-      transition: "slide",
-      speed: "normal",
-      enableHover: true,
-      enableFocus: true,
-    },
-  },
+    }
+  ),
 };
 
 // Playful Theme
@@ -364,8 +274,8 @@ export const playfulTheme: ThemeTemplate = {
   id: "playful",
   name: "Playful",
   description: "Fun and friendly design with rounded elements",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#F97316",
       secondary: "#84CC16",
       background: "#FFFBEB",
@@ -383,43 +293,18 @@ export const playfulTheme: ThemeTemplate = {
       answerText: "#713F12",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "solid",
       color: "#FFFBEB",
     },
-    typography: {
+    {
       fontFamily: "Nunito",
       headingFontFamily: "Nunito",
       fontSize: "large",
       lineHeight: "relaxed",
       fontWeight: "semibold",
-    },
-    layout: {
-      questionAlignment: "center",
-      maxWidth: "lg",
-      padding: "spacious",
-      contentPosition: "center",
-    },
-    buttons: {
-      variant: "solid",
-      radius: "full",
-      size: "lg",
-    },
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      type: "steps",
-      position: "top",
-      showPercentage: false,
-      color: "#F97316",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: {
-      transition: "zoom",
-      speed: "fast",
-      enableHover: true,
-      enableFocus: true,
-    },
-  },
+    }
+  ),
 };
 
 // Nature Theme
@@ -427,8 +312,8 @@ export const natureTheme: ThemeTemplate = {
   id: "nature",
   name: "Nature",
   description: "Earthy green tones inspired by nature",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#059669",
       secondary: "#84CC16",
       background: "#F0FDF4",
@@ -446,7 +331,7 @@ export const natureTheme: ThemeTemplate = {
       answerText: "#166534",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "gradient",
       gradient: {
         type: "linear",
@@ -457,39 +342,14 @@ export const natureTheme: ThemeTemplate = {
         ],
       },
     },
-    typography: {
+    {
       fontFamily: "Lato",
       headingFontFamily: "Lato",
       fontSize: "medium",
       lineHeight: "relaxed",
       fontWeight: "normal",
-    },
-    layout: {
-      questionAlignment: "left",
-      maxWidth: "lg",
-      padding: "spacious",
-      contentPosition: "center",
-    },
-    buttons: {
-      variant: "solid",
-      radius: "lg",
-      size: "md",
-    },
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      type: "bar",
-      position: "top",
-      showPercentage: true,
-      color: "#059669",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: {
-      transition: "fade",
-      speed: "slow",
-      enableHover: true,
-      enableFocus: true,
-    },
-  },
+    }
+  ),
 };
 
 // Ocean Theme
@@ -497,8 +357,8 @@ export const oceanTheme: ThemeTemplate = {
   id: "ocean",
   name: "Ocean",
   description: "Calming blue tones inspired by the sea",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#0891B2",
       secondary: "#06B6D4",
       background: "#ECFEFF",
@@ -516,7 +376,7 @@ export const oceanTheme: ThemeTemplate = {
       answerText: "#0E7490",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "gradient",
       gradient: {
         type: "linear",
@@ -527,39 +387,14 @@ export const oceanTheme: ThemeTemplate = {
         ],
       },
     },
-    typography: {
+    {
       fontFamily: "Open Sans",
       headingFontFamily: "Open Sans",
       fontSize: "medium",
       lineHeight: "normal",
       fontWeight: "normal",
-    },
-    layout: {
-      questionAlignment: "center",
-      maxWidth: "lg",
-      padding: "normal",
-      contentPosition: "center",
-    },
-    buttons: {
-      variant: "solid",
-      radius: "lg",
-      size: "md",
-    },
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      type: "bar",
-      position: "bottom",
-      showPercentage: true,
-      color: "#0891B2",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: {
-      transition: "slide",
-      speed: "normal",
-      enableHover: true,
-      enableFocus: true,
-    },
-  },
+    }
+  ),
 };
 
 // Sunset Theme
@@ -567,8 +402,8 @@ export const sunsetTheme: ThemeTemplate = {
   id: "sunset",
   name: "Sunset",
   description: "Warm colors inspired by sunset skies",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#DC2626",
       secondary: "#F97316",
       background: "#FEF2F2",
@@ -586,7 +421,7 @@ export const sunsetTheme: ThemeTemplate = {
       answerText: "#7F1D1D",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "gradient",
       gradient: {
         type: "linear",
@@ -598,39 +433,14 @@ export const sunsetTheme: ThemeTemplate = {
         ],
       },
     },
-    typography: {
+    {
       fontFamily: "Raleway",
       headingFontFamily: "Raleway",
       fontSize: "large",
       lineHeight: "normal",
       fontWeight: "medium",
-    },
-    layout: {
-      questionAlignment: "center",
-      maxWidth: "lg",
-      padding: "spacious",
-      contentPosition: "center",
-    },
-    buttons: {
-      variant: "solid",
-      radius: "md",
-      size: "lg",
-    },
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      type: "dots",
-      position: "bottom",
-      showPercentage: false,
-      color: "#DC2626",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: {
-      transition: "fade",
-      speed: "normal",
-      enableHover: true,
-      enableFocus: true,
-    },
-  },
+    }
+  ),
 };
 
 // Plain Blue Theme (Teal accent)
@@ -638,8 +448,8 @@ export const plainBlueTheme: ThemeTemplate = {
   id: "plain-blue",
   name: "Plain Blue",
   description: "Clean and simple with teal accents",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#14B8A6",
       secondary: "#6B7280",
       background: "#FFFFFF",
@@ -657,21 +467,12 @@ export const plainBlueTheme: ThemeTemplate = {
       answerText: "#14B8A6",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "solid",
       color: "#FFFFFF",
     },
-    typography: DEFAULT_TYPOGRAPHY,
-    layout: DEFAULT_LAYOUT,
-    buttons: DEFAULT_BUTTONS,
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      ...DEFAULT_PROGRESS_BAR,
-      color: "#14B8A6",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: DEFAULT_ANIMATIONS,
-  },
+    DEFAULT_TYPOGRAPHY
+  ),
 };
 
 // Plain Dark Theme
@@ -679,8 +480,8 @@ export const plainDarkTheme: ThemeTemplate = {
   id: "plain-dark",
   name: "Plain Dark",
   description: "Simple dark theme with subtle styling",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#374151",
       secondary: "#6B7280",
       background: "#F9FAFB",
@@ -698,24 +499,12 @@ export const plainDarkTheme: ThemeTemplate = {
       answerText: "#6B7280",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "solid",
       color: "#F9FAFB",
     },
-    typography: DEFAULT_TYPOGRAPHY,
-    layout: DEFAULT_LAYOUT,
-    buttons: {
-      ...DEFAULT_BUTTONS,
-      variant: "solid",
-    },
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      ...DEFAULT_PROGRESS_BAR,
-      color: "#374151",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: DEFAULT_ANIMATIONS,
-  },
+    DEFAULT_TYPOGRAPHY
+  ),
 };
 
 // Barceloneta Theme (Abstract waves pattern)
@@ -723,8 +512,8 @@ export const barcelonetaTheme: ThemeTemplate = {
   id: "barceloneta",
   name: "Barceloneta",
   description: "Warm sandy tones with abstract wave patterns",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#374151",
       secondary: "#D4A574",
       background: "#F5F0E8",
@@ -742,31 +531,17 @@ export const barcelonetaTheme: ThemeTemplate = {
       answerText: "#374151",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "solid",
       color: "#F5F0E8",
     },
-    typography: {
+    {
       ...DEFAULT_TYPOGRAPHY,
       fontFamily: "Raleway",
       headingFontFamily: "Raleway",
     },
-    layout: DEFAULT_LAYOUT,
-    buttons: {
-      ...DEFAULT_BUTTONS,
-      radius: "md",
-    },
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      ...DEFAULT_PROGRESS_BAR,
-      color: "#D4A574",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: {
-      ...DEFAULT_ANIMATIONS,
-      transition: "slide",
-    },
-  },
+    "#D4A574"
+  ),
 };
 
 // Coral Waves Theme
@@ -774,8 +549,8 @@ export const coralWavesTheme: ThemeTemplate = {
   id: "coral-waves",
   name: "Coral Waves",
   description: "Soft coral and pink gradient waves",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#374151",
       secondary: "#F87171",
       background: "#FEF2F2",
@@ -793,7 +568,7 @@ export const coralWavesTheme: ThemeTemplate = {
       answerText: "#374151",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "gradient",
       gradient: {
         type: "linear",
@@ -804,21 +579,13 @@ export const coralWavesTheme: ThemeTemplate = {
         ],
       },
     },
-    typography: {
+    {
       ...DEFAULT_TYPOGRAPHY,
       fontFamily: "Outfit",
       headingFontFamily: "Outfit",
     },
-    layout: DEFAULT_LAYOUT,
-    buttons: DEFAULT_BUTTONS,
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      ...DEFAULT_PROGRESS_BAR,
-      color: "#F87171",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: DEFAULT_ANIMATIONS,
-  },
+    "#F87171"
+  ),
 };
 
 // Teal Lagoon Theme
@@ -826,8 +593,8 @@ export const tealLagoonTheme: ThemeTemplate = {
   id: "teal-lagoon",
   name: "Teal Lagoon",
   description: "Calming teal and seafoam gradients",
-  theme: {
-    colors: {
+  theme: createTheme(
+    {
       primary: "#374151",
       secondary: "#5EEAD4",
       background: "#F0FDFA",
@@ -845,7 +612,7 @@ export const tealLagoonTheme: ThemeTemplate = {
       answerText: "#374151",
       answerBackground: "#FFFFFF",
     },
-    background: {
+    {
       type: "gradient",
       gradient: {
         type: "linear",
@@ -856,21 +623,13 @@ export const tealLagoonTheme: ThemeTemplate = {
         ],
       },
     },
-    typography: {
+    {
       ...DEFAULT_TYPOGRAPHY,
       fontFamily: "DM Sans",
       headingFontFamily: "DM Sans",
     },
-    layout: DEFAULT_LAYOUT,
-    buttons: DEFAULT_BUTTONS,
-    formElements: DEFAULT_FORM_ELEMENTS,
-    progressBar: {
-      ...DEFAULT_PROGRESS_BAR,
-      color: "#5EEAD4",
-    },
-    branding: DEFAULT_BRANDING,
-    animations: DEFAULT_ANIMATIONS,
-  },
+    "#5EEAD4"
+  ),
 };
 
 // All templates array
