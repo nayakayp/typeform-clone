@@ -21,4 +21,8 @@ export { RankingPreview } from "./ranking-preview";
 export { MatrixPreview } from "./matrix-preview";
 export { WelcomeScreenPreview } from "./welcome-screen-preview";
 export { AudioRecordingPreview } from "./audio-recording-preview";
+export { VideoRecordingPreview } from "./video-recording-preview";
 export { ThankYouScreenPreview } from "./thank-you-screen-preview";
+export { VideoEmbedPreview } from "./video-embed-preview";
+export { RedirectPreview } from "./redirect-preview";
+export { ImageBlockPreview } from "./image-block-preview";
