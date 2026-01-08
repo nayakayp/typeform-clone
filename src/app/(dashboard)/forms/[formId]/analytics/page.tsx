@@ -13,7 +13,9 @@ interface FormAnalyticsPageProps {
   params: Promise<{ formId: string }>;
 }
 
-export default async function FormAnalyticsPage({ params }: FormAnalyticsPageProps) {
+export default async function FormAnalyticsPage({
+  params,
+}: FormAnalyticsPageProps) {
   const { formId } = await params;
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -32,7 +34,7 @@ export default async function FormAnalyticsPage({ params }: FormAnalyticsPagePro
   }
 
   return (
-    <div className="container max-w-5xl py-8">
+    <div className="p-8">
       <div className="mb-6">
         <Button variant="ghost" size="sm" className="mb-4 -ml-2 gap-2" asChild>
           <Link href={`/forms/${form.id}/edit`}>

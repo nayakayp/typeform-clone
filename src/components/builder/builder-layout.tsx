@@ -30,7 +30,7 @@ export function BuilderLayout({ form, questions }: BuilderLayoutProps) {
   }, [form, questions, setForm, resetBuilder]);
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="-mx-6 flex h-screen flex-col">
       <BuilderHeader />
       <div className="flex flex-1 overflow-hidden">
         <QuestionSidebar />
