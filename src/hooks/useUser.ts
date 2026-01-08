@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   UserWithSettings,
   UserSettings,
@@ -11,63 +12,153 @@ import type {
   SecuritySettings,
 } from "@/lib/user/types";
 
-// Mock user data
-const mockUser: UserWithSettings = {
-  id: "user_1",
-  email: "john.doe@example.com",
-  name: "John Doe",
-  avatar: null,
-  timezone: "America/New_York",
-  language: "en",
-  createdAt: new Date("2024-01-15"),
-  settings: {
-    notifications: {
-      emailNotifications: true,
-      formResponses: true,
-      weeklyDigest: false,
-      marketingEmails: false,
-    },
-    preferences: {
-      theme: "system",
-      defaultLanguage: "en",
-      emailFrequency: "daily",
-    },
-  },
+// API response types
+interface ProfileResponse {
+  profile: {
+    id: string;
+    email: string;
+    name: string | null;
+    image: string | null;
+    createdAt: string;
+  };
+}
+
+interface NotificationsResponse {
+  notifications: {
+    newResponse: boolean;
+    dailyDigest: boolean;
+    weeklyReport: boolean;
+    formPublished: boolean;
+    teamInvite: boolean;
+    responseLimitWarning: boolean;
+    formClosed: boolean;
+    marketingEmails: boolean;
+  };
+}
+
+interface PreferencesResponse {
+  preferences: {
+    theme: "light" | "dark" | "system";
+    defaultLanguage: string;
+    emailFrequency: "realtime" | "daily" | "weekly" | "never";
+    timezone: string | null;
+  };
+}
+
+interface SecurityResponse {
+  sessions: {
+    id: string;
+    device: string;
+    browser: string;
+    location: string;
+    lastActive: string;
+    isCurrent: boolean;
+  }[];
+  twoFactorEnabled: boolean;
+}
+
+// Query keys
+const QUERY_KEYS = {
+  profile: ["settings", "profile"] as const,
+  notifications: ["settings", "notifications"] as const,
+  preferences: ["settings", "preferences"] as const,
+  security: ["settings", "security"] as const,
 };
 
-// Mock active sessions
-const mockSessions: ActiveSession[] = [
-  {
-    id: "session_1",
-    device: "MacBook Pro",
-    browser: "Chrome 120",
-    location: "New York, US",
-    lastActive: new Date(),
-    isCurrent: true,
-  },
-  {
-    id: "session_2",
-    device: "iPhone 14",
-    browser: "Safari 17",
-    location: "New York, US",
-    lastActive: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-    isCurrent: false,
-  },
-  {
-    id: "session_3",
-    device: "Windows PC",
-    browser: "Firefox 121",
-    location: "Boston, US",
-    lastActive: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-    isCurrent: false,
-  },
-];
+// Fetch functions
+async function fetchProfile(): Promise<ProfileResponse> {
+  const res = await fetch("/api/settings/profile");
+  if (!res.ok) throw new Error("Failed to fetch profile");
+  return res.json();
+}
 
-// Mock security settings
-const mockSecuritySettings: SecuritySettings = {
-  twoFactorEnabled: false,
-  activeSessions: mockSessions,
-};
+async function fetchNotifications(): Promise<NotificationsResponse> {
+  const res = await fetch("/api/settings/notifications");
+  if (!res.ok) throw new Error("Failed to fetch notifications");
+  return res.json();
+}
+
+async function fetchPreferences(): Promise<PreferencesResponse> {
+  const res = await fetch("/api/settings/preferences");
+  if (!res.ok) throw new Error("Failed to fetch preferences");
+  return res.json();
+}
+
+async function fetchSecurity(): Promise<SecurityResponse> {
+  const res = await fetch("/api/settings/security");
+  if (!res.ok) throw new Error("Failed to fetch security settings");
+  return res.json();
+}
+
+// Update functions
+async function updateProfileApi(
+  data: Partial<UserProfile>
+): Promise<ProfileResponse> {
+  const res = await fetch("/api/settings/profile", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update profile");
+  return res.json();
+}
+
+async function updateNotificationsApi(
+  data: Partial<NotificationSettings>
+): Promise<NotificationsResponse> {
+  // Map from frontend types to API types
+  const apiData: Record<string, boolean> = {};
+  if (data.emailNotifications !== undefined)
+    apiData.newResponse = data.emailNotifications;
+  if (data.formResponses !== undefined)
+    apiData.newResponse = data.formResponses;
+  if (data.weeklyDigest !== undefined) apiData.weeklyReport = data.weeklyDigest;
+  if (data.marketingEmails !== undefined)
+    apiData.marketingEmails = data.marketingEmails;
+
+  const res = await fetch("/api/settings/notifications", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(apiData),
+  });
+  if (!res.ok) throw new Error("Failed to update notifications");
+  return res.json();
+}
+
+async function updatePreferencesApi(
+  data: Partial<UserPreferences>
+): Promise<PreferencesResponse> {
+  const res = await fetch("/api/settings/preferences", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update preferences");
+  return res.json();
+}
+
+async function revokeSessionApi(sessionId: string): Promise<void> {
+  const res = await fetch(`/api/settings/security?sessionId=${sessionId}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Failed to revoke session");
+}
+
+async function changePasswordApi(
+  currentPassword: string,
+  newPassword: string
+): Promise<void> {
+  const res = await fetch("/api/settings/security", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "change-password",
+      currentPassword,
+      newPassword,
+    }),
+  });
+  if (!res.ok) throw new Error("Failed to change password");
+}
 
 interface UseUserReturn {
   user: UserWithSettings | null;
@@ -83,185 +174,208 @@ interface UseUserReturn {
   toggleTwoFactor: () => Promise<void>;
   revokeSession: (sessionId: string) => Promise<void>;
   deleteAccount: () => Promise<void>;
+  changePassword: (
+    currentPassword: string,
+    newPassword: string
+  ) => Promise<void>;
+  refetch: () => Promise<void>;
 }
 
 export function useUser(): UseUserReturn {
-  const [user, setUser] = useState<UserWithSettings | null>(mockUser);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const [securitySettings, setSecuritySettings] =
-    useState<SecuritySettings>(mockSecuritySettings);
+  const queryClient = useQueryClient();
 
-  const updateProfile = useCallback(async (profile: Partial<UserProfile>) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setUser((prev) => (prev ? { ...prev, ...profile } : null));
-    } catch (err) {
-      setError(
-        err instanceof Error ? err : new Error("Failed to update profile")
-      );
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  // Fetch all data
+  const {
+    data: profileData,
+    isLoading: profileLoading,
+    error: profileError,
+  } = useQuery({
+    queryKey: QUERY_KEYS.profile,
+    queryFn: fetchProfile,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 
-  const updateSettings = useCallback(
-    async (settings: Partial<UserSettings>) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        setUser((prev) =>
-          prev
-            ? {
-                ...prev,
-                settings: {
-                  ...prev.settings,
-                  ...settings,
-                },
-              }
-            : null
-        );
-      } catch (err) {
-        setError(
-          err instanceof Error ? err : new Error("Failed to update settings")
-        );
-        throw err;
-      } finally {
-        setIsLoading(false);
-      }
+  const {
+    data: notificationsData,
+    isLoading: notificationsLoading,
+    error: notificationsError,
+  } = useQuery({
+    queryKey: QUERY_KEYS.notifications,
+    queryFn: fetchNotifications,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const {
+    data: preferencesData,
+    isLoading: preferencesLoading,
+    error: preferencesError,
+  } = useQuery({
+    queryKey: QUERY_KEYS.preferences,
+    queryFn: fetchPreferences,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const {
+    data: securityData,
+    isLoading: securityLoading,
+    error: securityError,
+  } = useQuery({
+    queryKey: QUERY_KEYS.security,
+    queryFn: fetchSecurity,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // Mutations
+  const profileMutation = useMutation({
+    mutationFn: updateProfileApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.profile });
     },
-    []
+  });
+
+  const notificationsMutation = useMutation({
+    mutationFn: updateNotificationsApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications });
+    },
+  });
+
+  const preferencesMutation = useMutation({
+    mutationFn: updatePreferencesApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.preferences });
+    },
+  });
+
+  const revokeSessionMutation = useMutation({
+    mutationFn: revokeSessionApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.security });
+    },
+  });
+
+  // Combine loading and error states
+  const isLoading =
+    profileLoading ||
+    notificationsLoading ||
+    preferencesLoading ||
+    securityLoading;
+  const error =
+    profileError ||
+    notificationsError ||
+    preferencesError ||
+    securityError ||
+    null;
+
+  // Build user object from fetched data
+  const user: UserWithSettings | null =
+    profileData && notificationsData && preferencesData
+      ? {
+          id: profileData.profile.id,
+          email: profileData.profile.email,
+          name: profileData.profile.name,
+          avatar: profileData.profile.image,
+          timezone: preferencesData.preferences.timezone || "UTC",
+          language: preferencesData.preferences.defaultLanguage,
+          createdAt: new Date(profileData.profile.createdAt),
+          settings: {
+            notifications: {
+              emailNotifications: notificationsData.notifications.newResponse,
+              formResponses: notificationsData.notifications.newResponse,
+              weeklyDigest: notificationsData.notifications.weeklyReport,
+              marketingEmails: notificationsData.notifications.marketingEmails,
+            },
+            preferences: {
+              theme: preferencesData.preferences.theme,
+              defaultLanguage: preferencesData.preferences.defaultLanguage,
+              emailFrequency: preferencesData.preferences.emailFrequency,
+            },
+          },
+        }
+      : null;
+
+  // Build security settings
+  const securitySettings: SecuritySettings = {
+    twoFactorEnabled: securityData?.twoFactorEnabled ?? false,
+    activeSessions:
+      securityData?.sessions.map(
+        (s): ActiveSession => ({
+          id: s.id,
+          device: s.device,
+          browser: s.browser,
+          location: s.location,
+          lastActive: new Date(s.lastActive),
+          isCurrent: s.isCurrent,
+        })
+      ) ?? [],
+  };
+
+  // Action handlers
+  const updateProfile = useCallback(
+    async (profile: Partial<UserProfile>) => {
+      await profileMutation.mutateAsync(profile);
+    },
+    [profileMutation]
   );
 
   const updateNotifications = useCallback(
     async (notifications: Partial<NotificationSettings>) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        setUser((prev) =>
-          prev
-            ? {
-                ...prev,
-                settings: {
-                  ...prev.settings,
-                  notifications: {
-                    ...prev.settings.notifications,
-                    ...notifications,
-                  },
-                },
-              }
-            : null
-        );
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err
-            : new Error("Failed to update notifications")
-        );
-        throw err;
-      } finally {
-        setIsLoading(false);
-      }
+      await notificationsMutation.mutateAsync(notifications);
     },
-    []
+    [notificationsMutation]
   );
 
   const updatePreferences = useCallback(
     async (preferences: Partial<UserPreferences>) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        setUser((prev) =>
-          prev
-            ? {
-                ...prev,
-                settings: {
-                  ...prev.settings,
-                  preferences: {
-                    ...prev.settings.preferences,
-                    ...preferences,
-                  },
-                },
-              }
-            : null
-        );
-      } catch (err) {
-        setError(
-          err instanceof Error ? err : new Error("Failed to update preferences")
-        );
-        throw err;
-      } finally {
-        setIsLoading(false);
+      await preferencesMutation.mutateAsync(preferences);
+    },
+    [preferencesMutation]
+  );
+
+  const updateSettings = useCallback(
+    async (settings: Partial<UserSettings>) => {
+      if (settings.notifications) {
+        await updateNotifications(settings.notifications);
       }
+      if (settings.preferences) {
+        await updatePreferences(settings.preferences);
+      }
+    },
+    [updateNotifications, updatePreferences]
+  );
+
+  const toggleTwoFactor = useCallback(async () => {
+    // TODO: Implement 2FA toggle when backend supports it
+    console.warn("2FA toggle not yet implemented");
+  }, []);
+
+  const revokeSession = useCallback(
+    async (sessionId: string) => {
+      await revokeSessionMutation.mutateAsync(sessionId);
+    },
+    [revokeSessionMutation]
+  );
+
+  const deleteAccount = useCallback(async () => {
+    // TODO: Implement account deletion API
+    console.warn("Account deletion not yet implemented");
+  }, []);
+
+  const changePassword = useCallback(
+    async (currentPassword: string, newPassword: string) => {
+      await changePasswordApi(currentPassword, newPassword);
     },
     []
   );
 
-  const toggleTwoFactor = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setSecuritySettings((prev) => ({
-        ...prev,
-        twoFactorEnabled: !prev.twoFactorEnabled,
-      }));
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error("Failed to toggle 2FA"));
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const revokeSession = useCallback(async (sessionId: string) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setSecuritySettings((prev) => ({
-        ...prev,
-        activeSessions: prev.activeSessions.filter((s) => s.id !== sessionId),
-      }));
-    } catch (err) {
-      setError(
-        err instanceof Error ? err : new Error("Failed to revoke session")
-      );
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const deleteAccount = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      // In real implementation, this would redirect to login page
-      setUser(null);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err : new Error("Failed to delete account")
-      );
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const refetch = useCallback(async () => {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.profile }),
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.notifications }),
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.preferences }),
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.security }),
+    ]);
+  }, [queryClient]);
 
   return {
     user,
@@ -275,5 +389,7 @@ export function useUser(): UseUserReturn {
     toggleTwoFactor,
     revokeSession,
     deleteAccount,
+    changePassword,
+    refetch,
   };
 }
