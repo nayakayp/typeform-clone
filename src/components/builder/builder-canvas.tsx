@@ -28,6 +28,10 @@ import {
   YesNoPreview,
   DatePreview,
   DropdownPreview,
+  StatementPreview,
+  OpinionScalePreview,
+  RatingPreview,
+  NpsPreview,
 } from "./question-previews";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
@@ -137,6 +141,18 @@ export function BuilderCanvas({ className }: BuilderCanvasProps) {
                   )}
                   {question.type === "dropdown" && (
                     <DropdownPreview question={question} />
+                  )}
+                  {question.type === "statement" && (
+                    <StatementPreview question={question} />
+                  )}
+                  {question.type === "rating" && (
+                    <RatingPreview question={question} />
+                  )}
+                  {question.type === "opinion_scale" && (
+                    <OpinionScalePreview question={question} />
+                  )}
+                  {question.type === "nps" && (
+                    <NpsPreview question={question} />
                   )}
                 </EditableQuestionCard>
               ))}

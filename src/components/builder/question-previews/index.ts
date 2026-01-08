@@ -10,3 +10,7 @@ export { DropdownPreview } from "./dropdown-preview";
 export { DatePreview } from "./date-preview";
 export { YesNoPreview } from "./yes-no-preview";
 export { TimePreview } from "./time-preview";
+export { NpsPreview } from "./nps-preview";
+export { OpinionScalePreview } from "./opinion-scale-preview";
+export { RatingPreview } from "./rating-preview";
+export { StatementPreview } from "./statement-preview";
