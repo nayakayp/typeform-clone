@@ -117,6 +117,9 @@ interface FormBuilderActions {
   setSaving: (isSaving: boolean) => void;
   setSaveError: (error: string | null) => void;
   markSaved: () => void;
+
+  // Publish state
+  setFormStatus: (status: "draft" | "published" | "closed") => void;
 }
 
 const MAX_HISTORY_SIZE = 50;
@@ -564,6 +567,17 @@ export const useBuilderStore = create<FormBuilderState & FormBuilderActions>()(
             state.lastSavedAt = new Date();
             state.isSaving = false;
             state.saveError = null;
+          });
+        },
+
+        setFormStatus: (status) => {
+          set((state) => {
+            if (state.form) {
+              state.form.status = status;
+              if (status === "published") {
+                state.form.publishedAt = new Date();
+              }
+            }
           });
         },
       }))

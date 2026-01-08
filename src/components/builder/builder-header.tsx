@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useBuilderStore } from "@/stores/builder-store";
 import { cn } from "@/lib/utils";
 import {
@@ -11,6 +12,8 @@ import {
   Settings,
   Loader2,
   ExternalLink,
+  Globe,
+  GlobeLock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +24,7 @@ interface BuilderHeaderProps {
 }
 
 export function BuilderHeader({ className }: BuilderHeaderProps) {
+  const [isPublishing, setIsPublishing] = useState(false);
   const {
     form,
     isDirty,
@@ -32,6 +36,7 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
     canRedo,
     undo,
     redo,
+    setFormStatus,
   } = useBuilderStore();
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +57,46 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
       return `Saved ${seconds}s ago`;
     }
     return "Just saved";
+  };
+
+  const handlePublish = async () => {
+    if (!form) return;
+    setIsPublishing(true);
+    try {
+      const response = await fetch(`/api/forms/${form.id}/publish`, {
+        method: "POST",
+      });
+      if (response.ok) {
+        setFormStatus("published");
+      } else {
+        const data = await response.json();
+        alert(data.error || "Failed to publish form");
+      }
+    } catch {
+      alert("Failed to publish form");
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const handleUnpublish = async () => {
+    if (!form) return;
+    setIsPublishing(true);
+    try {
+      const response = await fetch(`/api/forms/${form.id}/publish`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        setFormStatus("draft");
+      } else {
+        const data = await response.json();
+        alert(data.error || "Failed to unpublish form");
+      }
+    } catch {
+      alert("Failed to unpublish form");
+    } finally {
+      setIsPublishing(false);
+    }
   };
 
   return (
@@ -154,6 +199,45 @@ export function BuilderHeader({ className }: BuilderHeaderProps) {
             </>
           )}
         </Button>
+
+        {form?.status === "published" ? (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleUnpublish}
+            disabled={isPublishing || isDirty}
+          >
+            {isPublishing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Unpublishing
+              </>
+            ) : (
+              <>
+                <GlobeLock className="mr-2 h-4 w-4" />
+                Unpublish
+              </>
+            )}
+          </Button>
+        ) : (
+          <Button
+            size="sm"
+            onClick={handlePublish}
+            disabled={isPublishing || isDirty}
+          >
+            {isPublishing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Publishing
+              </>
+            ) : (
+              <>
+                <Globe className="mr-2 h-4 w-4" />
+                Publish
+              </>
+            )}
+          </Button>
+        )}
       </div>
     </header>
   );
