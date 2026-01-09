@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import type { Form, Question } from "@/types";
 import type { Theme } from "@/lib/theme/types";
@@ -9,6 +9,7 @@ import { DEFAULT_THEME } from "@/lib/theme/defaults";
 import { FONT_SIZE_MAP, LINE_HEIGHT_MAP } from "@/lib/theme/types";
 import { useFormTaking } from "@/hooks/useFormTaking";
 import { useKeyboardNavigation } from "@/hooks/useKeyboardNavigation";
+import { useAnalyticsTracking } from "@/hooks/useAnalyticsTracking";
 import { FormProgressBar } from "./FormProgressBar";
 import { FormNavigation } from "./FormNavigation";
 import { QuestionDisplay } from "./QuestionDisplay";
@@ -64,11 +65,11 @@ export function FormTakingContainer({
     currentQuestion,
     currentQuestionNumber,
     totalQuestions,
-    startForm,
+    startForm: originalStartForm,
     goNext,
     goPrevious,
-    setAnswer,
-    submitForm,
+    setAnswer: originalSetAnswer,
+    submitForm: originalSubmitForm,
     canGoBack,
     canGoNext,
     isLastQuestion,
@@ -82,6 +83,113 @@ export function FormTakingContainer({
     theme,
     onSubmit,
   });
+
+  // Analytics tracking
+  const {
+    trackView,
+    trackStart,
+    trackQuestionView,
+    trackQuestionAnswer,
+    trackComplete,
+    trackDropOff,
+  } = useAnalyticsTracking(form.id);
+
+  // Track question start time for calculating time spent
+  const questionStartTimeRef = useRef<number>(Date.now());
+  const previousQuestionIdRef = useRef<string | null>(null);
+
+  // Track view on mount
+  useEffect(() => {
+    trackView();
+  }, [trackView]);
+
+  // Track question views when currentIndex changes
+  useEffect(() => {
+    if (currentQuestion && state.isStarted && !state.isSubmitted) {
+      // Track answer for previous question if exists
+      if (
+        previousQuestionIdRef.current &&
+        previousQuestionIdRef.current !== currentQuestion.id
+      ) {
+        const timeSpent = Math.round(
+          (Date.now() - questionStartTimeRef.current) / 1000
+        );
+        trackQuestionAnswer(previousQuestionIdRef.current, timeSpent);
+      }
+
+      // Track view for new question
+      trackQuestionView(currentQuestion.id);
+
+      // Reset timer for new question
+      questionStartTimeRef.current = Date.now();
+      previousQuestionIdRef.current = currentQuestion.id;
+    }
+  }, [
+    currentQuestion,
+    state.isStarted,
+    state.isSubmitted,
+    trackQuestionView,
+    trackQuestionAnswer,
+  ]);
+
+  // Track drop-off on page unload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Only track drop-off if form is started but not submitted
+      if (state.isStarted && !state.isSubmitted) {
+        trackDropOff(currentQuestion?.id);
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [state.isStarted, state.isSubmitted, currentQuestion?.id, trackDropOff]);
+
+  // Wrap startForm to include analytics
+  const startForm = useCallback(() => {
+    trackStart();
+    originalStartForm();
+  }, [trackStart, originalStartForm]);
+
+  // Wrap setAnswer to track question answers
+  const setAnswer = useCallback(
+    (questionId: string, value: AnswerValue) => {
+      originalSetAnswer(questionId, value);
+    },
+    [originalSetAnswer]
+  );
+
+  // Wrap submitForm to include analytics
+  const submitForm = useCallback(async () => {
+    // Track final question answer
+    if (currentQuestion && previousQuestionIdRef.current) {
+      const timeSpent = Math.round(
+        (Date.now() - questionStartTimeRef.current) / 1000
+      );
+      trackQuestionAnswer(previousQuestionIdRef.current, timeSpent);
+    }
+
+    // Calculate total time
+    const totalTime = state.startTime
+      ? Math.round((Date.now() - state.startTime.getTime()) / 1000)
+      : 0;
+
+    await originalSubmitForm();
+
+    // Track completion after successful submit
+    if (!state.submitError) {
+      trackComplete(totalTime);
+    }
+  }, [
+    currentQuestion,
+    state.startTime,
+    state.submitError,
+    originalSubmitForm,
+    trackQuestionAnswer,
+    trackComplete,
+  ]);
 
   // Handle option selection from keyboard
   const handleSelectOption = useCallback(
