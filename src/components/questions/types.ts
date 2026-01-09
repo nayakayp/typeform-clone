@@ -1,6 +1,17 @@
 import type { Question, QuestionSettings } from "@/lib/db/schema/questions";
 import type { InputStyle } from "@/lib/theme/types";
 
+// Theme colors passed to question renderers
+export interface ThemeColors {
+  primary?: string;
+  background?: string;
+  foreground?: string;
+  muted?: string;
+  mutedForeground?: string;
+  border?: string;
+  input?: string;
+}
+
 // Base question renderer props
 export interface QuestionRendererProps<T = unknown> {
   question: Question;
@@ -10,6 +21,10 @@ export interface QuestionRendererProps<T = unknown> {
   disabled?: boolean;
   autoFocus?: boolean;
   inputStyle?: InputStyle;
+  /** Primary theme color for custom styling */
+  primaryColor?: string;
+  /** Full theme colors for comprehensive theming */
+  themeColors?: ThemeColors;
 }
 
 // Extended settings interfaces for each question type

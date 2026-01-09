@@ -298,6 +298,17 @@ export function FormRenderer({ form, slug }: FormRendererProps) {
   const backgroundColor = theme.colors.background;
   const textColor = theme.colors.foreground;
 
+  // Theme colors object to pass to question renderers
+  const themeColors = useMemo(() => ({
+    primary: theme.colors.primary,
+    background: theme.colors.background,
+    foreground: theme.colors.foreground,
+    muted: theme.colors.muted,
+    mutedForeground: theme.colors.mutedForeground,
+    border: theme.colors.border,
+    input: theme.colors.input,
+  }), [theme.colors]);
+
   // Build CSS styles from theme
   const themeStyles = useMemo(() => {
     const styles: React.CSSProperties = {
@@ -734,7 +745,9 @@ export function FormRenderer({ form, slug }: FormRendererProps) {
         className="relative flex min-h-screen flex-col"
         style={themeStyles}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && !isSubmitting && animationPhase === "idle") {
+          // Enter without Shift navigates to next question
+          // Shift+Enter in textarea allows line breaks (handled by LongText component)
+          if (e.key === "Enter" && !e.shiftKey && !isSubmitting && animationPhase === "idle") {
             e.preventDefault();
             handleNext();
           }
@@ -851,7 +864,9 @@ export function FormRenderer({ form, slug }: FormRendererProps) {
                 answers[currentQuestion.id],
                 (value) => setAnswer(currentQuestion.id, value),
                 handleNext,
-                theme.formElements.inputStyle
+                theme.formElements.inputStyle,
+                primaryColor,
+                themeColors
               )}
             </div>
 
@@ -1051,7 +1066,9 @@ export function FormRenderer({ form, slug }: FormRendererProps) {
                   answers[question.id], 
                   (value) => setAnswer(question.id, value),
                   undefined,
-                  theme.formElements.inputStyle
+                  theme.formElements.inputStyle,
+                  primaryColor,
+                  themeColors
                 )}
               </div>
             </div>
@@ -1082,7 +1099,17 @@ function renderQuestionInput(
   value: AnswerValue,
   onChange: (value: AnswerValue) => void,
   onContinue?: () => void,
-  inputStyle: "box" | "underline" | "borderless" = "underline"
+  inputStyle: "box" | "underline" | "borderless" = "underline",
+  primaryColor?: string,
+  themeColors?: {
+    primary?: string;
+    background?: string;
+    foreground?: string;
+    muted?: string;
+    mutedForeground?: string;
+    border?: string;
+    input?: string;
+  }
 ) {
   const dbQuestion = toDBQuestion(question);
   const type = question.type;
@@ -1108,6 +1135,8 @@ function renderQuestionInput(
         onChange={handleChange}
         autoFocus
         inputStyle={inputStyle}
+        primaryColor={primaryColor}
+        themeColors={themeColors}
       />
     );
   }

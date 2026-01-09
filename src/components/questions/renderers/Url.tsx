@@ -16,7 +16,6 @@ export function Url({
   inputStyle = "underline",
 }: QuestionRendererProps<string>) {
   const settings = question.settings as UrlSettings;
-  const isUnderlineOrBorderless = inputStyle === "underline" || inputStyle === "borderless";
 
   const handleBlur = () => {
     if (
@@ -30,11 +29,8 @@ export function Url({
 
   return (
     <div className="space-y-2">
-      <div className="relative">
-        <Link className={cn(
-          "text-muted-foreground absolute top-1/2 h-6 w-6 -translate-y-1/2",
-          isUnderlineOrBorderless ? "left-0" : "left-3"
-        )} />
+      <div className="relative flex items-center">
+        <Link className="text-muted-foreground h-7 w-7 shrink-0" />
         <Input
           type="url"
           value={value || ""}
@@ -44,7 +40,7 @@ export function Url({
           disabled={disabled}
           autoFocus={autoFocus}
           className={cn(
-            isUnderlineOrBorderless ? "pl-8" : "pl-12",
+            "ml-3",
             getInputStyleClasses(inputStyle, !!error)
           )}
         />

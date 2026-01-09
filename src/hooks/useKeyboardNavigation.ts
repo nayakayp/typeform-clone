@@ -95,12 +95,9 @@ export function useKeyboardNavigation({
         target.isContentEditable;
 
       // Handle Enter key
+      // Note: LongText component handles Shift+Enter for line breaks internally,
+      // so Enter (without Shift) should trigger navigation for all elements
       if (event.key === "Enter" && !event.shiftKey) {
-        // Allow Enter in textarea for new lines
-        if (target.tagName === "TEXTAREA") {
-          return;
-        }
-
         event.preventDefault();
 
         if (isLastQuestion && onSubmit) {

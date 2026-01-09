@@ -16,15 +16,11 @@ export function Email({
   inputStyle = "underline",
 }: QuestionRendererProps<string>) {
   const settings = question.settings as EmailSettings;
-  const isUnderlineOrBorderless = inputStyle === "underline" || inputStyle === "borderless";
 
   return (
     <div className="space-y-2">
-      <div className="relative">
-        <Mail className={cn(
-          "text-muted-foreground absolute top-1/2 h-6 w-6 -translate-y-1/2",
-          isUnderlineOrBorderless ? "left-0" : "left-3"
-        )} />
+      <div className="relative flex items-center">
+        <Mail className="text-muted-foreground h-7 w-7 shrink-0" />
         <Input
           type="email"
           value={value || ""}
@@ -34,7 +30,7 @@ export function Email({
           autoFocus={autoFocus}
           autoComplete="off"
           className={cn(
-            isUnderlineOrBorderless ? "pl-8" : "pl-12",
+            "ml-3",
             getInputStyleClasses(inputStyle, !!error)
           )}
         />

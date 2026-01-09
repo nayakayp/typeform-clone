@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import type { QuestionRendererProps, LongTextSettings } from "../types";
@@ -28,19 +28,35 @@ export function LongText({
     }
   }, [value, settings?.autoResize]);
 
+  // Handle Enter key: Shift+Enter = line break, Enter = go to next question
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === "Enter") {
+        if (e.shiftKey) {
+          // Shift+Enter: allow default behavior (insert line break)
+          return;
+        }
+        // Enter without Shift: prevent default and let event bubble up to trigger navigation
+        e.preventDefault();
+      }
+    },
+    []
+  );
+
   return (
     <div className="space-y-2">
       <Textarea
         ref={textareaRef}
         value={value || ""}
         onChange={(e) => onChange(e.target.value)}
+        onKeyDown={handleKeyDown}
         placeholder={settings?.placeholder || "Type your answer here..."}
         maxLength={settings?.maxLength}
         rows={settings?.rows || 4}
         disabled={disabled}
         autoFocus={autoFocus}
         className={cn(
-          "min-h-[120px] resize-y",
+          "min-h-[100%] resize-y",
           settings?.autoResize && "resize-none overflow-hidden",
           getTextareaStyleClasses(inputStyle, !!error)
         )}
